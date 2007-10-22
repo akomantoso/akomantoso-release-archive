@@ -22,7 +22,7 @@
 
      ===================================================================== -->
 
-<!ENTITY @@ ANhier          "(section|part|paragraph|chapter|article)" >
+<!ENTITY @@ ANhier          "(section|part|paragraph|chapter|title|book|tome|article|clause|subsection|subpart|subparagraph|subchapter|subtitle|subclause)" >
 <!ENTITY @@ ANcontainers    "(div)" >
 <!ENTITY @@ ANblock         "(toc | comment | list | tblock)" >
 <!ENTITY @@ ANinline        "(def | ref | mref | rref | mod | mmod | rmod | ins | del | omissis)" >
@@ -44,7 +44,7 @@
 
 
 <!ENTITY @@ speechItems       "(speech | question | answer | other | comment)">
-
+<!ENTITY @@ SpeechSection     "(AdministrationOfOath|Communication|Petitions|Papers|NoticesOfMotion|Questions|Address|ProceduralMotions|PointOfOrder|subdivision)">
 
 <!-- =====================================================================
 
@@ -88,9 +88,10 @@
                           title        #STRING      #IMPLIED">
 <!ENTITY ## idreq        "id           #ID           #REQUIRED">
 <!ENTITY ## idopt        "id           #ID           #IMPLIED">
+<!ENTITY ## refers       "refersTo     #IDREF         #IMPLIED" >
 
-<!ENTITY ## corereq      "##HTMLattrs; ##enactment; ##idreq;" >
-<!ENTITY ## coreopt      "##HTMLattrs; ##enactment; ##idopt;" >
+<!ENTITY ## corereq      "##HTMLattrs; ##enactment; ##idreq; ##refers;" >
+<!ENTITY ## coreopt      "##HTMLattrs; ##enactment; ##idopt; ##refers;" >
 
 <!-- =====================================================================
 
@@ -99,7 +100,7 @@
      ===================================================================== -->
 <!ENTITY # VersionType  "#STRING(OriginalVersion|SingleVersion|MultipleVersions)" >
 <!ENTITY # EventType    "#STRING(Generation|Amendment|Repeal)" >
-<!ENTITY # statusType   "#STRING(omissis|repealed|suspended)">
+<!ENTITY # statusType   "#STRING(omissis|repealed|suspended|editorial)">
 
 
 
@@ -109,11 +110,9 @@
 
      ===================================================================== -->
 
-<!ENTITY @ basehierarchy     "(num?, title?, subtitle?, sidenote?)" >
-<!ENTITY @ hierarchy         "@basehierarchy;, (@@hierElements;+)"              "##corereq;">
-<!ENTITY @ althierarchy      "@basehierarchy;, (subdivision | @@speechItems;)*" "##corereq;">
-<!ENTITY @ articleType       "@basehierarchy;, (clause+)"                       "##corereq;">
-<!ENTITY @ clauseType        "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
+<!ENTITY @ basehierarchy     "(num?, heading?, subheading?, sidenote?)" >
+<!ENTITY @ hierarchy         "@basehierarchy;, (@@hierElements;+ | content)"            "##corereq;">
+<!ENTITY @ althierarchy      "@basehierarchy;, (@@SpeechSection; | @@speechItems;)*" "##corereq;">
 <!ENTITY @ blocksreq         "(@@blockElements;)+" "##corereq;">
 <!ENTITY @ blocksopt         "(@@blockElements;)+" "##coreopt;">
 <!ENTITY @ inline            "(#PCDATA | @@InlineCM;)*" "##coreopt;">
@@ -152,7 +151,7 @@
 <!ENTITY @ HierarchicalStructure "(meta, 
                                    preface?,
                                    preamble?, 
-                                   clauses, 
+                                   body, 
                                    conclusions?, 
                                    attachments?)" 
                                  " contains #VersionType; 'OriginalVersion'">
@@ -192,11 +191,11 @@
 <!ELEMENT attachment  @referenceType; >
 
 
-<!ELEMENT clauses     (@@hierElements;)+ >
-<!ATTLIST clauses     ##coreopt; >
-<!ELEMENT debate      (subdivision+) >
+<!ELEMENT body        (@@hierElements;)+ >
+<!ATTLIST body        ##coreopt; >
+<!ELEMENT debate      (@@SpeechSection;+) >
 <!ATTLIST debate      ##coreopt; >
-<!ELEMENT maincontent (@@hierElements; | subdivision | @@blockElements; | @@containerElements; )+ >
+<!ELEMENT maincontent (@@hierElements; | @@SpeechSection; | @@blockElements; | @@containerElements; )+ >
 <!ATTLIST maincontent ##coreopt; >
 
 <!-- =====================================================================
@@ -204,26 +203,46 @@
         Elements for hierarchical documents
 
      ===================================================================== -->
-<!ELEMENT section    @hierarchy; >
-<!ELEMENT part       @hierarchy; >
-<!ELEMENT paragraph  @hierarchy; >
-<!ELEMENT chapter    @hierarchy; >
+<!ELEMENT section       @hierarchy; >
+<!ELEMENT part          @hierarchy; >
+<!ELEMENT paragraph     @hierarchy; >
+<!ELEMENT chapter       @hierarchy; >
+<!ELEMENT title         @hierarchy; >
+<!ELEMENT book          @hierarchy; >
+<!ELEMENT tome          @hierarchy; >
+<!ELEMENT article       @hierarchy; >
+<!ELEMENT clause        @hierarchy; >
+<!ELEMENT subsection    @hierarchy; >
+<!ELEMENT subpart       @hierarchy; >
+<!ELEMENT subparagraph  @hierarchy; >
+<!ELEMENT subchapter    @hierarchy; >
+<!ELEMENT subtitle      @hierarchy; >
+<!ELEMENT subclause     @hierarchy; >
 
-<!ELEMENT article          @articleType; >
-<!ELEMENT clause           @clauseType; >
-
-<!ELEMENT num              @inline; >
-<!ELEMENT title            @inline; >
-<!ELEMENT subtitle         @inline; >
-<!ELEMENT sidenote         @inline; >
-<!ELEMENT from             @inline; >
+<!ELEMENT content       @blocksopt; >
+<!ELEMENT num           @inline; >
+<!ELEMENT heading       @inline; >
+<!ELEMENT subheading    @inline; >
+<!ELEMENT sidenote      @inline; >
+<!ELEMENT from          @inline; >
 
 <!-- =====================================================================
 
         Elements for debates documents
 
      ===================================================================== -->
-<!ELEMENT subdivision         @althierarchy; >
+
+<!ELEMENT AdministrationOfOath  @althierarchy; >
+<!ELEMENT Communication         @althierarchy; >
+<!ELEMENT Petitions             @althierarchy; >
+<!ELEMENT Papers                @althierarchy; >
+<!ELEMENT NoticesOfMotion       @althierarchy; >
+<!ELEMENT Questions             @althierarchy; >
+<!ELEMENT Address               @althierarchy; >
+<!ELEMENT ProceduralMotions     @althierarchy; >
+<!ELEMENT PointOfOrder          @althierarchy; >
+<!ELEMENT subdivision           @althierarchy; >
+<!ATTLIST subdivision           ##name; >
 
 <!ELEMENT speech              @speechType; >
 <!ELEMENT question            @speechType; >
@@ -232,8 +251,10 @@
 <!ELEMENT comment             @inline; >
 <!ELEMENT list                (item+) >
 <!ATTLIST list                ##corereq; >
-<!ELEMENT tblock              @clauseType; >
-<!ELEMENT item                @clauseType; >
+
+<!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
+<!ELEMENT tblock              @itemType; >
+<!ELEMENT item                @itemType; >
 
 <!-- =====================================================================
 
@@ -278,7 +299,7 @@
 <!ATTLIST rmod  upTo   #ANYURI        #REQUIRED >
 
 <!ELEMENT quotedText        @inline; >
-<!ELEMENT quotedStructure   (@@hierElements; | clause | @@blockElements; | @@containerElements;)+ >
+<!ELEMENT quotedStructure   (@@hierElements; | @@blockElements; | @@containerElements;)+ >
 <!ATTLIST quotedStructure   ##corereq; >
 
 <!ELEMENT def          @inline; >
@@ -378,8 +399,7 @@
 >
 <!ELEMENT tr (th | td)+>
 <!ATTLIST tr
-    ##HTMLattrs;
-    ##idreq;
+    ##corereq;
 >
 <!ELEMENT th (@inline;)>
 <!ELEMENT td (@inline;)>
@@ -400,18 +420,17 @@
 <!ELEMENT meta             (identification, publication, classification*, lifecycle*, 
                             analysis*, references*, notes*, proprietary*) >
 
-<!ELEMENT identification   (Work, Expression, Manifestation, Item?) >
+<!ELEMENT identification   (FRBRWork, FRBRExpression, FRBRManifestation, FRBRItem?) >
 <!ATTLIST identification   ##source; >
 
-<!ENTITY @ coreProperties  "(uri+, alias*, date, author+, preservation?)" >
-<!ENTITY @ extProperties   "(uri+, alias*, date, author+, components?, preservation?)" >
-<!ELEMENT Work             @coreProperties; >
-<!ELEMENT Expression       @extProperties; >
-<!ELEMENT Manifestation    @extProperties; >
-<!ELEMENT Item             @extProperties; >
+<!ENTITY @ coreProperties   "(uri+, alias*, date, author+, components?, preservation?)" >
+<!ELEMENT FRBRWork             @coreProperties; >
+<!ELEMENT FRBRExpression       @coreProperties; >
+<!ELEMENT FRBRManifestation    @coreProperties; >
+<!ELEMENT FRBRItem             @coreProperties; >
 
 <!ELEMENT uri              @metaopt;>
-<!ATTLIST uri              ##link; >
+<!ATTLIST uri              ##value; >
 <!ELEMENT alias            @metaopt;>
 <!ATTLIST alias            ##value; >
 <!ELEMENT date             @metaopt;>
@@ -419,12 +438,13 @@
 <!ELEMENT author           @metaopt;>
 <!ATTLIST author           ##link; 
                            as #ANYURI  #IMPLIED>
-<!ELEMENT components       (component+)>
-<!ELEMENT component        @metareq;>
-<!ATTLIST component        ##link; ##show;>  
+<!ENTITY @ comp            "(component*)"> 
+<!ELEMENT components       @comp;>
+<!ELEMENT component        @comp;>
+<!ATTLIST component        ##idreq; ##name; ##link; ##show;>  
 <!ELEMENT preservation     @anyOther; >
 
-<!ENTITY @ publicationType ""                    "##idopt; ##date; ##show; ##name;">
+<!ENTITY @ publicationType ""                    "##idopt; ##date; ##show; ##name; ##refers;">
 <!ELEMENT publication      @publicationType;>
 
 <!ELEMENT classification   (keyword+)>
@@ -448,34 +468,35 @@
 <!ELEMENT analysis              (ActiveModifications?, PassiveModifications?) >
 <!ATTLIST analysis              ##source; >
 
-<!ENTITY @ Amendments          "(Textual | Meaning | Scope | Force | Efficacy | LegalSystem)+" >
-<!ENTITY @ modificationType             "(source+, destination+, force?, efficacy?, application?, duration?, condition?)" "##idreq; ##enactment; ##modifiers;" >
+<!ENTITY @ Amendments          "(TextualMod | MeaningMod | ScopeMod | ForceMod | EfficacyMod | LegalSystemMod)+" >
+<!ENTITY @ modificationType    "(source+, destination+, force?, efficacy?, application?, duration?, condition?)" 
+                               "##idreq; ##enactment; ##modifiers; ##refers;" >
                                  
 <!ENTITY # TextualMods         "#STRING(Repeal|Substitution|Insertion|Replacement|Renumbering)" >
 <!ENTITY # MeaningMods         "#STRING(Variation|TermModification|AuthenticInterpretation)" >
 <!ENTITY # ScopeMods           "#STRING(ExceptionOfScope|ExtensionOfScope)" >
 <!ENTITY # ForceMods           "#STRING(EntryIntoForce|EndOfEnactment|PostponementOfEntryIntoForce|
-                                 ProrogationOfForce|ReEnactment|Uncostitutionality)" >
-<!ENTITY # EfficacyMods        "#STRING(Suspension|Inapplication|Retroactivity|Extraefficacy|
-                                 PostponementOfEfficacy|ProrogationOfEfficacy)" >
+                                ProrogationOfForce|ReEnactment|Uncostitutionality)" >
+<!ENTITY # EfficacyMods        "#STRING(EntryIntoEfficacy|EndOfEfficacy|Inapplication|Retroactivity|Extraefficacy|
+                                PostponementOfEfficacy|ProrogationOfEfficacy)" >
 <!ENTITY # LegalSystemMods     "#STRING(StaticReference|Implementation|Ratification|Application|
-                                 LegislativeDelegation|Deregulation|Conversion|Expiration|
-                                 Reiteration|Remaking|Republication|Coordination)" >
+                                LegislativeDelegation|Deregulation|Conversion|Expiration|
+                                Reiteration|Remaking|Republication|Coordination)" >
 
 <!ELEMENT ActiveModifications   @Amendments; >
 <!ELEMENT PassiveModifications  @Amendments; >
-<!ELEMENT Textual               (@modificationType;, (old?, new?)) > 
-<!ATTLIST Textual               type #TextualMods; #REQUIRED >
-<!ELEMENT Meaning               (@modificationType;, (domain?)) > 
-<!ATTLIST Meaning               type #MeaningMods; #REQUIRED >
-<!ELEMENT Scope                 (@modificationType;, (domain?)) > 
-<!ATTLIST Scope                 type #ScopeMods; #REQUIRED >
-<!ELEMENT Force                 @modificationType; > 
-<!ATTLIST Force                 type #ForceMods; #REQUIRED >
-<!ELEMENT Efficacy              @modificationType; > 
-<!ATTLIST Efficacy              type #EfficacyMods; #REQUIRED >
-<!ELEMENT LegalSystem           @modificationType; > 
-<!ATTLIST LegalSystem           type #LegalSystemMods; #REQUIRED >
+<!ELEMENT TextualMod            (@modificationType;, (old?, new?)) > 
+<!ATTLIST TextualMod            type #TextualMods; #REQUIRED >
+<!ELEMENT MeaningMod            (@modificationType;, (domain?)) > 
+<!ATTLIST MeaningMod            type #MeaningMods; #REQUIRED >
+<!ELEMENT ScopeMod              (@modificationType;, (domain?)) > 
+<!ATTLIST ScopeMod              type #ScopeMods; #REQUIRED >
+<!ELEMENT ForceMod              @modificationType; > 
+<!ATTLIST ForceMod              type #ForceMods; #REQUIRED >
+<!ELEMENT EfficacyMod           @modificationType; > 
+<!ATTLIST EfficacyMod           type #EfficacyMods; #REQUIRED >
+<!ELEMENT LegalSystemMod        @modificationType; > 
+<!ATTLIST LegalSystemMod        type #LegalSystemMods; #REQUIRED >
 
 <!ELEMENT source           @argumentType;>
 <!ELEMENT destination      @argumentType;>
@@ -490,25 +511,34 @@
 <!ELEMENT domain           @anyOtherType; >
 
 
-<!ENTITY @@ refItems          "(Original|PassiveRef|ActiveRef|
-                                Jurisprudence|Attachment|AttachmentOf|
-                                Person|Role|Organization|Reference)" >
+
+<!ENTITY @@ docRefs        "(Original|PassiveRef|ActiveRef|Jurisprudence|Attachment|AttachmentOf)" >
+<!ENTITY @@ TLCs           "(TLCPerson|TLCOrganization|TLCConcept|TLCObject|TLCEvent|TLCPlace|TLCProcess|TLCRole|TLCTerm|TLCReference)" >
+<!ENTITY @@ refItems       "(@@docRefs;|@@TLCs;")>
+
 <!ELEMENT references     (@@refItems;)+>
 <!ATTLIST references     ##source; >
 
-<!ELEMENT Original       @referenceType; >
-<!ELEMENT PassiveRef     @referenceType; >
-<!ELEMENT ActiveRef      @referenceType; >
-<!ELEMENT Jurisprudence  @referenceType; >
-<!ELEMENT Attachment     @referenceType; >
-<!ATTLIST Attachment     type CDATA  #IMPLIED >
-<!ELEMENT AttachmentOf   @referenceType; >
-<!ATTLIST AttachmentOf   type CDATA  #IMPLIED >
-<!ELEMENT Person         @referenceType; >
-<!ELEMENT Role           @referenceType; >
-<!ELEMENT Organization   @referenceType; >
-<!ELEMENT Reference      @referenceType; >
-<!ATTLIST Reference      ##name; >
+<!ELEMENT Original         @referenceType; >
+<!ELEMENT PassiveRef       @referenceType; >
+<!ELEMENT ActiveRef        @referenceType; >
+<!ELEMENT Jurisprudence    @referenceType; >
+<!ELEMENT Attachment       @referenceType; >
+<!ATTLIST Attachment       type CDATA  #IMPLIED >
+<!ELEMENT AttachmentOf     @referenceType; >
+<!ATTLIST AttachmentOf     type CDATA  #IMPLIED >
+
+<!ELEMENT TLCPerson        @referenceType; >
+<!ELEMENT TLCOrganization  @referenceType; >
+<!ELEMENT TLCConcept       @referenceType; >
+<!ELEMENT TLCObject        @referenceType; >
+<!ELEMENT TLCEvent         @referenceType; >
+<!ELEMENT TLCPlace         @referenceType; >
+<!ELEMENT TLCProcess       @referenceType; >
+<!ELEMENT TLCRole          @referenceType; >
+<!ELEMENT TLCTerm          @referenceType; >
+<!ELEMENT TLCReference     @referenceType; >
+<!ATTLIST TLCReference     ##name; >
 
 <!ELEMENT notes        (note)+>
 <!ATTLIST notes        ##source; >
