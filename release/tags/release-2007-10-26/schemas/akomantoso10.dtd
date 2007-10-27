@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % PredefinedSimpleTypes SYSTEM "./pst.dtd">
+%PredefinedSimpleTypes;
+
+
+<!--  =====================================================================
+Akoma Ntoso main schema
+
+
+Release  17/09/2007
+technical supervision Fabio Vitali - University of Bologna
+legal domain supervision Monica Palmirani - University of Bologna
+
+The present schema uses systematically XML design patterns as
+described in http://www.xmlpatterns.com/
+A few of them are explicitly mentioned, when their use or approach
+was not felt clear or natural enough. Others are just used without
+mentions.
+=====================================================================  -->
+
+
+
+<!--  =====================================================================
+
+Main element groups
+
+=====================================================================  -->
+
+<!ENTITY % ANhier          "section | part | paragraph | chapter | title | book | tome | article | clause | subsection | subpart | subparagraph | subchapter | subtitle | subclause" >
+<!ENTITY % ANcontainers    "div" >
+<!ENTITY % ANblock         "toc | comment | list | tblock" >
+<!ENTITY % ANinline        "def | ref | mref | rref | mod | mmod | rmod | ins | del | omissis" >
+<!ENTITY % ANtitleInline   "ActType | ActTitle | ActNumber | ActProponent | ActDate | ActPurpose" >
+<!ENTITY % ANmarker        "noteref | recordedTime | eol | eop" >
+
+<!ENTITY % HTMLcontainers    "div" >
+<!ENTITY % HTMLblock         "p | ul | ol | table" >
+<!ENTITY % HTMLinline        "span | b | i | a" >
+<!ENTITY % HTMLmarker        "img" >
+
+<!ENTITY % hierElements      "%ANhier; | hcontainer" >
+<!ENTITY % containerElements "%HTMLcontainers; | container" >
+<!ENTITY % blockElements     "%ANblock; | %HTMLblock; | block | foreign" >
+<!ENTITY % inlineElements    "%ANinline; | %HTMLinline; | inline | %ANtitleInline;" >
+<!ENTITY % markerElements    "%ANmarker; | %HTMLmarker; | marker" >
+
+<!ENTITY % InlineCM          "%inlineElements; | %markerElements;" >
+
+
+<!ENTITY % speechItems       "speech | question | answer | other | comment" >
+<!ENTITY % SpeechSection     "AdministrationOfOath | Communication | Petitions | Papers | NoticesOfMotion | Questions | Address | ProceduralMotions | PointOfOrder | subdivision" >
+
+<!--  =====================================================================
+
+Attribute groups
+
+=====================================================================  -->
+
+<!ENTITY % name         " name %STRING; #REQUIRED" >
+<!ENTITY % source       " source %ANYURI; #REQUIRED" >
+<!ENTITY % date         " date %DATE; #REQUIRED" >
+<!ENTITY % time         " time %TIME; #REQUIRED" >
+<!ENTITY % link         " href %ANYURI; #REQUIRED" >
+<!ENTITY % linkopt      " href %ANYURI; #IMPLIED" >
+<!ENTITY % value        " value %STRING; #REQUIRED" >
+<!ENTITY % optvalue     " value %STRING; #IMPLIED" >
+<!ENTITY % speechAtts   " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED to %ANYURI; #IMPLIED" >
+<!ENTITY % show         " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
+
+<!ENTITY % period " start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED startEfficacy %ANYURI; #IMPLIED endEfficacy %ANYURI; #IMPLIED"
+>
+<!ENTITY % statusType   "(omissis|repealed|suspended|editorial)" >
+<!ENTITY % EstatusType "((omissis|repealed|suspended|editorial))" ><!ENTITY % enactment " %period;  status %statusType; #IMPLIED" >
+<!ENTITY % modifiers " exclusion %BOOLEAN; #IMPLIED incomplete %BOOLEAN; #IMPLIED" >
+
+<!ENTITY % cellattrs    " rowspan %INTEGER; '1'  colspan %INTEGER; '1' " >
+<!ENTITY % HTMLattrs    " class %STRING; #IMPLIED style %STRING; #IMPLIED title %STRING; #IMPLIED" >
+<!ENTITY % idreq        " id ID #REQUIRED" >
+<!ENTITY % idopt        " id ID #IMPLIED" >
+<!ENTITY % refers       " refersTo IDREF #IMPLIED" >
+
+<!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers; " >
+<!ENTITY % coreopt      " %HTMLattrs;  %enactment;  %idopt;  %refers; " >
+
+<!--  =====================================================================
+
+Simple types (data values)
+
+=====================================================================  -->
+<!ENTITY % VersionType  "(OriginalVersion|SingleVersion|MultipleVersions)" >
+<!ENTITY % EVersionType "((OriginalVersion|SingleVersion|MultipleVersions))" >
+<!ENTITY % EventType    "(Generation|Amendment|Repeal)" >
+<!ENTITY % EEventType "((Generation|Amendment|Repeal))" >
+
+
+
+
+<!--  =====================================================================
+
+Complex types (markup structures)
+
+=====================================================================  -->
+
+<!ENTITY % basehierarchy     "(num?,heading?,subheading?,sidenote?)" >
+<!ENTITY % hierarchy         "(%basehierarchy;,((%hierElements;)+ | content))" >
+<!ENTITY % althierarchy      "(%basehierarchy;,(%SpeechSection; | %speechItems;)*)" >
+<!ENTITY % blocksreq         "(%blockElements;)+" >
+<!ENTITY % blocksopt         "(%blockElements;)+" >
+<!ENTITY % inline_mixed            "%InlineCM;" >
+<!ENTITY % inline "(#PCDATA | %inline_mixed;)*" >
+<!ENTITY % markerreq         "EMPTY" >
+<!ENTITY % markeropt         "EMPTY" >
+<!ENTITY % metareq           "EMPTY" >
+<!ENTITY % metaopt           "EMPTY" >
+<!ENTITY % anyOther          "ANY" >
+
+<!ENTITY % speechType        "(from,(%blockElements;)+)" >
+<!ENTITY % referenceType     "EMPTY" >
+<!ENTITY % argumentType      "EMPTY" >
+<!ENTITY % periodType        "EMPTY" >
+<!ENTITY % anyOtherType      "ANY" >
+
+<!--  =====================================================================
+
+Root element
+Comment: One generic root element contains all document elements
+Pattern: Universal Root
+Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
+
+=====================================================================  -->
+
+<!ENTITY % DocumentTypes "(act | bill | doc | report | debaterecord)" >
+<!ELEMENT akomantoso           %DocumentTypes; ><!ATTLIST akomantoso xmlns CDATA #FIXED "http://www.akomantoso.org/1.0" >
+
+<!--  =====================================================================
+
+Document elements
+Comment: All document elements share just two content models
+Pattern: Consistent Element Set
+Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
+
+=====================================================================  -->
+<!ENTITY % HierarchicalStructure "(meta,preface?,preamble?,body,conclusions?,attachments?)" >
+
+<!ENTITY % OpenStructure         "(meta,preface?,preamble?,maincontent,conclusions?,attachments?)" >
+
+<!ENTITY % DebateStructure        "(meta,preface?,debate,conclusions?,attachments?)" >
+
+<!ELEMENT act           %HierarchicalStructure; >
+<!ATTLIST act contains %VersionType; 'OriginalVersion'  >
+<!ELEMENT bill          %HierarchicalStructure; >
+<!ATTLIST bill contains %VersionType; 'OriginalVersion'  >
+<!ELEMENT doc           %OpenStructure; >
+<!ATTLIST doc contains %VersionType; 'OriginalVersion'  >
+<!ELEMENT report        %OpenStructure; >
+<!ATTLIST report contains %VersionType; 'OriginalVersion'  >
+<!ELEMENT debaterecord  %DebateStructure; >
+<!ATTLIST debaterecord contains %VersionType; 'OriginalVersion'  >
+
+<!--  =====================================================================
+
+AN common containers elements
+
+=====================================================================  -->
+
+<!ELEMENT preface     %blocksopt; >
+<!ATTLIST preface %coreopt;  >
+<!ELEMENT preamble    %blocksopt; >
+<!ATTLIST preamble %coreopt;  >
+<!ELEMENT conclusions %blocksopt; >
+<!ATTLIST conclusions %coreopt;  >
+<!ELEMENT attachments (attachment+)>
+
+<!ATTLIST attachments %coreopt;  >
+<!ELEMENT attachment  %referenceType; >
+<!ATTLIST attachment %idreq;  %link;  %show;  >
+
+
+<!ELEMENT body        (%hierElements;)+>
+
+<!ATTLIST body %coreopt;  >
+<!ELEMENT debate      ((%SpeechSection;)+)>
+
+<!ATTLIST debate %coreopt;  >
+<!ELEMENT maincontent (%hierElements; | %SpeechSection; | %blockElements; | %containerElements;)+>
+
+<!ATTLIST maincontent %coreopt;  >
+
+<!--  =====================================================================
+
+Elements for hierarchical documents
+
+=====================================================================  -->
+<!ELEMENT section       %hierarchy; >
+<!ATTLIST section %corereq;  >
+<!ELEMENT part          %hierarchy; >
+<!ATTLIST part %corereq;  >
+<!ELEMENT paragraph     %hierarchy; >
+<!ATTLIST paragraph %corereq;  >
+<!ELEMENT chapter       %hierarchy; >
+<!ATTLIST chapter %corereq;  >
+<!ELEMENT title         %hierarchy; >
+<!ATTLIST title %corereq;  >
+<!ELEMENT book          %hierarchy; >
+<!ATTLIST book %corereq;  >
+<!ELEMENT tome          %hierarchy; >
+<!ATTLIST tome %corereq;  >
+<!ELEMENT article       %hierarchy; >
+<!ATTLIST article %corereq;  >
+<!ELEMENT clause        %hierarchy; >
+<!ATTLIST clause %corereq;  >
+<!ELEMENT subsection    %hierarchy; >
+<!ATTLIST subsection %corereq;  >
+<!ELEMENT subpart       %hierarchy; >
+<!ATTLIST subpart %corereq;  >
+<!ELEMENT subparagraph  %hierarchy; >
+<!ATTLIST subparagraph %corereq;  >
+<!ELEMENT subchapter    %hierarchy; >
+<!ATTLIST subchapter %corereq;  >
+<!ELEMENT subtitle      %hierarchy; >
+<!ATTLIST subtitle %corereq;  >
+<!ELEMENT subclause     %hierarchy; >
+<!ATTLIST subclause %corereq;  >
+
+<!ELEMENT content       %blocksopt; >
+<!ATTLIST content %coreopt;  >
+<!ELEMENT num           %inline; >
+<!ATTLIST num %coreopt;  >
+<!ELEMENT heading       %inline; >
+<!ATTLIST heading %coreopt;  >
+<!ELEMENT subheading    %inline; >
+<!ATTLIST subheading %coreopt;  >
+<!ELEMENT sidenote      %inline; >
+<!ATTLIST sidenote %coreopt;  >
+<!ELEMENT from          %inline; >
+<!ATTLIST from %coreopt;  >
+
+<!--  =====================================================================
+
+Elements for debates documents
+
+=====================================================================  -->
+
+<!ELEMENT AdministrationOfOath  %althierarchy; >
+<!ATTLIST AdministrationOfOath %corereq;  >
+<!ELEMENT Communication         %althierarchy; >
+<!ATTLIST Communication %corereq;  >
+<!ELEMENT Petitions             %althierarchy; >
+<!ATTLIST Petitions %corereq;  >
+<!ELEMENT Papers                %althierarchy; >
+<!ATTLIST Papers %corereq;  >
+<!ELEMENT NoticesOfMotion       %althierarchy; >
+<!ATTLIST NoticesOfMotion %corereq;  >
+<!ELEMENT Questions             %althierarchy; >
+<!ATTLIST Questions %corereq;  >
+<!ELEMENT Address               %althierarchy; >
+<!ATTLIST Address %corereq;  >
+<!ELEMENT ProceduralMotions     %althierarchy; >
+<!ATTLIST ProceduralMotions %corereq;  >
+<!ELEMENT PointOfOrder          %althierarchy; >
+<!ATTLIST PointOfOrder %corereq;  >
+<!ELEMENT subdivision           %althierarchy; >
+<!ATTLIST subdivision %corereq;  >
+
+<!ATTLIST subdivision %name;  >
+
+<!ELEMENT speech              %speechType; >
+<!ATTLIST speech %coreopt;  %speechAtts;  >
+<!ELEMENT question            %speechType; >
+<!ATTLIST question %coreopt;  %speechAtts;  >
+<!ELEMENT answer              %speechType; >
+<!ATTLIST answer %coreopt;  %speechAtts;  >
+<!ELEMENT other               %blocksopt; >
+<!ATTLIST other %coreopt;  >
+<!ELEMENT comment             %inline; >
+<!ATTLIST comment %coreopt;  >
+<!ELEMENT list                (item+)>
+
+<!ATTLIST list %corereq;  >
+
+<!ENTITY % itemType          "(%basehierarchy;,(%blockElements;)+)" >
+<!ELEMENT tblock              %itemType; >
+<!ATTLIST tblock %corereq;  >
+<!ELEMENT item                %itemType; >
+<!ATTLIST item %corereq;  >
+
+<!--  =====================================================================
+
+AN block elements
+Comment: the only AN-specific block is the table of content (TOC),
+a structure containing toc items related to the various subparts of the
+main document.
+
+=====================================================================  -->
+
+<!ELEMENT toc       (tocitem+)>
+<!ELEMENT tocitem   %inline; >
+<!ATTLIST tocitem %coreopt;  >
+
+<!ATTLIST tocitem %link;  level %INTEGER; #REQUIRED >
+
+<!--  =====================================================================
+
+AN inline elements
+Comment: AN-specific inline elements are connected to the
+identification of elements that are corresponding to an inline
+legal structure, regardless of their position in the document.
+
+=====================================================================  -->
+<!ELEMENT ActType      %inline; >
+<!ATTLIST ActType %coreopt;  >
+<!ELEMENT ActTitle     %inline; >
+<!ATTLIST ActTitle %coreopt;  >
+<!ELEMENT ActNumber    %inline; >
+<!ATTLIST ActNumber %coreopt;  >
+<!ELEMENT ActProponent %inline; >
+<!ATTLIST ActProponent %coreopt;  >
+<!ELEMENT ActDate      %inline; >
+<!ATTLIST ActDate %coreopt;  >
+
+<!ATTLIST ActDate %date;  >
+<!ELEMENT ActPurpose   %inline; >
+<!ATTLIST ActPurpose %coreopt;  >
+
+<!ELEMENT mref         %inline; >
+<!ATTLIST mref %coreopt;  >
+<!ELEMENT ref          %inline; >
+<!ATTLIST ref %coreopt;  >
+
+<!ATTLIST ref %link;  >
+<!ELEMENT rref         %inline; >
+<!ATTLIST rref %coreopt;  >
+
+<!ATTLIST rref %link;  upTo %ANYURI; #REQUIRED >
+
+<!ENTITY % modType_mixed  "%InlineCM; | quotedText | quotedStructure" >
+<!ENTITY % modType "(#PCDATA | %modType_mixed;)*" >
+<!ELEMENT mod   %modType; >
+<!ATTLIST mod %coreopt;  >
+<!ELEMENT mmod  %modType; >
+<!ATTLIST mmod %coreopt;  >
+<!ELEMENT rmod  %modType; >
+<!ATTLIST rmod %coreopt;  >
+
+<!ATTLIST rmod upTo %ANYURI; #REQUIRED >
+
+<!ELEMENT quotedText        %inline; >
+<!ATTLIST quotedText %coreopt;  >
+<!ELEMENT quotedStructure   (%hierElements; | %blockElements; | %containerElements;)+>
+
+<!ATTLIST quotedStructure %corereq;  >
+
+<!ELEMENT def          %inline; >
+<!ATTLIST def %coreopt;  >
+<!ELEMENT ins          %inline; >
+<!ATTLIST ins %coreopt;  >
+<!ELEMENT del          %inline; >
+<!ATTLIST del %coreopt;  >
+<!ELEMENT omissis      %inline; >
+<!ATTLIST omissis %coreopt;  >
+
+<!ELEMENT noteref      %markeropt; >
+<!ATTLIST noteref %coreopt;  >
+
+<!ATTLIST noteref %link;  num %STRING; #REQUIRED >
+
+<!ELEMENT recordedTime   %markeropt; >
+<!ATTLIST recordedTime %coreopt;  >
+
+<!ATTLIST recordedTime %time;  >
+
+<!ENTITY % eolType  "%markeropt;" >
+<!ELEMENT eol   %eolType; >
+<!ATTLIST eol breakat %INTEGER; #IMPLIED %coreopt;  >
+<!ELEMENT eop   %eolType; >
+<!ATTLIST eop breakat %INTEGER; #IMPLIED %coreopt;  >
+
+<!--  =====================================================================
+
+Generic elements
+Comment: All elements in this schema fall under one of five
+content models: hierarchical container, container, block, inline
+and mark. Besides named elements, the schema also provides for a
+generic element for each of them, that can be used for markup that
+fits the content models but can be specified by a precise name that
+is not used in this schema. The 'name' attribute must be used for
+naming the element.
+It is also a characteristic of this schema that all named elements
+are equivalent, and can be substituted to, the corresponding generic
+element with their name as the value of the name attribute. Thus, by
+definition, <p>  = <block name="p"> , <part>  = <hcontainer name="part"> ,
+<act>  = <container name="act"> , etc.
+Pattern: Generic Document + Role Attribute
+Reference: http://www.xmlpatterns.com/GenericDocumentMain.shtml +
+http://www.xmlpatterns.com/RoleAttributeMain.shtml
+
+=====================================================================  -->
+
+<!ELEMENT hcontainer %hierarchy; >
+<!ATTLIST hcontainer %corereq;  >
+<!ELEMENT container  %blocksreq; >
+<!ATTLIST container %corereq;  >
+<!ELEMENT block      %inline; >
+<!ATTLIST block %coreopt;  >
+<!ELEMENT inline     %inline; >
+<!ATTLIST inline %coreopt;  >
+<!ELEMENT marker     %markerreq; >
+<!ATTLIST marker %corereq;  >
+<!ELEMENT foreign    %anyOther; >
+
+
+
+<!ATTLIST hcontainer %name;  >
+
+<!ATTLIST container %name;  >
+
+<!ATTLIST block %name;  >
+
+<!ATTLIST inline %name;  >
+
+<!ATTLIST marker %name;  >
+
+<!--  =====================================================================
+
+HTML elements
+Comment: Many elements are drawn directly from HTML 4.0
+Pattern: Reuse Document Types (partial)
+Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
+
+=====================================================================  -->
+
+<!ELEMENT div  %blocksreq; >
+<!ATTLIST div %corereq;  >
+
+<!ELEMENT p    %inline; >
+<!ATTLIST p %coreopt;  >
+<!ELEMENT li   (#PCDATA |%InlineCM; | ul | ol | p)*>
+
+<!ATTLIST li %optvalue;  %coreopt;  >
+
+<!ELEMENT span %inline; >
+<!ATTLIST span %coreopt;  >
+<!ELEMENT b    %inline; >
+<!ATTLIST b %coreopt;  >
+<!ELEMENT i    %inline; >
+<!ATTLIST i %coreopt;  >
+<!ELEMENT a    %inline; >
+<!ATTLIST a %coreopt;  >
+
+<!ATTLIST a %link;  target %STRING; #IMPLIED >
+
+<!ELEMENT img %markeropt; >
+<!ATTLIST img %coreopt;  >
+
+<!ATTLIST img src %ANYURI; #REQUIRED alt %STRING; #IMPLIED width %INTEGER; #IMPLIED height %INTEGER; #IMPLIED >
+
+<!ENTITY % listItems "(li+)" >
+<!ELEMENT ul   %listItems; >
+<!ATTLIST ul %corereq;  >
+<!ELEMENT ol   %listItems; >
+<!ATTLIST ol %corereq;  >
+
+<!ELEMENT table (tr+)>
+
+<!ATTLIST table %corereq;  width %INTEGER; #IMPLIED border %INTEGER; #IMPLIED cellspacing %INTEGER; #IMPLIED cellpadding %INTEGER; #IMPLIED >
+<!ELEMENT tr (th | td)+>
+
+<!ATTLIST tr %corereq;  >
+<!ELEMENT th %inline; >
+<!ATTLIST th %coreopt;  >
+<!ELEMENT td %inline; >
+<!ATTLIST td %coreopt;  >
+
+<!ATTLIST th %cellattrs;  >
+
+<!ATTLIST td %cellattrs;  >
+
+
+<!--  =====================================================================
+
+Metadata elements for acts, bills and generic documents
+
+=====================================================================  -->
+
+<!ELEMENT meta             (identification,publication,classification*,lifecycle*,analysis*,references*,notes*,proprietary*)>
+
+<!ELEMENT identification   (FRBRWork,FRBRExpression,FRBRManifestation,FRBRItem?)>
+
+<!ATTLIST identification %source;  >
+
+<!ENTITY % coreProperties   "(uri+,alias*,date,author+,components?,preservation?)" >
+<!ELEMENT FRBRWork             %coreProperties; >
+<!ELEMENT FRBRExpression       %coreProperties; >
+<!ELEMENT FRBRManifestation    %coreProperties; >
+<!ELEMENT FRBRItem             %coreProperties; >
+
+<!ELEMENT uri              %metaopt; >
+<!ATTLIST uri %idopt;  >
+
+<!ATTLIST uri %value;  >
+<!ELEMENT alias            %metaopt; >
+<!ATTLIST alias %idopt;  >
+
+<!ATTLIST alias %value;  >
+<!ELEMENT date             %metaopt; >
+<!ATTLIST date %idopt;  >
+
+<!ATTLIST date %date;  %name;  >
+<!ELEMENT author           %metaopt; >
+<!ATTLIST author %idopt;  >
+
+<!ATTLIST author %link;  as %ANYURI; #IMPLIED >
+<!ENTITY % comp            "(component*)" >
+<!ELEMENT components       %comp; >
+<!ELEMENT component        %comp; >
+
+<!ATTLIST component %idreq;  %name;  %link;  %show;  >
+<!ELEMENT preservation     %anyOther; >
+
+<!ENTITY % publicationType "EMPTY" >
+<!ELEMENT publication      %publicationType; >
+<!ATTLIST publication %idopt;  %date;  %show;  %name;  %refers;  >
+
+<!ELEMENT classification   (keyword+)>
+
+<!ATTLIST classification %source;  >
+<!ELEMENT keyword %metaopt; >
+<!ATTLIST keyword %idopt;  >
+
+<!ATTLIST keyword %value;  %show;  dictionary %ANYURI; #REQUIRED >
+
+<!ELEMENT lifecycle (event+)>
+
+<!ATTLIST lifecycle %source;  >
+<!ELEMENT event %metareq; >
+<!ATTLIST event %idreq;  >
+
+<!ATTLIST event %date;  %source;  type %EventType; #IMPLIED >
+
+<!ELEMENT analysis              (ActiveModifications?,PassiveModifications?)>
+
+<!ATTLIST analysis %source;  >
+
+<!ENTITY % Amendments          "(TextualMod | MeaningMod | ScopeMod | ForceMod | EfficacyMod | LegalSystemMod)+" >
+<!ENTITY % modificationType    "(source+,destination+,force?,efficacy?,application?,duration?,condition?)" >
+
+<!ENTITY % TextualMods         "(Repeal|Substitution|Insertion|Replacement|Renumbering)" >
+<!ENTITY % ETextualMods "((Repeal|Substitution|Insertion|Replacement|Renumbering))" >
+<!ENTITY % MeaningMods         "(Variation|TermModification|AuthenticInterpretation)" >
+<!ENTITY % EMeaningMods "((Variation|TermModification|AuthenticInterpretation))" >
+<!ENTITY % ScopeMods           "(ExceptionOfScope|ExtensionOfScope)" >
+<!ENTITY % EScopeMods "((ExceptionOfScope|ExtensionOfScope))" >
+<!ENTITY % ForceMods           "(EntryIntoForce|EndOfEnactment|PostponementOfEntryIntoForce|ProrogationOfForce|ReEnactment|Uncostitutionality)" >
+<!ENTITY % EForceMods "((EntryIntoForce|EndOfEnactment|PostponementOfEntryIntoForce|ProrogationOfForce|ReEnactment|Uncostitutionality))" >
+<!ENTITY % EfficacyMods        "(EntryIntoEfficacy|EndOfEfficacy|Inapplication|Retroactivity|Extraefficacy|PostponementOfEfficacy|ProrogationOfEfficacy)" >
+<!ENTITY % EEfficacyMods "((EntryIntoEfficacy|EndOfEfficacy|Inapplication|Retroactivity|Extraefficacy|PostponementOfEfficacy|ProrogationOfEfficacy))" >
+<!ENTITY % LegalSystemMods     "(StaticReference|Implementation|Ratification|Application|LegislativeDelegation|Deregulation|Conversion|Expiration|Reiteration|Remaking|Republication|Coordination)" >
+<!ENTITY % ELegalSystemMods "((StaticReference|Implementation|Ratification|Application|LegislativeDelegation|Deregulation|Conversion|Expiration|Reiteration|Remaking|Republication|Coordination))" >
+
+<!ELEMENT ActiveModifications   %Amendments; >
+<!ELEMENT PassiveModifications  %Amendments; >
+ <!ENTITY            % TextualMod_entity "(%modificationType;,(old?,new?))" ><!ELEMENT TextualMod %TextualMod_entity;>
+<!ATTLIST TextualMod %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ATTLIST TextualMod type %TextualMods; #REQUIRED >
+ <!ENTITY            % MeaningMod_entity "(%modificationType;,(domain?))" ><!ELEMENT MeaningMod %MeaningMod_entity;>
+<!ATTLIST MeaningMod %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ATTLIST MeaningMod type %MeaningMods; #REQUIRED >
+ <!ENTITY              % ScopeMod_entity "(%modificationType;,(domain?))" ><!ELEMENT ScopeMod %ScopeMod_entity;>
+<!ATTLIST ScopeMod %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ATTLIST ScopeMod type %ScopeMods; #REQUIRED >
+<!ELEMENT ForceMod              %modificationType; >
+<!ATTLIST ForceMod %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ATTLIST ForceMod type %ForceMods; #REQUIRED >
+<!ELEMENT EfficacyMod           %modificationType; >
+<!ATTLIST EfficacyMod %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ATTLIST EfficacyMod type %EfficacyMods; #REQUIRED >
+<!ELEMENT LegalSystemMod        %modificationType; >
+<!ATTLIST LegalSystemMod %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ATTLIST LegalSystemMod type %LegalSystemMods; #REQUIRED >
+
+<!ELEMENT source           %argumentType; >
+<!ATTLIST source %idopt;  %link;  upTo %ANYURI; #IMPLIED >
+<!ELEMENT destination      %argumentType; >
+<!ATTLIST destination %idopt;  %link;  upTo %ANYURI; #IMPLIED >
+<!ELEMENT force            %periodType; >
+<!ATTLIST force %idopt;  %period;  >
+<!ELEMENT efficacy         %periodType; >
+<!ATTLIST efficacy %idopt;  %period;  >
+<!ELEMENT application      %periodType; >
+<!ATTLIST application %idopt;  %period;  >
+<!ELEMENT duration         %periodType; >
+<!ATTLIST duration %idopt;  %period;  >
+<!ELEMENT condition        %anyOtherType; >
+<!ATTLIST condition %idopt;  %linkopt;  >
+
+<!ATTLIST condition frozen %BOOLEAN; #IMPLIED >
+<!ELEMENT old              %anyOtherType; >
+<!ATTLIST old %idopt;  %linkopt;  >
+<!ELEMENT new              %anyOtherType; >
+<!ATTLIST new %idopt;  %linkopt;  >
+<!ELEMENT domain           %anyOtherType; >
+<!ATTLIST domain %idopt;  %linkopt;  >
+
+
+
+<!ENTITY % docRefs        "Original | PassiveRef | ActiveRef | Jurisprudence | Attachment | AttachmentOf" >
+<!ENTITY % TLCs           "TLCPerson | TLCOrganization | TLCConcept | TLCObject | TLCEvent | TLCPlace | TLCProcess | TLCRole | TLCTerm | TLCReference" >
+<!ENTITY % refItems       "%docRefs; | %TLCs;" >
+
+<!ELEMENT references     (%refItems;)+>
+
+<!ATTLIST references %source;  >
+
+<!ELEMENT Original         %referenceType; >
+<!ATTLIST Original %idreq;  %link;  %show;  >
+<!ELEMENT PassiveRef       %referenceType; >
+<!ATTLIST PassiveRef %idreq;  %link;  %show;  >
+<!ELEMENT ActiveRef        %referenceType; >
+<!ATTLIST ActiveRef %idreq;  %link;  %show;  >
+<!ELEMENT Jurisprudence    %referenceType; >
+<!ATTLIST Jurisprudence %idreq;  %link;  %show;  >
+<!ELEMENT Attachment       %referenceType; >
+<!ATTLIST Attachment %idreq;  %link;  %show;  >
+
+<!ATTLIST Attachment type CDATA #IMPLIED >
+<!ELEMENT AttachmentOf     %referenceType; >
+<!ATTLIST AttachmentOf %idreq;  %link;  %show;  >
+
+<!ATTLIST AttachmentOf type CDATA #IMPLIED >
+
+<!ELEMENT TLCPerson        %referenceType; >
+<!ATTLIST TLCPerson %idreq;  %link;  %show;  >
+<!ELEMENT TLCOrganization  %referenceType; >
+<!ATTLIST TLCOrganization %idreq;  %link;  %show;  >
+<!ELEMENT TLCConcept       %referenceType; >
+<!ATTLIST TLCConcept %idreq;  %link;  %show;  >
+<!ELEMENT TLCObject        %referenceType; >
+<!ATTLIST TLCObject %idreq;  %link;  %show;  >
+<!ELEMENT TLCEvent         %referenceType; >
+<!ATTLIST TLCEvent %idreq;  %link;  %show;  >
+<!ELEMENT TLCPlace         %referenceType; >
+<!ATTLIST TLCPlace %idreq;  %link;  %show;  >
+<!ELEMENT TLCProcess       %referenceType; >
+<!ATTLIST TLCProcess %idreq;  %link;  %show;  >
+<!ELEMENT TLCRole          %referenceType; >
+<!ATTLIST TLCRole %idreq;  %link;  %show;  >
+<!ELEMENT TLCTerm          %referenceType; >
+<!ATTLIST TLCTerm %idreq;  %link;  %show;  >
+<!ELEMENT TLCReference     %referenceType; >
+<!ATTLIST TLCReference %idreq;  %link;  %show;  >
+
+<!ATTLIST TLCReference %name;  >
+
+<!ELEMENT notes        (note)+>
+
+<!ATTLIST notes %source;  >
+<!ELEMENT note         %blocksreq; >
+<!ATTLIST note %corereq;  >
+
+<!ELEMENT proprietary %anyOther; >
+
+<!ATTLIST proprietary %source;  >
+
+
+
+<!--  =====================================================================
+
+End of Schema
+
+=====================================================================  -->
