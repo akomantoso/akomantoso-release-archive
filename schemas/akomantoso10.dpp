@@ -3,7 +3,7 @@
        Akoma Ntoso main schema                                                  
                                                                            
                                                                            
-       Release  17/09/2007                                                 
+       Release  3/3/2007 (test with judgments)                                                
        technical supervision Fabio Vitali - University of Bologna
        legal domain supervision Monica Palmirani - University of Bologna
                                                                            
@@ -27,6 +27,8 @@
 <!ENTITY @@ ANblock         "(toc | comment | list | tblock)" >
 <!ENTITY @@ ANinline        "(def | ref | mref | rref | mod | mmod | rmod | ins | del | omissis)" >
 <!ENTITY @@ ANtitleInline   "(ActType | ActTitle | ActNumber | ActProponent | ActDate | ActPurpose)" >
+<!ENTITY @@ ANheaderInline   "(judgmentType | judgmentTitle | judgmentNumber | courtType | neutralCitation | party | judge | judgmentDate)" >
+
 <!ENTITY @@ ANmarker        "(noteref | recordedTime | eol | eop )" >
 
 <!ENTITY @@ HTMLcontainers    "( div )" >
@@ -37,14 +39,15 @@
 <!ENTITY @@ hierElements      "(@@ANhier;   |                     hcontainer)">
 <!ENTITY @@ containerElements "(              @@HTMLcontainers; | container)">
 <!ENTITY @@ blockElements     "(@@ANblock;  | @@HTMLblock;      | block      | foreign)">
-<!ENTITY @@ inlineElements    "(@@ANinline; | @@HTMLinline;     | inline        | @@ANtitleInline; )">
+<!ENTITY @@ inlineElements    "(@@ANinline; | @@HTMLinline;     | inline        | @@ANtitleInline; | @@ANheaderInline;)">
 <!ENTITY @@ markerElements    "(@@ANmarker; | @@HTMLmarker;     | marker  )">
 
 <!ENTITY @@ InlineCM          "(@@inlineElements; | @@markerElements;)">
 
 
+<!ENTITY @@ judgmentBlock    "(introduction | background | motivation | decision)">
 <!ENTITY @@ speechItems       "(speech | question | answer | other | comment)">
-<!ENTITY @@ SpeechSection     "(AdministrationOfOath|Communication|Petitions|Papers|NoticesOfMotion|Questions|Address|ProceduralMotions|PointOfOrder|subdivision)">
+<!ENTITY @@ SpeechSection     "(AdministrationOfOath|DeclarationOfVote|Communication|Petitions|Papers|NoticesOfMotion|Questions|Address|ProceduralMotions|PointOfOrder|subdivision)">
 
 <!-- =====================================================================
 
@@ -80,6 +83,10 @@
     exclusion  #BOOLEAN #IMPLIED
     incomplete #BOOLEAN #IMPLIED
 ">
+<!ENTITY ## role "
+    as #ANYURI #IMPLIED
+">
+
 
 <!ENTITY ## cellattrs    "rowspan      #INTEGER     '1'
                           colspan      #INTEGER     '1'  ">
@@ -122,6 +129,8 @@
 <!ENTITY @ metaopt           "" "##idopt;">
 <!ENTITY @ anyOther          "ANY{##other}">
 
+<!ENTITY @ maincontent       "(@@hierElements; | @@SpeechSection; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
+
 <!ENTITY @ speechType        "(from, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 <!ENTITY @ referenceType     ""                            "##idreq; ##link; ##show;" >
 <!ENTITY @ argumentType      ""                            "##idopt; ##link; upTo   #ANYURI #IMPLIED" >
@@ -137,7 +146,7 @@
 
      ===================================================================== -->
 
-<!ENTITY @ DocumentTypes "(act | bill | doc | report | debaterecord)">
+<!ENTITY @ DocumentTypes "(act | bill | doc | report | debaterecord | judgment)">
 <!ROOT akomantoso           @DocumentTypes; >
           
 <!-- =====================================================================
@@ -170,12 +179,20 @@
                                    conclusions?, 
                                    attachments?)" 
                                  " contains #VersionType; 'OriginalVersion'">
+<!ENTITY @ judgmentStructure    "(meta, 
+                                   header,
+                                   judgmentBody, 
+                                   conclusions, 
+                                   attachments?)" 
+                                 " contains #VersionType; 'OriginalVersion'">
+
 
 <!ELEMENT act           @HierarchicalStructure; >
 <!ELEMENT bill          @HierarchicalStructure; >
 <!ELEMENT doc           @OpenStructure; >
 <!ELEMENT report        @OpenStructure; >
 <!ELEMENT debaterecord  @DebateStructure; >
+<!ELEMENT judgment     @judgmentStructure; >
 
 <!-- =====================================================================
 
@@ -186,17 +203,19 @@
 <!ELEMENT preface     @blocksopt; >
 <!ELEMENT preamble    @blocksopt; >
 <!ELEMENT conclusions @blocksopt; >
+<!ELEMENT header      @blocksopt; >
 <!ELEMENT attachments (attachment+) >
 <!ATTLIST attachments ##coreopt; >
 <!ELEMENT attachment  @referenceType; >
 
 
-<!ELEMENT body        (@@hierElements;)+ >
-<!ATTLIST body        ##coreopt; >
-<!ELEMENT debate      (@@SpeechSection;+) >
-<!ATTLIST debate      ##coreopt; >
-<!ELEMENT maincontent (@@hierElements; | @@SpeechSection; | @@blockElements; | @@containerElements; )+ >
-<!ATTLIST maincontent ##coreopt; >
+<!ELEMENT body            (@@hierElements;)+ >
+<!ATTLIST body            ##coreopt; >
+<!ELEMENT debate          (@@SpeechSection;+) >
+<!ATTLIST debate          ##coreopt; >
+<!ELEMENT maincontent     @maincontent; >
+<!ELEMENT judgmentBody   (@@judgmentBlock;)+ >
+<!ATTLIST judgmentBody   ##coreopt; >
 
 <!-- =====================================================================
 
@@ -233,6 +252,7 @@
      ===================================================================== -->
 
 <!ELEMENT AdministrationOfOath  @althierarchy; >
+<!ELEMENT DeclarationOfVote     @althierarchy; >
 <!ELEMENT Communication         @althierarchy; >
 <!ELEMENT Petitions             @althierarchy; >
 <!ELEMENT Papers                @althierarchy; >
@@ -251,6 +271,11 @@
 <!ELEMENT comment             @inline; >
 <!ELEMENT list                (item+) >
 <!ATTLIST list                ##corereq; >
+
+<!ELEMENT introduction        @maincontent; >
+<!ELEMENT background          @maincontent; >
+<!ELEMENT motivation          @maincontent; >
+<!ELEMENT decision            @maincontent; >
 
 <!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 <!ELEMENT tblock              @itemType; >
@@ -284,6 +309,18 @@
 <!ELEMENT ActDate      @inline; >
 <!ATTLIST ActDate      ##date; >
 <!ELEMENT ActPurpose   @inline; >
+
+<!ELEMENT judgmentType      @inline; >
+<!ELEMENT judgmentTitle     @inline; >
+<!ELEMENT judgmentNumber    @inline; >
+<!ELEMENT courtType          @inline; >
+<!ELEMENT neutralCitation    @inline; >
+<!ELEMENT party              @inline; >
+<!ATTLIST party              ##role; >
+<!ELEMENT judge              @inline; >
+<!ATTLIST judge              ##role; >
+<!ELEMENT judgmentDate      @inline; >
+<!ATTLIST judgmentDate      ##date; ##name; >
 
 <!ELEMENT mref         @inline; >
 <!ELEMENT ref          @inline; >
@@ -417,18 +454,20 @@
 
      ===================================================================== -->
 
-<!ELEMENT meta             (identification, publication, classification*, lifecycle*, 
+<!ELEMENT meta             (identification, publication, classification*, lifecycle*, workflow*,
                             analysis*, references*, notes*, proprietary*) >
 
 <!ELEMENT identification   (FRBRWork, FRBRExpression, FRBRManifestation, FRBRItem?) >
 <!ATTLIST identification   ##source; >
 
-<!ENTITY @ coreProperties   "(uri+, alias*, date, author+, components?, preservation?)" >
+<!ENTITY @ coreProperties   "(this, uri+, alias*, date, author+, components?, preservation?)" >
 <!ELEMENT FRBRWork             @coreProperties; >
 <!ELEMENT FRBRExpression       @coreProperties; >
 <!ELEMENT FRBRManifestation    @coreProperties; >
 <!ELEMENT FRBRItem             @coreProperties; >
 
+<!ELEMENT this             @metaopt;>
+<!ATTLIST this             ##value; >
 <!ELEMENT uri              @metaopt;>
 <!ATTLIST uri              ##value; >
 <!ELEMENT alias            @metaopt;>
@@ -462,6 +501,16 @@
 <!ATTLIST event
     ##date;
     ##source;
+    type   #EventType; #IMPLIED
+>
+
+<!ELEMENT workflow   (action+)>
+<!ATTLIST workflow   ##source; >
+<!ELEMENT action     @metareq;>
+<!ATTLIST action
+    ##date;
+    ##source;
+    ##role;
     type   #EventType; #IMPLIED
 >
 
@@ -512,7 +561,7 @@
 
 
 
-<!ENTITY @@ docRefs        "(Original|PassiveRef|ActiveRef|Jurisprudence|Attachment|AttachmentOf)" >
+<!ENTITY @@ docRefs        "(Original|PassiveRef|ActiveRef|Jurisprudence|HasAttachment|AttachmentOf)" >
 <!ENTITY @@ TLCs           "(TLCPerson|TLCOrganization|TLCConcept|TLCObject|TLCEvent|TLCPlace|TLCProcess|TLCRole|TLCTerm|TLCReference)" >
 <!ENTITY @@ refItems       "(@@docRefs;|@@TLCs;")>
 
@@ -523,8 +572,8 @@
 <!ELEMENT PassiveRef       @referenceType; >
 <!ELEMENT ActiveRef        @referenceType; >
 <!ELEMENT Jurisprudence    @referenceType; >
-<!ELEMENT Attachment       @referenceType; >
-<!ATTLIST Attachment       type CDATA  #IMPLIED >
+<!ELEMENT HasAttachment    @referenceType; >
+<!ATTLIST HasAttachment    type CDATA  #IMPLIED >
 <!ELEMENT AttachmentOf     @referenceType; >
 <!ATTLIST AttachmentOf     type CDATA  #IMPLIED >
 
