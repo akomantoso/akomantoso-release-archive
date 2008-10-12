@@ -14,7 +14,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		Akoma Ntoso main schema
 		
 		
-		Release  17/09/2007
+		Release  3/3/2007 (test with judgments)
 		technical supervision Fabio Vitali - University of Bologna
 		legal domain supervision Monica Palmirani - University of Bologna
 		
@@ -38,6 +38,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:group name="ANhier">
+
 		<xsd:choice>
 			<xsd:element ref="section"/>
 			<xsd:element ref="part"/>
@@ -58,12 +59,14 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="ANcontainers">
+
 		<xsd:sequence>
 			<xsd:element ref="div"/>
 		</xsd:sequence>
 	</xsd:group>
 
 	<xsd:group name="ANblock">
+
 		<xsd:choice>
 			<xsd:element ref="toc"/>
 			<xsd:element ref="comment"/>
@@ -73,6 +76,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="ANinline">
+
 		<xsd:choice>
 			<xsd:element ref="def"/>
 			<xsd:element ref="ref"/>
@@ -88,6 +92,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="ANtitleInline">
+
 		<xsd:choice>
 			<xsd:element ref="ActType"/>
 			<xsd:element ref="ActTitle"/>
@@ -98,7 +103,22 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		</xsd:choice>
 	</xsd:group>
 
+	<xsd:group name="ANheaderInline">
+
+		<xsd:choice>
+			<xsd:element ref="judgmentType"/>
+			<xsd:element ref="judgmentTitle"/>
+			<xsd:element ref="judgmentNumber"/>
+			<xsd:element ref="courtType"/>
+			<xsd:element ref="neutralCitation"/>
+			<xsd:element ref="party"/>
+			<xsd:element ref="judge"/>
+			<xsd:element ref="judgmentDate"/>
+		</xsd:choice>
+	</xsd:group>
+
 	<xsd:group name="ANmarker">
+
 		<xsd:choice>
 			<xsd:element ref="noteref"/>
 			<xsd:element ref="recordedTime"/>
@@ -108,12 +128,14 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="HTMLcontainers">
+
 		<xsd:sequence>
 			<xsd:element ref="div"/>
 		</xsd:sequence>
 	</xsd:group>
 
 	<xsd:group name="HTMLblock">
+
 		<xsd:choice>
 			<xsd:element ref="p"/>
 			<xsd:element ref="ul"/>
@@ -123,6 +145,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="HTMLinline">
+
 		<xsd:choice>
 			<xsd:element ref="span"/>
 			<xsd:element ref="b"/>
@@ -132,12 +155,14 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="HTMLmarker">
+
 		<xsd:sequence>
 			<xsd:element ref="img"/>
 		</xsd:sequence>
 	</xsd:group>
 
 	<xsd:group name="hierElements">
+
 		<xsd:choice>
 			<xsd:group ref="ANhier" />
 			<xsd:element ref="hcontainer"/>
@@ -145,6 +170,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="containerElements">
+
 		<xsd:choice>
 			<xsd:group ref="HTMLcontainers" />
 			<xsd:element ref="container"/>
@@ -152,6 +178,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="blockElements">
+
 		<xsd:choice>
 			<xsd:group ref="ANblock" />
 			<xsd:group ref="HTMLblock" />
@@ -161,15 +188,18 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="inlineElements">
+
 		<xsd:choice>
 			<xsd:group ref="ANinline" />
 			<xsd:group ref="HTMLinline" />
 			<xsd:element ref="inline"/>
 			<xsd:group ref="ANtitleInline" />
+			<xsd:group ref="ANheaderInline" />
 		</xsd:choice>
 	</xsd:group>
 
 	<xsd:group name="markerElements">
+
 		<xsd:choice>
 			<xsd:group ref="ANmarker" />
 			<xsd:group ref="HTMLmarker" />
@@ -178,13 +208,25 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="InlineCM">
+
 		<xsd:choice>
 			<xsd:group ref="inlineElements" />
 			<xsd:group ref="markerElements" />
 		</xsd:choice>
 	</xsd:group>
 
+	<xsd:group name="judgmentBlock">
+
+		<xsd:choice>
+			<xsd:element ref="introduction"/>
+			<xsd:element ref="background"/>
+			<xsd:element ref="motivation"/>
+			<xsd:element ref="decision"/>
+		</xsd:choice>
+	</xsd:group>
+
 	<xsd:group name="speechItems">
+
 		<xsd:choice>
 			<xsd:element ref="speech"/>
 			<xsd:element ref="question"/>
@@ -195,8 +237,10 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="SpeechSection">
+
 		<xsd:choice>
 			<xsd:element ref="AdministrationOfOath"/>
+			<xsd:element ref="DeclarationOfVote"/>
 			<xsd:element ref="Communication"/>
 			<xsd:element ref="Petitions"/>
 			<xsd:element ref="Papers"/>
@@ -220,49 +264,60 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:attributeGroup name="name">
+
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="source">
+
 		<xsd:attribute name="source" type="xsd:anyURI" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="date">
+
 		<xsd:attribute name="date" type="xsd:date" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="time">
+
 		<xsd:attribute name="time" type="xsd:time" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="link">
+
 		<xsd:attribute name="href" type="xsd:anyURI" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="linkopt">
+
 		<xsd:attribute name="href" type="xsd:anyURI"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="value">
+
 		<xsd:attribute name="value" type="xsd:string" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="optvalue">
+
 		<xsd:attribute name="value" type="xsd:string"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="speechAtts">
+
 		<xsd:attribute name="by" type="xsd:anyURI" use="required"/>
 		<xsd:attribute name="as" type="xsd:anyURI"/>
 		<xsd:attribute name="to" type="xsd:anyURI"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="show">
+
 		<xsd:attribute name="showAs" type="xsd:string" use="required"/>
 		<xsd:attribute name="shortForm" type="xsd:string"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="period">
+
 		<xsd:attribute name="start" type="xsd:anyURI"/>
 		<xsd:attribute name="end" type="xsd:anyURI"/>
 		<xsd:attribute name="startEfficacy" type="xsd:anyURI"/>
@@ -270,50 +325,73 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="enactment">
+
 		<xsd:attributeGroup ref="period"/>
+
 		<xsd:attribute name="status" type="statusType"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="modifiers">
+
 		<xsd:attribute name="exclusion" type="xsd:boolean"/>
 		<xsd:attribute name="incomplete" type="xsd:boolean"/>
 	</xsd:attributeGroup>
 
+	<xsd:attributeGroup name="role">
+
+		<xsd:attribute name="as" type="xsd:anyURI"/>
+	</xsd:attributeGroup>
+
 	<xsd:attributeGroup name="cellattrs">
+
 		<xsd:attribute name="rowspan" type="xsd:integer" default="1" />
 		<xsd:attribute name="colspan" type="xsd:integer" default="1" />
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="HTMLattrs">
+
 		<xsd:attribute name="class" type="xsd:string"/>
 		<xsd:attribute name="style" type="xsd:string"/>
 		<xsd:attribute name="title" type="xsd:string"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="idreq">
+
 		<xsd:attribute name="id" type="xsd:ID" use="required"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="idopt">
+
 		<xsd:attribute name="id" type="xsd:ID"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="refers">
+
 		<xsd:attribute name="refersTo" type="xsd:IDREF"/>
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="corereq">
+
 		<xsd:attributeGroup ref="HTMLattrs"/>
+
 		<xsd:attributeGroup ref="enactment"/>
+
 		<xsd:attributeGroup ref="idreq"/>
+
 		<xsd:attributeGroup ref="refers"/>
+
 	</xsd:attributeGroup>
 
 	<xsd:attributeGroup name="coreopt">
+
 		<xsd:attributeGroup ref="HTMLattrs"/>
+
 		<xsd:attributeGroup ref="enactment"/>
+
 		<xsd:attributeGroup ref="idopt"/>
+
 		<xsd:attributeGroup ref="refers"/>
+
 	</xsd:attributeGroup>
 
 	<xsd:annotation>
@@ -327,6 +405,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:simpleType name="VersionType"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="OriginalVersion" />
 			<xsd:enumeration value="SingleVersion" />
@@ -335,6 +414,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="EventType"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="Generation" />
 			<xsd:enumeration value="Amendment" />
@@ -343,6 +423,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="statusType"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="omissis" />
 			<xsd:enumeration value="repealed" />
@@ -362,6 +443,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:complexType name="basehierarchy"  >
+
 		<xsd:sequence >
 			<xsd:element ref="num" minOccurs="0" maxOccurs="1" />
 			<xsd:element ref="heading" minOccurs="0" maxOccurs="1" />
@@ -371,6 +453,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="hierarchy"  >
+
 		<xsd:complexContent>
 			<xsd:extension base="basehierarchy">
 				<xsd:choice >
@@ -383,6 +466,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="althierarchy"  >
+
 		<xsd:complexContent>
 			<xsd:extension base="basehierarchy">
 				<xsd:choice minOccurs="0" maxOccurs="unbounded" >
@@ -395,6 +479,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="blocksreq"  >
+
 		<xsd:sequence minOccurs="1" maxOccurs="unbounded" >
 			<xsd:group ref="blockElements" />
 		</xsd:sequence>
@@ -402,6 +487,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="blocksopt"  >
+
 		<xsd:sequence minOccurs="1" maxOccurs="unbounded" >
 			<xsd:group ref="blockElements" />
 		</xsd:sequence>
@@ -409,6 +495,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="inline"  mixed="true">
+
 		<xsd:choice minOccurs="0" maxOccurs="unbounded" >
 			<xsd:group ref="InlineCM" />
 		</xsd:choice>
@@ -416,28 +503,45 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="markerreq"  >
+
 		<xsd:attributeGroup ref="corereq"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="markeropt"  >
+
 		<xsd:attributeGroup ref="coreopt"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="metareq"  >
+
 		<xsd:attributeGroup ref="idreq"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="metaopt"  >
+
 		<xsd:attributeGroup ref="idopt"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="anyOther"  >
+
 		<xsd:choice>
-			<xsd:any minOccurs="0" processContents="lax"  namespace="##other"/>
+			<xsd:any  namespace="##other"/>
 		</xsd:choice>
 	</xsd:complexType>
 
+	<xsd:complexType name="maincontent"  >
+
+		<xsd:choice minOccurs="1" maxOccurs="unbounded" >
+			<xsd:group ref="hierElements" />
+			<xsd:group ref="SpeechSection" />
+			<xsd:group ref="blockElements" />
+			<xsd:group ref="containerElements" />
+		</xsd:choice>
+		<xsd:attributeGroup ref="coreopt"/>
+	</xsd:complexType>
+
 	<xsd:complexType name="speechType"  >
+
 		<xsd:sequence >
 			<xsd:element ref="from" />
 			<xsd:sequence minOccurs="1" maxOccurs="unbounded" >
@@ -449,25 +553,29 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="referenceType"  >
+
 		<xsd:attributeGroup ref="idreq"/>
 		<xsd:attributeGroup ref="link"/>
 		<xsd:attributeGroup ref="show"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="argumentType"  >
+
 		<xsd:attributeGroup ref="idopt"/>
 		<xsd:attributeGroup ref="link"/>
 		<xsd:attribute name="upTo" type="xsd:anyURI"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="periodType"  >
+
 		<xsd:attributeGroup ref="idopt"/>
 		<xsd:attributeGroup ref="period"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="anyOtherType"  >
+
 		<xsd:choice>
-			<xsd:any minOccurs="0" processContents="lax"  namespace="##other"/>
+			<xsd:any  namespace="##other"/>
 		</xsd:choice>
 		<xsd:attributeGroup ref="idopt"/>
 		<xsd:attributeGroup ref="linkopt"/>
@@ -487,16 +595,19 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:complexType name="DocumentTypes"  >
+
 		<xsd:choice >
 			<xsd:element ref="act" />
 			<xsd:element ref="bill" />
 			<xsd:element ref="doc" />
 			<xsd:element ref="report" />
 			<xsd:element ref="debaterecord" />
+			<xsd:element ref="judgment" />
 		</xsd:choice>
 	</xsd:complexType>
 
 	<xsd:element name="akomantoso"  type="DocumentTypes" />
+
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -512,6 +623,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:complexType name="HierarchicalStructure"  >
+
 		<xsd:sequence >
 			<xsd:element ref="meta" />
 			<xsd:element ref="preface" minOccurs="0" maxOccurs="1" />
@@ -524,6 +636,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="OpenStructure"  >
+
 		<xsd:sequence >
 			<xsd:element ref="meta" />
 			<xsd:element ref="preface" minOccurs="0" maxOccurs="1" />
@@ -536,6 +649,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="DebateStructure"  >
+
 		<xsd:sequence >
 			<xsd:element ref="meta" />
 			<xsd:element ref="preface" minOccurs="0" maxOccurs="1" />
@@ -546,15 +660,35 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		<xsd:attribute name="contains" type="VersionType" default="OriginalVersion" />
 	</xsd:complexType>
 
+	<xsd:complexType name="judgmentStructure"  >
+
+		<xsd:sequence >
+			<xsd:element ref="meta" />
+			<xsd:element ref="header" />
+			<xsd:element ref="judgmentBody" />
+			<xsd:element ref="conclusions" />
+			<xsd:element ref="attachments" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="contains" type="VersionType" default="OriginalVersion" />
+	</xsd:complexType>
+
 	<xsd:element name="act"  type="HierarchicalStructure" />
+
 
 	<xsd:element name="bill"  type="HierarchicalStructure" />
 
+
 	<xsd:element name="doc"  type="OpenStructure" />
+
 
 	<xsd:element name="report"  type="OpenStructure" />
 
+
 	<xsd:element name="debaterecord"  type="DebateStructure" />
+
+
+	<xsd:element name="judgment"  type="judgmentStructure" />
+
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -568,9 +702,15 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="preface"  type="blocksopt" />
 
+
 	<xsd:element name="preamble"  type="blocksopt" />
 
+
 	<xsd:element name="conclusions"  type="blocksopt" />
+
+
+	<xsd:element name="header"  type="blocksopt" />
+
 
 	<xsd:element name="attachments" >
 		<xsd:complexType >
@@ -582,6 +722,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="attachment"  type="referenceType" />
+
 
 	<xsd:element name="body" >
 		<xsd:complexType >
@@ -601,14 +742,14 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="maincontent" >
+	<xsd:element name="maincontent"  type="maincontent" />
+
+
+	<xsd:element name="judgmentBody" >
 		<xsd:complexType >
-			<xsd:choice minOccurs="1" maxOccurs="unbounded" >
-				<xsd:group ref="hierElements" />
-				<xsd:group ref="SpeechSection" />
-				<xsd:group ref="blockElements" />
-				<xsd:group ref="containerElements" />
-			</xsd:choice>
+			<xsd:sequence minOccurs="1" maxOccurs="unbounded" >
+				<xsd:group ref="judgmentBlock" />
+			</xsd:sequence>
 				<xsd:attributeGroup ref="coreopt"/>
 		</xsd:complexType>
 	</xsd:element>
@@ -625,45 +766,66 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="section"  type="hierarchy" />
 
+
 	<xsd:element name="part"  type="hierarchy" />
+
 
 	<xsd:element name="paragraph"  type="hierarchy" />
 
+
 	<xsd:element name="chapter"  type="hierarchy" />
+
 
 	<xsd:element name="title"  type="hierarchy" />
 
+
 	<xsd:element name="book"  type="hierarchy" />
+
 
 	<xsd:element name="tome"  type="hierarchy" />
 
+
 	<xsd:element name="article"  type="hierarchy" />
+
 
 	<xsd:element name="clause"  type="hierarchy" />
 
+
 	<xsd:element name="subsection"  type="hierarchy" />
+
 
 	<xsd:element name="subpart"  type="hierarchy" />
 
+
 	<xsd:element name="subparagraph"  type="hierarchy" />
+
 
 	<xsd:element name="subchapter"  type="hierarchy" />
 
+
 	<xsd:element name="subtitle"  type="hierarchy" />
+
 
 	<xsd:element name="subclause"  type="hierarchy" />
 
+
 	<xsd:element name="content"  type="blocksopt" />
+
 
 	<xsd:element name="num"  type="inline" />
 
+
 	<xsd:element name="heading"  type="inline" />
+
 
 	<xsd:element name="subheading"  type="inline" />
 
+
 	<xsd:element name="sidenote"  type="inline" />
 
+
 	<xsd:element name="from"  type="inline" />
+
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -677,23 +839,36 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="AdministrationOfOath"  type="althierarchy" />
 
+
+	<xsd:element name="DeclarationOfVote"  type="althierarchy" />
+
+
 	<xsd:element name="Communication"  type="althierarchy" />
+
 
 	<xsd:element name="Petitions"  type="althierarchy" />
 
+
 	<xsd:element name="Papers"  type="althierarchy" />
+
 
 	<xsd:element name="NoticesOfMotion"  type="althierarchy" />
 
+
 	<xsd:element name="Questions"  type="althierarchy" />
+
 
 	<xsd:element name="Address"  type="althierarchy" />
 
+
 	<xsd:element name="ProceduralMotions"  type="althierarchy" />
+
 
 	<xsd:element name="PointOfOrder"  type="althierarchy" />
 
+
 	<xsd:element name="subdivision"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="althierarchy">
@@ -705,13 +880,18 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="speech"  type="speechType" />
 
+
 	<xsd:element name="question"  type="speechType" />
+
 
 	<xsd:element name="answer"  type="speechType" />
 
+
 	<xsd:element name="other"  type="blocksopt" />
 
+
 	<xsd:element name="comment"  type="inline" />
+
 
 	<xsd:element name="list" >
 		<xsd:complexType >
@@ -722,7 +902,20 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		</xsd:complexType>
 	</xsd:element>
 
+	<xsd:element name="introduction"  type="maincontent" />
+
+
+	<xsd:element name="background"  type="maincontent" />
+
+
+	<xsd:element name="motivation"  type="maincontent" />
+
+
+	<xsd:element name="decision"  type="maincontent" />
+
+
 	<xsd:complexType name="itemType"  >
+
 		<xsd:complexContent>
 			<xsd:extension base="basehierarchy">
 				<xsd:sequence minOccurs="1" maxOccurs="unbounded" >
@@ -735,7 +928,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="tblock"  type="itemType" />
 
+
 	<xsd:element name="item"  type="itemType" />
+
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -759,6 +954,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="tocitem"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -784,13 +980,18 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="ActType"  type="inline" />
 
+
 	<xsd:element name="ActTitle"  type="inline" />
+
 
 	<xsd:element name="ActNumber"  type="inline" />
 
+
 	<xsd:element name="ActProponent"  type="inline" />
 
+
 	<xsd:element name="ActDate"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -802,9 +1003,61 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="ActPurpose"  type="inline" />
 
+
+	<xsd:element name="judgmentType"  type="inline" />
+
+
+	<xsd:element name="judgmentTitle"  type="inline" />
+
+
+	<xsd:element name="judgmentNumber"  type="inline" />
+
+
+	<xsd:element name="courtType"  type="inline" />
+
+
+	<xsd:element name="neutralCitation"  type="inline" />
+
+
+	<xsd:element name="party"  >
+
+		<xsd:complexType mixed="true">
+			<xsd:complexContent>
+				<xsd:extension base="inline">
+					<xsd:attributeGroup ref="role"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="judge"  >
+
+		<xsd:complexType mixed="true">
+			<xsd:complexContent>
+				<xsd:extension base="inline">
+					<xsd:attributeGroup ref="role"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="judgmentDate"  >
+
+		<xsd:complexType mixed="true">
+			<xsd:complexContent>
+				<xsd:extension base="inline">
+					<xsd:attributeGroup ref="date"/>
+					<xsd:attributeGroup ref="name"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
 	<xsd:element name="mref"  type="inline" />
 
+
 	<xsd:element name="ref"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -815,6 +1068,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="rref"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -826,6 +1080,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:complexType name="modType"  mixed="true">
+
 		<xsd:choice minOccurs="0" maxOccurs="unbounded" >
 			<xsd:group ref="InlineCM" />
 			<xsd:element ref="quotedText" />
@@ -836,9 +1091,12 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="mod"  type="modType" />
 
+
 	<xsd:element name="mmod"  type="modType" />
 
+
 	<xsd:element name="rmod"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="modType">
@@ -849,6 +1107,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="quotedText"  type="inline" />
+
 
 	<xsd:element name="quotedStructure" >
 		<xsd:complexType >
@@ -863,13 +1122,18 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="def"  type="inline" />
 
+
 	<xsd:element name="ins"  type="inline" />
+
 
 	<xsd:element name="del"  type="inline" />
 
+
 	<xsd:element name="omissis"  type="inline" />
 
+
 	<xsd:element name="noteref"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="markeropt">
@@ -881,6 +1145,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="recordedTime"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="markeropt">
@@ -891,6 +1156,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:complexType name="eolType"  >
+
 		<xsd:complexContent>
 			<xsd:extension base="markeropt">
 				<xsd:attribute name="breakat" type="xsd:integer"/>
@@ -900,7 +1166,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="eol"  type="eolType" />
 
+
 	<xsd:element name="eop"  type="eolType" />
+
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -928,6 +1196,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:annotation>
 
 	<xsd:element name="hcontainer"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="hierarchy">
@@ -938,6 +1207,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="container"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="blocksreq">
@@ -948,6 +1218,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="block"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -958,6 +1229,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="inline"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -968,6 +1240,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="marker"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="markerreq">
@@ -978,6 +1251,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="foreign"  type="anyOther" />
+
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -994,9 +1268,12 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="div"  type="blocksreq" />
 
+
 	<xsd:element name="p"  type="inline" />
 
+
 	<xsd:element name="li" >
+
 		<xsd:complexType mixed="true">
 			<xsd:choice minOccurs="0" maxOccurs="unbounded" >
 				<xsd:group ref="InlineCM" />
@@ -1011,11 +1288,15 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="span"  type="inline" />
 
+
 	<xsd:element name="b"  type="inline" />
+
 
 	<xsd:element name="i"  type="inline" />
 
+
 	<xsd:element name="a"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -1027,6 +1308,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="img"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="markeropt">
@@ -1040,6 +1322,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:complexType name="listItems"  >
+
 		<xsd:sequence >
 			<xsd:element ref="li" minOccurs="1" maxOccurs="unbounded" />
 		</xsd:sequence>
@@ -1048,7 +1331,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="ul"  type="listItems" />
 
+
 	<xsd:element name="ol"  type="listItems" />
+
 
 	<xsd:element name="table" >
 		<xsd:complexType >
@@ -1074,6 +1359,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="th"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -1084,6 +1370,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="td"  >
+
 		<xsd:complexType mixed="true">
 			<xsd:complexContent>
 				<xsd:extension base="inline">
@@ -1110,6 +1397,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 				<xsd:element ref="publication" />
 				<xsd:element ref="classification" minOccurs="0" maxOccurs="unbounded" />
 				<xsd:element ref="lifecycle" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element ref="workflow" minOccurs="0" maxOccurs="unbounded" />
 				<xsd:element ref="analysis" minOccurs="0" maxOccurs="unbounded" />
 				<xsd:element ref="references" minOccurs="0" maxOccurs="unbounded" />
 				<xsd:element ref="notes" minOccurs="0" maxOccurs="unbounded" />
@@ -1131,7 +1419,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:complexType name="coreProperties"  >
+
 		<xsd:sequence >
+			<xsd:element ref="this" />
 			<xsd:element ref="uri" minOccurs="1" maxOccurs="unbounded" />
 			<xsd:element ref="alias" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element ref="date" />
@@ -1143,13 +1433,29 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="FRBRWork"  type="coreProperties" />
 
+
 	<xsd:element name="FRBRExpression"  type="coreProperties" />
+
 
 	<xsd:element name="FRBRManifestation"  type="coreProperties" />
 
+
 	<xsd:element name="FRBRItem"  type="coreProperties" />
 
+
+	<xsd:element name="this"  >
+
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="metaopt">
+					<xsd:attributeGroup ref="value"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
 	<xsd:element name="uri"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="metaopt">
@@ -1160,6 +1466,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="alias"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="metaopt">
@@ -1170,6 +1477,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="date"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="metaopt">
@@ -1181,6 +1489,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="author"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="metaopt">
@@ -1192,6 +1501,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:complexType name="comp"  >
+
 		<xsd:sequence >
 			<xsd:element ref="component" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
@@ -1199,7 +1509,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="components"  type="comp" />
 
+
 	<xsd:element name="component"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="comp">
@@ -1214,7 +1526,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="preservation"  type="anyOther" />
 
+
 	<xsd:complexType name="publicationType"  >
+
 		<xsd:attributeGroup ref="idopt"/>
 		<xsd:attributeGroup ref="date"/>
 		<xsd:attributeGroup ref="show"/>
@@ -1223,6 +1537,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:element name="publication"  type="publicationType" />
+
 
 	<xsd:element name="classification" >
 		<xsd:complexType >
@@ -1234,6 +1549,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="keyword"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="metaopt">
@@ -1255,11 +1571,35 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="event"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="metareq">
 					<xsd:attributeGroup ref="date"/>
 					<xsd:attributeGroup ref="source"/>
+					<xsd:attribute name="type" type="EventType"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="workflow" >
+		<xsd:complexType >
+			<xsd:sequence >
+				<xsd:element ref="action" minOccurs="1" maxOccurs="unbounded" />
+			</xsd:sequence>
+				<xsd:attributeGroup ref="source"/>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="action"  >
+
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="metareq">
+					<xsd:attributeGroup ref="date"/>
+					<xsd:attributeGroup ref="source"/>
+					<xsd:attributeGroup ref="role"/>
 					<xsd:attribute name="type" type="EventType"/>
 				</xsd:extension>
 			</xsd:complexContent>
@@ -1277,6 +1617,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:complexType name="Amendments"  >
+
 		<xsd:choice minOccurs="1" maxOccurs="unbounded" >
 			<xsd:element ref="TextualMod" />
 			<xsd:element ref="MeaningMod" />
@@ -1288,6 +1629,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:complexType name="modificationType"  >
+
 		<xsd:sequence >
 			<xsd:element ref="source" minOccurs="1" maxOccurs="unbounded" />
 			<xsd:element ref="destination" minOccurs="1" maxOccurs="unbounded" />
@@ -1304,6 +1646,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:complexType>
 
 	<xsd:simpleType name="TextualMods"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="Repeal" />
 			<xsd:enumeration value="Substitution" />
@@ -1314,6 +1657,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="MeaningMods"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="Variation" />
 			<xsd:enumeration value="TermModification" />
@@ -1322,6 +1666,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="ScopeMods"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="ExceptionOfScope" />
 			<xsd:enumeration value="ExtensionOfScope" />
@@ -1329,6 +1674,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="ForceMods"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="EntryIntoForce" />
 			<xsd:enumeration value="EndOfEnactment" />
@@ -1340,6 +1686,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="EfficacyMods"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="EntryIntoEfficacy" />
 			<xsd:enumeration value="EndOfEfficacy" />
@@ -1352,6 +1699,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:simpleType>
 
 	<xsd:simpleType name="LegalSystemMods"  >
+
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="StaticReference" />
 			<xsd:enumeration value="Implementation" />
@@ -1370,9 +1718,12 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="ActiveModifications"  type="Amendments" />
 
+
 	<xsd:element name="PassiveModifications"  type="Amendments" />
 
+
 	<xsd:element name="TextualMod"  >
+
 		<xsd:complexType >
 			<xsd:complexContent>
 				<xsd:extension base="modificationType">
@@ -1387,6 +1738,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="MeaningMod"  >
+
 		<xsd:complexType >
 			<xsd:complexContent>
 				<xsd:extension base="modificationType">
@@ -1400,6 +1752,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="ScopeMod"  >
+
 		<xsd:complexType >
 			<xsd:complexContent>
 				<xsd:extension base="modificationType">
@@ -1413,6 +1766,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="ForceMod"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="modificationType">
@@ -1423,6 +1777,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="EfficacyMod"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="modificationType">
@@ -1433,6 +1788,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="LegalSystemMod"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="modificationType">
@@ -1444,17 +1800,24 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="source"  type="argumentType" />
 
+
 	<xsd:element name="destination"  type="argumentType" />
+
 
 	<xsd:element name="force"  type="periodType" />
 
+
 	<xsd:element name="efficacy"  type="periodType" />
+
 
 	<xsd:element name="application"  type="periodType" />
 
+
 	<xsd:element name="duration"  type="periodType" />
 
+
 	<xsd:element name="condition"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="anyOtherType">
@@ -1466,22 +1829,27 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="old"  type="anyOtherType" />
 
+
 	<xsd:element name="new"  type="anyOtherType" />
+
 
 	<xsd:element name="domain"  type="anyOtherType" />
 
+
 	<xsd:group name="docRefs">
+
 		<xsd:choice>
 			<xsd:element ref="Original"/>
 			<xsd:element ref="PassiveRef"/>
 			<xsd:element ref="ActiveRef"/>
 			<xsd:element ref="Jurisprudence"/>
-			<xsd:element ref="Attachment"/>
+			<xsd:element ref="HasAttachment"/>
 			<xsd:element ref="AttachmentOf"/>
 		</xsd:choice>
 	</xsd:group>
 
 	<xsd:group name="TLCs">
+
 		<xsd:choice>
 			<xsd:element ref="TLCPerson"/>
 			<xsd:element ref="TLCOrganization"/>
@@ -1497,6 +1865,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:group>
 
 	<xsd:group name="refItems">
+
 		<xsd:choice>
 			<xsd:group ref="docRefs" />
 			<xsd:group ref="TLCs" />
@@ -1514,13 +1883,18 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="Original"  type="referenceType" />
 
+
 	<xsd:element name="PassiveRef"  type="referenceType" />
+
 
 	<xsd:element name="ActiveRef"  type="referenceType" />
 
+
 	<xsd:element name="Jurisprudence"  type="referenceType" />
 
-	<xsd:element name="Attachment"  >
+
+	<xsd:element name="HasAttachment"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="referenceType">
@@ -1531,6 +1905,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	</xsd:element>
 
 	<xsd:element name="AttachmentOf"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="referenceType">
@@ -1542,23 +1917,33 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="TLCPerson"  type="referenceType" />
 
+
 	<xsd:element name="TLCOrganization"  type="referenceType" />
+
 
 	<xsd:element name="TLCConcept"  type="referenceType" />
 
+
 	<xsd:element name="TLCObject"  type="referenceType" />
+
 
 	<xsd:element name="TLCEvent"  type="referenceType" />
 
+
 	<xsd:element name="TLCPlace"  type="referenceType" />
+
 
 	<xsd:element name="TLCProcess"  type="referenceType" />
 
+
 	<xsd:element name="TLCRole"  type="referenceType" />
+
 
 	<xsd:element name="TLCTerm"  type="referenceType" />
 
+
 	<xsd:element name="TLCReference"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="referenceType">
@@ -1579,7 +1964,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="note"  type="blocksreq" />
 
+
 	<xsd:element name="proprietary"  >
+
 		<xsd:complexType>
 			<xsd:complexContent>
 				<xsd:extension base="anyOther">
