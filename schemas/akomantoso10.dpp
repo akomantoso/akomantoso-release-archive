@@ -3,7 +3,7 @@
        Akoma Ntoso main schema                                                  
                                                                            
                                                                            
-       Release  3/3/2007 (test with judgments)                                                
+       Release  05/11/2008
        technical supervision Fabio Vitali - University of Bologna
        legal domain supervision Monica Palmirani - University of Bologna
                                                                            
@@ -24,12 +24,12 @@
 
 <!ENTITY @@ ANhier          "(section|part|paragraph|chapter|title|book|tome|article|clause|subsection|subpart|subparagraph|subchapter|subtitle|subclause)" >
 <!ENTITY @@ ANcontainers    "(div)" >
-<!ENTITY @@ ANblock         "(toc | comment | list | tblock)" >
-<!ENTITY @@ ANinline        "(def | ref | mref | rref | mod | mmod | rmod | ins | del | omissis)" >
-<!ENTITY @@ ANtitleInline   "(ActType | ActTitle | ActNumber | ActProponent | ActDate | ActPurpose)" >
-<!ENTITY @@ ANheaderInline   "(judgmentType | judgmentTitle | judgmentNumber | courtType | neutralCitation | party | judge | judgmentDate)" >
+<!ENTITY @@ ANblock         "(toc | scene | list | tblock)" >
+<!ENTITY @@ ANinline        "(def | remark | ref | mref | rref | mod | mmod | rmod | ins | del | omissis)" >
+<!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | docPurpose)" >
+<!ENTITY @@ ANheaderInline   "(judgementType | judgementTitle | judgementNumber | courtType | neutralCitation | party | judge | judgementDate)" >
 
-<!ENTITY @@ ANmarker        "(noteref | recordedTime | eol | eop )" >
+<!ENTITY @@ ANmarker        "(noteRef | recordedTime | eol | eop )" >
 
 <!ENTITY @@ HTMLcontainers    "( div )" >
 <!ENTITY @@ HTMLblock         "(p|ul|ol|table)" >
@@ -42,12 +42,12 @@
 <!ENTITY @@ inlineElements    "(@@ANinline; | @@HTMLinline;     | inline        | @@ANtitleInline; | @@ANheaderInline;)">
 <!ENTITY @@ markerElements    "(@@ANmarker; | @@HTMLmarker;     | marker  )">
 
-<!ENTITY @@ InlineCM          "(@@inlineElements; | @@markerElements;)">
+<!ENTITY @@ inlineCM          "(@@inlineElements; | @@markerElements;)">
 
 
-<!ENTITY @@ judgmentBlock    "(introduction | background | motivation | decision)">
-<!ENTITY @@ speechItems       "(speech | question | answer | other | comment)">
-<!ENTITY @@ SpeechSection     "(AdministrationOfOath|DeclarationOfVote|Communication|Petitions|Papers|NoticesOfMotion|Questions|Address|ProceduralMotions|PointOfOrder|subdivision)">
+<!ENTITY @@ judgementBlock    "(introduction | background | motivation | decision)">
+<!ENTITY @@ speechItems       "(speech | question | answer | other | scene)">
+<!ENTITY @@ speechSection     "(administrationOfOath|declarationOfVote|communication|petitions|papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder|subdivision)">
 
 <!-- =====================================================================
 
@@ -105,11 +105,11 @@
         Simple types (data values)
 
      ===================================================================== -->
-<!ENTITY # VersionType  "#STRING(OriginalVersion|SingleVersion|MultipleVersions)" >
-<!ENTITY # EventType    "#STRING(Generation|Amendment|Repeal)" >
+<!ENTITY # versionType  "#STRING(originalVersion|singleVersion|multipleVersions)" >
+<!ENTITY # eventType    "#STRING(generation|amendment|repeal)" >
 <!ENTITY # statusType   "#STRING(omissis|repealed|suspended|editorial)">
-
-
+<!ENTITY # remarkType   "#STRING(sceneDescription|phenomenon|caption|translation)">
+<!ENTITY # timeType     "#STRING(startEvent|endEvent)">
 
 <!-- =====================================================================
 
@@ -119,17 +119,17 @@
 
 <!ENTITY @ basehierarchy     "(num?, heading?, subheading?, sidenote?)" >
 <!ENTITY @ hierarchy         "@basehierarchy;, (@@hierElements;+ | content)"            "##corereq;">
-<!ENTITY @ althierarchy      "@basehierarchy;, (@@SpeechSection; | @@speechItems;)*" "##corereq;">
+<!ENTITY @ althierarchy      "@basehierarchy;, (@@speechSection; | @@speechItems;)*" "##corereq;">
 <!ENTITY @ blocksreq         "(@@blockElements;)+" "##corereq;">
 <!ENTITY @ blocksopt         "(@@blockElements;)+" "##coreopt;">
-<!ENTITY @ inline            "(#PCDATA | @@InlineCM;)*" "##coreopt;">
+<!ENTITY @ inline            "(#PCDATA | @@inlineCM;)*" "##coreopt;">
 <!ENTITY @ markerreq         "" "##corereq;">
 <!ENTITY @ markeropt         "" "##coreopt;">
 <!ENTITY @ metareq           "" "##idreq;">
 <!ENTITY @ metaopt           "" "##idopt;">
 <!ENTITY @ anyOther          "ANY{##other}">
 
-<!ENTITY @ maincontent       "(@@hierElements; | @@SpeechSection; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
+<!ENTITY @ maincontent       "(@@hierElements; | @@speechSection; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
 
 <!ENTITY @ speechType        "(from, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 <!ENTITY @ referenceType     ""                            "##idreq; ##link; ##show;" >
@@ -146,8 +146,12 @@
 
      ===================================================================== -->
 
-<!ENTITY @ DocumentTypes "(act | bill | doc | report | debaterecord | judgment)">
-<!ROOT akomantoso           @DocumentTypes; >
+<!ENTITY @@ legislativeDocs  "(act | bill)" >
+<!ENTITY @@ judgementDocs    "(judgement )" >
+<!ENTITY @@ debateDocs       "(report | debateRecord)" >
+
+<!ENTITY @ documentType      "(@@legislativeDocs; | @@debateDocs; | @@judgementDocs; | doc)">
+<!ROOT     akomaNtoso        @documentType; >
           
 <!-- =====================================================================
 
@@ -157,42 +161,42 @@
         Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
      ===================================================================== -->
-<!ENTITY @ HierarchicalStructure "(meta, 
+<!ENTITY @ hierarchicalStructure "(meta, 
                                    preface?,
                                    preamble?, 
                                    body, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #VersionType; 'OriginalVersion'">
+                                 " contains #versionType; 'originalVersion'">
 
-<!ENTITY @ OpenStructure         "(meta, 
+<!ENTITY @ openStructure         "(meta, 
                                    preface?,
                                    preamble?, 
-                                   maincontent, 
+                                   mainContent, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #VersionType; 'OriginalVersion'">
+                                 " contains #versionType; 'originalVersion'">
 
-<!ENTITY @ DebateStructure        "(meta, 
+<!ENTITY @ debateStructure        "(meta, 
                                    preface?,
                                    debate, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #VersionType; 'OriginalVersion'">
-<!ENTITY @ judgmentStructure    "(meta, 
+                                 " contains #versionType; 'originalVersion'">
+<!ENTITY @ judgementStructure     "(meta, 
                                    header,
-                                   judgmentBody, 
+                                   judgementBody, 
                                    conclusions, 
                                    attachments?)" 
-                                 " contains #VersionType; 'OriginalVersion'">
+                                 " contains #versionType; 'originalVersion'">
 
 
-<!ELEMENT act           @HierarchicalStructure; >
-<!ELEMENT bill          @HierarchicalStructure; >
-<!ELEMENT doc           @OpenStructure; >
-<!ELEMENT report        @OpenStructure; >
-<!ELEMENT debaterecord  @DebateStructure; >
-<!ELEMENT judgment     @judgmentStructure; >
+<!ELEMENT act           @hierarchicalStructure; >
+<!ELEMENT bill          @hierarchicalStructure; >
+<!ELEMENT doc           @openStructure; >
+<!ELEMENT report        @openStructure; >
+<!ELEMENT debateRecord  @debateStructure; >
+<!ELEMENT judgement     @judgementStructure; >
 
 <!-- =====================================================================
 
@@ -211,11 +215,11 @@
 
 <!ELEMENT body            (@@hierElements;)+ >
 <!ATTLIST body            ##coreopt; >
-<!ELEMENT debate          (@@SpeechSection;+) >
+<!ELEMENT debate          (@@speechSection;)+ >
 <!ATTLIST debate          ##coreopt; >
-<!ELEMENT maincontent     @maincontent; >
-<!ELEMENT judgmentBody   (@@judgmentBlock;)+ >
-<!ATTLIST judgmentBody   ##coreopt; >
+<!ELEMENT mainContent     @maincontent; >
+<!ELEMENT judgementBody    (@@judgementBlock;)+ >
+<!ATTLIST judgementBody    ##coreopt; >
 
 <!-- =====================================================================
 
@@ -251,16 +255,16 @@
 
      ===================================================================== -->
 
-<!ELEMENT AdministrationOfOath  @althierarchy; >
-<!ELEMENT DeclarationOfVote     @althierarchy; >
-<!ELEMENT Communication         @althierarchy; >
-<!ELEMENT Petitions             @althierarchy; >
-<!ELEMENT Papers                @althierarchy; >
-<!ELEMENT NoticesOfMotion       @althierarchy; >
-<!ELEMENT Questions             @althierarchy; >
-<!ELEMENT Address               @althierarchy; >
-<!ELEMENT ProceduralMotions     @althierarchy; >
-<!ELEMENT PointOfOrder          @althierarchy; >
+<!ELEMENT administrationOfOath  @althierarchy; >
+<!ELEMENT declarationOfVote     @althierarchy; >
+<!ELEMENT communication         @althierarchy; >
+<!ELEMENT petitions             @althierarchy; >
+<!ELEMENT papers                @althierarchy; >
+<!ELEMENT noticesOfMotion       @althierarchy; >
+<!ELEMENT questions             @althierarchy; >
+<!ELEMENT address               @althierarchy; >
+<!ELEMENT proceduralMotions     @althierarchy; >
+<!ELEMENT pointOfOrder          @althierarchy; >
 <!ELEMENT subdivision           @althierarchy; >
 <!ATTLIST subdivision           ##name; >
 
@@ -268,7 +272,7 @@
 <!ELEMENT question            @speechType; >
 <!ELEMENT answer              @speechType; >
 <!ELEMENT other               @blocksopt; >
-<!ELEMENT comment             @inline; >
+<!ELEMENT scene               @inline; >
 <!ELEMENT list                (item+) >
 <!ATTLIST list                ##corereq; >
 
@@ -290,9 +294,9 @@
 
      ===================================================================== -->
 
-<!ELEMENT toc       (tocitem+) >
-<!ELEMENT tocitem   @inline; >
-<!ATTLIST tocitem   ##link; level #INTEGER #REQUIRED >
+<!ELEMENT toc       (tocItem+) >
+<!ELEMENT tocItem   @inline; >
+<!ATTLIST tocItem   ##link; level #INTEGER #REQUIRED >
 
 <!-- =====================================================================
 
@@ -302,25 +306,25 @@
         legal structure, regardless of their position in the document.
 
      ===================================================================== -->
-<!ELEMENT ActType      @inline; >
-<!ELEMENT ActTitle     @inline; >
-<!ELEMENT ActNumber    @inline; >
-<!ELEMENT ActProponent @inline; >
-<!ELEMENT ActDate      @inline; >
-<!ATTLIST ActDate      ##date; >
-<!ELEMENT ActPurpose   @inline; >
+<!ELEMENT docType      @inline; >
+<!ELEMENT docTitle     @inline; >
+<!ELEMENT docNumber    @inline; >
+<!ELEMENT docProponent @inline; >
+<!ELEMENT docDate      @inline; >
+<!ATTLIST docDate      ##date; >
+<!ELEMENT docPurpose   @inline; >
 
-<!ELEMENT judgmentType      @inline; >
-<!ELEMENT judgmentTitle     @inline; >
-<!ELEMENT judgmentNumber    @inline; >
+<!ELEMENT judgementType      @inline; >
+<!ELEMENT judgementTitle     @inline; >
+<!ELEMENT judgementNumber    @inline; >
+<!ELEMENT judgementDate      @inline; >
+<!ATTLIST judgementDate      ##date; ##name; >
 <!ELEMENT courtType          @inline; >
 <!ELEMENT neutralCitation    @inline; >
 <!ELEMENT party              @inline; >
 <!ATTLIST party              ##role; >
 <!ELEMENT judge              @inline; >
 <!ATTLIST judge              ##role; >
-<!ELEMENT judgmentDate      @inline; >
-<!ATTLIST judgmentDate      ##date; ##name; >
 
 <!ELEMENT mref         @inline; >
 <!ELEMENT ref          @inline; >
@@ -329,7 +333,7 @@
 <!ATTLIST rref         ##link; 
                        upTo   #ANYURI        #REQUIRED >
                        
-<!ENTITY @ modType  "(#PCDATA | @@InlineCM; | quotedText | quotedStructure )*" "##coreopt;" >
+<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure )*" "##coreopt;" >
 <!ELEMENT mod   @modType;>
 <!ELEMENT mmod  @modType;>
 <!ELEMENT rmod  @modType;>
@@ -340,16 +344,20 @@
 <!ATTLIST quotedStructure   ##corereq; >
 
 <!ELEMENT def          @inline; >
+<!ELEMENT remark       @inline; >
+<!ATTLIST remark       type #remarkType; #IMPLIED >
+
 <!ELEMENT ins          @inline; >
 <!ELEMENT del          @inline; >
 <!ELEMENT omissis      @inline; >
 
-<!ELEMENT noteref      @markeropt; >
-<!ATTLIST noteref      ##link;
+<!ELEMENT noteRef      @markeropt; >
+<!ATTLIST noteRef      ##link;
                        num    #STRING        #REQUIRED >
                        
 <!ELEMENT recordedTime   @markeropt; >
-<!ATTLIST recordedTime   ##time; >
+<!ATTLIST recordedTime   type #timeType; #IMPLIED
+                         ##time; >
 
 <!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED">
 <!ELEMENT eol   @eolType; >
@@ -402,7 +410,7 @@
 <!ELEMENT div  @blocksreq; >
 
 <!ELEMENT p    @inline; >
-<!ELEMENT li   (#PCDATA | @@InlineCM; | ul | ol | p)* >
+<!ELEMENT li   (#PCDATA | @@inlineCM; | ul | ol | p)* >
 <!ATTLIST li   ##optvalue;  ##coreopt;>
 
 <!ELEMENT span @inline; >
@@ -501,7 +509,7 @@
 <!ATTLIST event
     ##date;
     ##source;
-    type   #EventType; #IMPLIED
+    type   #eventType; #IMPLIED
 >
 
 <!ELEMENT workflow   (action+)>
@@ -511,41 +519,41 @@
     ##date;
     ##source;
     ##role;
-    type   #EventType; #IMPLIED
+    type   #eventType; #IMPLIED
 >
 
-<!ELEMENT analysis              (ActiveModifications?, PassiveModifications?) >
+<!ELEMENT analysis              (activeModifications?, passiveModifications?) >
 <!ATTLIST analysis              ##source; >
 
-<!ENTITY @ Amendments          "(TextualMod | MeaningMod | ScopeMod | ForceMod | EfficacyMod | LegalSystemMod)+" >
+<!ENTITY @ Amendments          "(textualMod | meaningMod | scopeMod | forceMod | efficacyMod | legalSystemMod)+" >
 <!ENTITY @ modificationType    "(source+, destination+, force?, efficacy?, application?, duration?, condition?)" 
                                "##idreq; ##enactment; ##modifiers; ##refers;" >
                                  
-<!ENTITY # TextualMods         "#STRING(Repeal|Substitution|Insertion|Replacement|Renumbering)" >
-<!ENTITY # MeaningMods         "#STRING(Variation|TermModification|AuthenticInterpretation)" >
-<!ENTITY # ScopeMods           "#STRING(ExceptionOfScope|ExtensionOfScope)" >
-<!ENTITY # ForceMods           "#STRING(EntryIntoForce|EndOfEnactment|PostponementOfEntryIntoForce|
-                                ProrogationOfForce|ReEnactment|Uncostitutionality)" >
-<!ENTITY # EfficacyMods        "#STRING(EntryIntoEfficacy|EndOfEfficacy|Inapplication|Retroactivity|Extraefficacy|
-                                PostponementOfEfficacy|ProrogationOfEfficacy)" >
-<!ENTITY # LegalSystemMods     "#STRING(StaticReference|Implementation|Ratification|Application|
-                                LegislativeDelegation|Deregulation|Conversion|Expiration|
-                                Reiteration|Remaking|Republication|Coordination)" >
+<!ENTITY # TextualMods         "#STRING(repeal|substitution|insertion|replacement|renumbering)" >
+<!ENTITY # MeaningMods         "#STRING(variation|termModification|authenticInterpretation)" >
+<!ENTITY # ScopeMods           "#STRING(exceptionOfScope|extensionOfScope)" >
+<!ENTITY # ForceMods           "#STRING(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|
+                                prorogationOfForce|reEnactment|uncostitutionality)" >
+<!ENTITY # EfficacyMods        "#STRING(entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy|
+                                postponementOfEfficacy|prorogationOfEfficacy)" >
+<!ENTITY # LegalSystemMods     "#STRING(staticReference|implementation|ratification|application|
+                                legislativeDelegation|deregulation|conversion|expiration|
+                                reiteration|remaking|republication|coordination)" >
 
-<!ELEMENT ActiveModifications   @Amendments; >
-<!ELEMENT PassiveModifications  @Amendments; >
-<!ELEMENT TextualMod            (@modificationType;, (old?, new?)) > 
-<!ATTLIST TextualMod            type #TextualMods; #REQUIRED >
-<!ELEMENT MeaningMod            (@modificationType;, (domain?)) > 
-<!ATTLIST MeaningMod            type #MeaningMods; #REQUIRED >
-<!ELEMENT ScopeMod              (@modificationType;, (domain?)) > 
-<!ATTLIST ScopeMod              type #ScopeMods; #REQUIRED >
-<!ELEMENT ForceMod              @modificationType; > 
-<!ATTLIST ForceMod              type #ForceMods; #REQUIRED >
-<!ELEMENT EfficacyMod           @modificationType; > 
-<!ATTLIST EfficacyMod           type #EfficacyMods; #REQUIRED >
-<!ELEMENT LegalSystemMod        @modificationType; > 
-<!ATTLIST LegalSystemMod        type #LegalSystemMods; #REQUIRED >
+<!ELEMENT activeModifications   @Amendments; >
+<!ELEMENT passiveModifications  @Amendments; >
+<!ELEMENT textualMod            (@modificationType;, (old?, new?)) > 
+<!ATTLIST textualMod            type #TextualMods; #REQUIRED >
+<!ELEMENT meaningMod            (@modificationType;, (domain?)) > 
+<!ATTLIST meaningMod            type #MeaningMods; #REQUIRED >
+<!ELEMENT scopeMod              (@modificationType;, (domain?)) > 
+<!ATTLIST scopeMod              type #ScopeMods; #REQUIRED >
+<!ELEMENT forceMod              @modificationType; > 
+<!ATTLIST forceMod              type #ForceMods; #REQUIRED >
+<!ELEMENT efficacyMod           @modificationType; > 
+<!ATTLIST efficacyMod           type #EfficacyMods; #REQUIRED >
+<!ELEMENT legalSystemMod        @modificationType; > 
+<!ATTLIST legalSystemMod        type #LegalSystemMods; #REQUIRED >
 
 <!ELEMENT source           @argumentType;>
 <!ELEMENT destination      @argumentType;>
@@ -561,21 +569,21 @@
 
 
 
-<!ENTITY @@ docRefs        "(Original|PassiveRef|ActiveRef|Jurisprudence|HasAttachment|AttachmentOf)" >
+<!ENTITY @@ docRefs        "(original|passiveRef|activeRef|jurisprudence|hasAttachment|attachmentOf)" >
 <!ENTITY @@ TLCs           "(TLCPerson|TLCOrganization|TLCConcept|TLCObject|TLCEvent|TLCPlace|TLCProcess|TLCRole|TLCTerm|TLCReference)" >
 <!ENTITY @@ refItems       "(@@docRefs;|@@TLCs;")>
 
 <!ELEMENT references     (@@refItems;)+>
 <!ATTLIST references     ##source; >
 
-<!ELEMENT Original         @referenceType; >
-<!ELEMENT PassiveRef       @referenceType; >
-<!ELEMENT ActiveRef        @referenceType; >
-<!ELEMENT Jurisprudence    @referenceType; >
-<!ELEMENT HasAttachment    @referenceType; >
-<!ATTLIST HasAttachment    type CDATA  #IMPLIED >
-<!ELEMENT AttachmentOf     @referenceType; >
-<!ATTLIST AttachmentOf     type CDATA  #IMPLIED >
+<!ELEMENT original         @referenceType; >
+<!ELEMENT passiveRef       @referenceType; >
+<!ELEMENT activeRef        @referenceType; >
+<!ELEMENT jurisprudence    @referenceType; >
+<!ELEMENT hasAttachment    @referenceType; >
+<!ATTLIST hasAttachment    type CDATA  #IMPLIED >
+<!ELEMENT attachmentOf     @referenceType; >
+<!ATTLIST attachmentOf     type CDATA  #IMPLIED >
 
 <!ELEMENT TLCPerson        @referenceType; >
 <!ELEMENT TLCOrganization  @referenceType; >
