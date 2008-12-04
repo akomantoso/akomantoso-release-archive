@@ -7,7 +7,7 @@
 Akoma Ntoso main schema
 
 
-Release  04/08/2008 (new camelCase)
+Release  05/11/2008
 technical supervision Fabio Vitali - University of Bologna
 legal domain supervision Monica Palmirani - University of Bologna
 
@@ -29,11 +29,11 @@ Main element groups
 <!ENTITY % ANhier          "section | part | paragraph | chapter | title | book | tome | article | clause | subsection | subpart | subparagraph | subchapter | subtitle | subclause" >
 <!ENTITY % ANcontainers    "div" >
 <!ENTITY % ANblock         "toc | scene | list | tblock" >
-<!ENTITY % ANinline        "def | ref | mref | rref | mod | mmod | rmod | ins | del | omissis" >
+<!ENTITY % ANinline        "def | remark | ref | mref | rref | mod | mmod | rmod | ins | del | omissis" >
 <!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | docPurpose" >
 <!ENTITY % ANheaderInline   "judgementType | judgementTitle | judgementNumber | courtType | neutralCitation | party | judge | judgementDate" >
 
-<!ENTITY % ANmarker        "noteRef | recordedTime | remark | eol | eop" >
+<!ENTITY % ANmarker        "noteRef | recordedTime | eol | eop" >
 
 <!ENTITY % HTMLcontainers    "div" >
 <!ENTITY % HTMLblock         "p | ul | ol | table" >
@@ -407,6 +407,10 @@ legal structure, regardless of their position in the document.
 
 <!ELEMENT def          %inline; >
 <!ATTLIST def %coreopt;  >
+<!ELEMENT remark       %inline; >
+<!ATTLIST remark %coreopt;  >
+
+<!ATTLIST remark type %remarkType; #IMPLIED >
 
 <!ELEMENT ins          %inline; >
 <!ATTLIST ins %coreopt;  >
@@ -424,12 +428,6 @@ legal structure, regardless of their position in the document.
 <!ATTLIST recordedTime %coreopt;  >
 
 <!ATTLIST recordedTime type %timeType; #IMPLIED %time;  >
-
-<!ELEMENT remark         %markeropt; >
-<!ATTLIST remark %coreopt;  >
-
-<!ATTLIST remark type %remarkType; #IMPLIED >
-
 
 <!ENTITY % eolType  "%markeropt;" >
 <!ELEMENT eol   %eolType; >

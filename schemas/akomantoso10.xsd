@@ -14,7 +14,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		Akoma Ntoso main schema
 		
 		
-		Release  04/08/2008 (new camelCase)
+		Release  05/11/2008
 		technical supervision Fabio Vitali - University of Bologna
 		legal domain supervision Monica Palmirani - University of Bologna
 		
@@ -75,6 +75,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	<xsd:group name="ANinline">
 		<xsd:choice>
 			<xsd:element ref="def"/>
+			<xsd:element ref="remark"/>
 			<xsd:element ref="ref"/>
 			<xsd:element ref="mref"/>
 			<xsd:element ref="rref"/>
@@ -115,7 +116,6 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		<xsd:choice>
 			<xsd:element ref="noteRef"/>
 			<xsd:element ref="recordedTime"/>
-			<xsd:element ref="remark"/>
 			<xsd:element ref="eol"/>
 			<xsd:element ref="eop"/>
 		</xsd:choice>
@@ -1002,6 +1002,16 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
 	<xsd:element name="def"  type="inline" />
 
+	<xsd:element name="remark"  >
+		<xsd:complexType mixed="true">
+			<xsd:complexContent>
+				<xsd:extension base="inline">
+					<xsd:attribute name="type" type="remarkType"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
 	<xsd:element name="ins"  type="inline" />
 
 	<xsd:element name="del"  type="inline" />
@@ -1025,16 +1035,6 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 				<xsd:extension base="markeropt">
 					<xsd:attribute name="type" type="timeType"/>
 					<xsd:attributeGroup ref="time"/>
-				</xsd:extension>
-			</xsd:complexContent>
-		</xsd:complexType>
-	</xsd:element>
-
-	<xsd:element name="remark"  >
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="markeropt">
-					<xsd:attribute name="type" type="remarkType"/>
 				</xsd:extension>
 			</xsd:complexContent>
 		</xsd:complexType>
