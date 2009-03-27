@@ -23,11 +23,12 @@
      ===================================================================== -->
 
 <!ENTITY @@ ANhier          "(section|part|paragraph|chapter|title|book|tome|article|clause|subsection|subpart|subparagraph|subchapter|subtitle|subclause)" >
-<!ENTITY @@ ANcontainers    "(div)" >
-<!ENTITY @@ ANblock         "(toc | scene | list | tblock)" >
+<!ENTITY @@ ANcontainers    "(speech | question | answer | other | scene )" >
+<!ENTITY @@ ANblock         "(toc | list | tblock)" >
 <!ENTITY @@ ANinline        "(def | remark | ref | mref | rref | mod | mmod | rmod | ins | del | omissis)" >
 <!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | docPurpose)" >
-<!ENTITY @@ ANheaderInline   "(judgementType | judgementTitle | judgementNumber | courtType | neutralCitation | party | judge | judgementDate)" >
+<!ENTITY @@ ANheaderInline  "(courtType | neutralCitation | party | judge | lawyer | signature | opinion)" >
+<!ENTITY @@ ANotherInline   "(entity | date)" >
 
 <!ENTITY @@ ANmarker        "(noteRef | recordedTime | eol | eop )" >
 
@@ -36,17 +37,16 @@
 <!ENTITY @@ HTMLinline        "(span | b | i | a)" >
 <!ENTITY @@ HTMLmarker        "(img)" >
 
-<!ENTITY @@ hierElements      "(@@ANhier;   |                     hcontainer)">
-<!ENTITY @@ containerElements "(              @@HTMLcontainers; | container)">
-<!ENTITY @@ blockElements     "(@@ANblock;  | @@HTMLblock;      | block      | foreign)">
-<!ENTITY @@ inlineElements    "(@@ANinline; | @@HTMLinline;     | inline        | @@ANtitleInline; | @@ANheaderInline;)">
-<!ENTITY @@ markerElements    "(@@ANmarker; | @@HTMLmarker;     | marker  )">
+<!ENTITY @@ hierElements      "(@@ANhier;       |                     hcontainer)">
+<!ENTITY @@ containerElements "(@@ANcontainers; | @@HTMLcontainers; | container)">
+<!ENTITY @@ blockElements     "(@@ANblock;      | @@HTMLblock;      | block      | foreign)">
+<!ENTITY @@ inlineElements    "(@@ANinline;     | @@HTMLinline;     | inline        | @@ANtitleInline; | @@ANheaderInline;)">
+<!ENTITY @@ markerElements    "(@@ANmarker;     | @@HTMLmarker;     | marker  )">
 
 <!ENTITY @@ inlineCM          "(@@inlineElements; | @@markerElements;)">
 
 
 <!ENTITY @@ judgementBlock    "(introduction | background | motivation | decision)">
-<!ENTITY @@ speechItems       "(speech | question | answer | other | scene)">
 <!ENTITY @@ speechSection     "(administrationOfOath|declarationOfVote|communication|petitions|papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder|subdivision)">
 
 <!-- =====================================================================
@@ -95,9 +95,12 @@
                           title        #STRING      #IMPLIED">
 <!ENTITY ## idreq        "id           #ID           #REQUIRED">
 <!ENTITY ## idopt        "id           #ID           #IMPLIED">
-<!ENTITY ## refers       "refersTo     #IDREF         #IMPLIED" >
+
+<!ENTITY ## refers       "refersTo           #IDREF         #IMPLIED" >
+<!ENTITY ## refersreq    "refersTo           #IDREF         #REQUIRED" >
 
 <!ENTITY ## corereq      "##HTMLattrs; ##enactment; ##idreq; ##refers;" >
+<!ENTITY ## corereqreq   "##HTMLattrs; ##enactment; ##idreq; ##refersreq;" >
 <!ENTITY ## coreopt      "##HTMLattrs; ##enactment; ##idopt; ##refers;" >
 
 <!-- =====================================================================
@@ -105,11 +108,12 @@
         Simple types (data values)
 
      ===================================================================== -->
-<!ENTITY # versionType  "#STRING(originalVersion|singleVersion|multipleVersions)" >
-<!ENTITY # eventType    "#STRING(generation|amendment|repeal)" >
-<!ENTITY # statusType   "#STRING(omissis|repealed|suspended|editorial)">
-<!ENTITY # remarkType   "#STRING(sceneDescription|phenomenon|caption|translation)">
-<!ENTITY # timeType     "#STRING(startEvent|endEvent)">
+<!ENTITY # versionType    "#STRING(originalVersion|singleVersion|multipleVersions)" >
+<!ENTITY # eventType      "#STRING(generation|amendment|repeal)" >
+<!ENTITY # statusType     "#STRING(omissis|repealed|suspended|editorial)">
+<!ENTITY # remarkType     "#STRING(sceneDescription|phenomenon|caption|translation)">
+<!ENTITY # timeType       "#STRING(startEvent|endEvent)">
+<!ENTITY # outOfLineType  "#STRING(sideNote|publicationNote)">
 
 <!-- =====================================================================
 
@@ -117,19 +121,22 @@
 
      ===================================================================== -->
 
-<!ENTITY @ basehierarchy     "(num?, heading?, subheading?, sidenote?)" >
+<!ENTITY @ basehierarchy     "(num?, heading?, subheading?)" >
 <!ENTITY @ hierarchy         "@basehierarchy;, (@@hierElements;+ | content)"            "##corereq;">
-<!ENTITY @ althierarchy      "@basehierarchy;, (@@speechSection; | @@speechItems;)*" "##corereq;">
+<!ENTITY @ althierarchy      "@basehierarchy;, (@@speechSection; | @@containerElements;)*" "##corereq;">
 <!ENTITY @ blocksreq         "(@@blockElements;)+" "##corereq;">
 <!ENTITY @ blocksopt         "(@@blockElements;)+" "##coreopt;">
 <!ENTITY @ inline            "(#PCDATA | @@inlineCM;)*" "##coreopt;">
+<!ENTITY @ inlinereq         "(#PCDATA | @@inlineCM;)*" "##corereq;">
+<!ENTITY @ inlinereqreq      "(#PCDATA | @@inlineCM;)*" "##corereqreq;">
+
 <!ENTITY @ markerreq         "" "##corereq;">
 <!ENTITY @ markeropt         "" "##coreopt;">
 <!ENTITY @ metareq           "" "##idreq;">
 <!ENTITY @ metaopt           "" "##idopt;">
 <!ENTITY @ anyOther          "ANY{##other}">
 
-<!ENTITY @ maincontent       "(@@hierElements; | @@speechSection; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
+<!ENTITY @ maincontent       "(@@hierElements; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
 
 <!ENTITY @ speechType        "(from, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 <!ENTITY @ referenceType     ""                            "##idreq; ##link; ##show;" >
@@ -166,6 +173,7 @@
                                    preamble?, 
                                    body, 
                                    conclusions?, 
+                                   outOfLines?,
                                    attachments?)" 
                                  " contains #versionType; 'originalVersion'">
 
@@ -174,6 +182,7 @@
                                    preamble?, 
                                    mainContent, 
                                    conclusions?, 
+                                   outOfLines?,
                                    attachments?)" 
                                  " contains #versionType; 'originalVersion'">
 
@@ -181,12 +190,14 @@
                                    preface?,
                                    debate, 
                                    conclusions?, 
+                                   outOfLines?,
                                    attachments?)" 
                                  " contains #versionType; 'originalVersion'">
 <!ENTITY @ judgementStructure     "(meta, 
                                    header,
                                    judgementBody, 
                                    conclusions, 
+                                   outOfLines?,
                                    attachments?)" 
                                  " contains #versionType; 'originalVersion'">
 
@@ -211,6 +222,10 @@
 <!ELEMENT attachments (attachment+) >
 <!ATTLIST attachments ##coreopt; >
 <!ELEMENT attachment  @referenceType; >
+<!ELEMENT outOfLines  (outOfLine)+>
+<!ELEMENT outOfLine   @blocksreq;>
+<!ATTLIST outOfLine   ##link; 
+                      type  #outOfLineType; #REQUIRED>
 
 
 <!ELEMENT body            (@@hierElements;)+ >
@@ -218,8 +233,8 @@
 <!ELEMENT debate          (@@speechSection;)+ >
 <!ATTLIST debate          ##coreopt; >
 <!ELEMENT mainContent     @maincontent; >
-<!ELEMENT judgementBody    (@@judgementBlock;)+ >
-<!ATTLIST judgementBody    ##coreopt; >
+<!ELEMENT judgementBody   (@@judgementBlock;)+ >
+<!ATTLIST judgementBody   ##coreopt; >
 
 <!-- =====================================================================
 
@@ -246,7 +261,6 @@
 <!ELEMENT num           @inline; >
 <!ELEMENT heading       @inline; >
 <!ELEMENT subheading    @inline; >
-<!ELEMENT sidenote      @inline; >
 <!ELEMENT from          @inline; >
 
 <!-- =====================================================================
@@ -306,6 +320,7 @@
         legal structure, regardless of their position in the document.
 
      ===================================================================== -->
+
 <!ELEMENT docType      @inline; >
 <!ELEMENT docTitle     @inline; >
 <!ELEMENT docNumber    @inline; >
@@ -314,26 +329,30 @@
 <!ATTLIST docDate      ##date; >
 <!ELEMENT docPurpose   @inline; >
 
-<!ELEMENT judgementType      @inline; >
-<!ELEMENT judgementTitle     @inline; >
-<!ELEMENT judgementNumber    @inline; >
-<!ELEMENT judgementDate      @inline; >
-<!ATTLIST judgementDate      ##date; ##name; >
 <!ELEMENT courtType          @inline; >
 <!ELEMENT neutralCitation    @inline; >
-<!ELEMENT party              @inline; >
+<!ELEMENT party              @inlinereqreq; >
 <!ATTLIST party              ##role; >
-<!ELEMENT judge              @inline; >
+<!ELEMENT judge              @inlinereqreq; >
 <!ATTLIST judge              ##role; >
+<!ELEMENT lawyer             @inlinereqreq; >
+<!ATTLIST lawyer             ##role; 
+                             represents      #ANYURI        #IMPLIED >
+<!ELEMENT signature          @inline; >
+<!ELEMENT opinion            @inline; >
+
+<!ELEMENT date               @inline; >
+<!ATTLIST date               ##date; >
+<!ELEMENT entity             @inlinereqreq; >
 
 <!ELEMENT mref         @inline; >
-<!ELEMENT ref          @inline; >
+<!ELEMENT ref          @inlinereq; >
 <!ATTLIST ref          ##link; >
-<!ELEMENT rref         @inline; >
+<!ELEMENT rref         @inlinereq; >
 <!ATTLIST rref         ##link; 
                        upTo   #ANYURI        #REQUIRED >
                        
-<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure )*" "##coreopt;" >
+<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure )*" "##corereq;" >
 <!ELEMENT mod   @modType;>
 <!ELEMENT mmod  @modType;>
 <!ELEMENT rmod  @modType;>
@@ -468,22 +487,22 @@
 <!ELEMENT identification   (FRBRWork, FRBRExpression, FRBRManifestation, FRBRItem?) >
 <!ATTLIST identification   ##source; >
 
-<!ENTITY @ coreProperties   "(this, uri+, alias*, date, author+, components?, preservation?)" >
+<!ENTITY @ coreProperties   "(FRBRthis, FRBRuri+, FRBRalias*, FRBRdate, FRBRauthor+, components?, preservation?)" >
 <!ELEMENT FRBRWork             @coreProperties; >
 <!ELEMENT FRBRExpression       @coreProperties; >
 <!ELEMENT FRBRManifestation    @coreProperties; >
 <!ELEMENT FRBRItem             @coreProperties; >
 
-<!ELEMENT this             @metaopt;>
-<!ATTLIST this             ##value; >
-<!ELEMENT uri              @metaopt;>
-<!ATTLIST uri              ##value; >
-<!ELEMENT alias            @metaopt;>
-<!ATTLIST alias            ##value; >
-<!ELEMENT date             @metaopt;>
-<!ATTLIST date             ##date; ##name; >
-<!ELEMENT author           @metaopt;>
-<!ATTLIST author           ##link; 
+<!ELEMENT FRBRthis             @metaopt;>
+<!ATTLIST FRBRthis             ##value; >
+<!ELEMENT FRBRuri              @metaopt;>
+<!ATTLIST FRBRuri              ##value; >
+<!ELEMENT FRBRalias            @metaopt;>
+<!ATTLIST FRBRalias            ##value; >
+<!ELEMENT FRBRdate             @metaopt;>
+<!ATTLIST FRBRdate             ##date; ##name; >
+<!ELEMENT FRBRauthor           @metaopt;>
+<!ATTLIST FRBRauthor           ##link; 
                            as #ANYURI  #IMPLIED>
 <!ENTITY @ comp            "(component*)"> 
 <!ELEMENT components       @comp;>
