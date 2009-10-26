@@ -3,7 +3,7 @@
        Akoma Ntoso main schema                                                  
                                                                            
                                                                            
-       Release  11/05/2009
+       Release  21/10/2009
        technical supervision Fabio Vitali - University of Bologna
        legal domain supervision Monica Palmirani - University of Bologna
                                                                            
@@ -31,7 +31,7 @@
 <!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
 <!ENTITY @@ ANinline        "(def | remark | ref | mref | rref | mod | mmod | rmod | ins | del | omissis)" >
 <!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
-<!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | docPurpose)" >
+<!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docketNumber | docProponent | docDate | docPurpose)" >
 <!--- The group ANheaderInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the header element -->
 <!ENTITY @@ ANheaderInline  "(courtType | neutralCitation | party | judge | lawyer | signature | opinion)" >
 <!--- The group ANotherInline lists additional elements that are inline, and are specific to the Akoma Ntoso vocabulary -->
@@ -48,10 +48,17 @@
 <!--- The group HTMLmarker lists the elements that are marker and were inherited from the HTML vocabulary -->
 <!ENTITY @@ HTMLmarker        "(img)" >
 
+<!--- The group judgementBlock lists the structures that should be found in a judgement -->
+<!ENTITY @@ judgementBlock    "(introduction | background | motivation | decision)">
+<!--- The group speechSection lists the structures that should contain speeches -->
+<!ENTITY @@ speechSection     "(administrationOfOath|declarationOfVote|communication|petitions|
+papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder|subdivision)">
+
+
 <!--- The group hierElements lists all the elements that are hierarchical -->
 <!ENTITY @@ hierElements      "(@@ANhier;       |                     hcontainer)">
 <!--- The group containerElements lists all the elements that are containers -->
-<!ENTITY @@ containerElements "(@@ANcontainers; | @@HTMLcontainers; | container)">
+<!ENTITY @@ containerElements "(@@ANcontainers; | @@HTMLcontainers; | @@speechSection; | container)">
 <!--- The group blockElements lists all the elements that are blocks -->
 <!ENTITY @@ blockElements     "(@@ANblock;      | @@HTMLblock;      | block      | foreign)">
 <!--- The group inlineElements lists all the elements that are inline -->
@@ -61,11 +68,6 @@
 
 <!--- The group inlineCM is the content model of blocks and inlines, and is composed of all the inlines and all the markers -->
 <!ENTITY @@ inlineCM          "(@@inlineElements; | @@markerElements;)">
-
-<!--- The group judgementBlock lists the structures that should be found in a judgement -->
-<!ENTITY @@ judgementBlock    "(introduction | background | motivation | decision)">
-<!--- The group speechSection lists the structures that should contain speeches -->
-<!ENTITY @@ speechSection     "(administrationOfOath|declarationOfVote|communication|petitions|papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder|subdivision)">
 
 <!-- =====================================================================
 
@@ -113,9 +115,17 @@
     exclusion  #BOOLEAN #IMPLIED
     incomplete #BOOLEAN #IMPLIED
 ">
-<!--- The attribute role is used to identify the role of an individual mentioned in the text. It is a reference to a person or organization element in the references section -->
+<!--- The attribute role is used to identify the role of an individual mentioned in the text. It is a reference to a TLCRole element in the references section -->
 <!ENTITY ## role "
     as #ANYURI #IMPLIED
+">
+<!--- The attribute actor is used to identify the actor of a step of a workflow of the document. It is a reference to a TLCPerson or TLCOrganization element in the references section -->
+<!ENTITY ## actor "
+    actor #ANYURI #IMPLIED
+">
+<!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
+<!ENTITY ## outcome "
+    outcome #ANYURI #IMPLIED
 ">
 
 
@@ -160,6 +170,10 @@
 <!ENTITY # timeType       "#STRING(startEvent|endEvent)">
 <!--- This is the list of allowed values for the type attribute of the outOfLine element  -->
 <!ENTITY # outOfLineType  "#STRING(sideNote|publicationNote)">
+<!--- This is the list of allowed values for the type attribute of the opinion element  -->
+<!ENTITY # opinionType  "#STRING(dissenting|agreeing|null)">
+<!--- This is the list of allowed values for the type attribute of the result element  -->
+<!ENTITY # resultType  "#STRING(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)">
 
 <!-- =====================================================================
 
@@ -172,7 +186,7 @@
 <!--- The complex type hierarchy is used by most or all the hierarchical elements of act-like documents. -->
 <!ENTITY @ hierarchy         "@basehierarchy;, (@@hierElements;+ | content)"            "##corereq;">
 <!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
-<!ENTITY @ althierarchy      "@basehierarchy;, (@@speechSection; | @@containerElements;)*" "##corereq;">
+<!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;)*" "##corereq;">
 <!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the id attribute is required -->
 <!ENTITY @ blocksreq         "(@@blockElements;)+" "##corereq;">
 <!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the id attribute is optional -->
@@ -200,10 +214,6 @@
 <!ENTITY @ speechType        "(from, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 <!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the references section -->
 <!ENTITY @ referenceType     ""                            "##idreq; ##link; ##show;" >
-<!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
-<!ENTITY @ argumentType      ""                            "##idopt; ##link; upTo   #ANYURI #IMPLIED" >
-<!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
-<!ENTITY @ periodType        ""                            "##idopt; ##period;" >                 
 <!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
 <!ENTITY @ anyOtherType      "ANY{##other}"                "##idopt; ##linkopt;" >                 
 
@@ -470,6 +480,8 @@
 <!ELEMENT docTitle     @inline; >
 <!--- the element docNumber is an inline element within preface to identify the string used by the document for its own number -->
 <!ELEMENT docNumber    @inline; >
+<!--- the element docketNumber is an inline element within preface to identify the string used by the document for the number of the docket, case, file, etc which the document belongs to -->
+<!ELEMENT docketNumber    @inline; >
 <!--- the element docProponent is an inline element within preface to identify the string used by the document for its proponent -->
 <!ELEMENT docProponent @inline; >
 <!--- the element docDate is an inline element within preface to identify the string used by the document for its own date(s). Documents with multiple dates may use multiple docDate elements. -->
@@ -488,13 +500,15 @@
 <!--- the element judge is an inline element within judgements to identify where the document defines one of the judges, and his/her role -->
 <!ELEMENT judge              @inlinereqreq; >
 <!ATTLIST judge              ##role; >
-<!--- the element lawyer is an inline element within judgements to identify where the document defines one of the lawyers, his/her role, and which party it represents -->
+<!--- the element lawyer is an inline element within judgements to identify where the document defines one of the lawyers, his/her role, which party it represents, and the other lawyer, if any, this lawyer received the power delegation of power in some role -->
 <!ELEMENT lawyer             @inlinereqreq; >
 <!ATTLIST lawyer             ##role; 
-                             represents      #ANYURI        #IMPLIED >
+                             for         #ANYURI    #IMPLIED 
+                             empoweredBy #ANYURI    #IMPLIED >
 <!--- the element opinion is an inline element within judgements to identify where the document defines the opinion of one of the judges -->
 <!ELEMENT opinion            @inline; >
-
+<!ATTLIST opinion            type  #opinionType; #IMPLIED>
+                      
 <!--- the element signature is an inline element within conclusions to identify where the document defines one of the signatures -->
 <!ELEMENT signature          @inline; >
 
@@ -746,20 +760,20 @@
     type   #eventType; #IMPLIED
 >
 
-<!--- The element workflow is a metadata container of the actions associated to the workflow of the document. -->
-<!ELEMENT workflow   (action+)>
+<!--- The element workflow is a metadata container of the steps associated to the workflow of the document. -->
+<!ELEMENT workflow   (step+)>
 <!ATTLIST workflow   ##source; >
-<!--- The element action is a metadata element specifying facts about a workflow action occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced.  -->
-<!ELEMENT action     @metareq;>
-<!ATTLIST action
+<!--- The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified. -->
+<!ELEMENT step     @metareq;>
+<!ATTLIST step
     ##date;
-    ##source;
+    ##actor;
     ##role;
-    type   #eventType; #IMPLIED
+    ##outcome;
 >
 
 <!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events -->
-<!ELEMENT analysis              (activeModifications?, passiveModifications?) >
+<!ELEMENT analysis              (activeModifications?, passiveModifications?, judicial?) >
 <!ATTLIST analysis              ##source; >
 
 <!--- The complex type Amendments is a list of all the amendment elements that can be used on a document analysis -->
@@ -808,6 +822,47 @@
 <!ELEMENT legalSystemMod        @modificationType; > 
 <!ATTLIST legalSystemMod        type #LegalSystemMods; #REQUIRED >
 
+<!--- The complex type judicialArguments is a list of all the judicial analysis elements that can be used on the analysis of a judgment -->
+<!ENTITY @ judicialArguments          "(result, (supports | isAnalogTo | applies | extends | restricts | derogates | contrasts | overrules | dissentsFrom | putsInQuestion | distinguishes)+)" >
+<!--- The complex type judicialArgumentType lists all the properties associated to judicial elements. -->
+<!ENTITY @ judicialArgumentType       "(source+, destination+, condition?)" 
+                               "##idreq; ##enactment; ##modifiers; ##refers;" >
+
+<!--- The element judicial is a metadata container of the analysis of the judicial arguments of a judgement. -->
+<!ELEMENT judicial   @judicialArguments; >
+<!--- The element result is a metadata element specifying the overall result of the judgement. -->
+<!ELEMENT result   @anyOtherType; >
+<!ATTLIST result   type  #resultType; #REQUIRED >
+
+<!--- The element supports is a metadata element specifying a reference to a source supported by the argument being described. -->
+<!ELEMENT supports  @judicialArgumentType; >
+<!--- The element isAnalogTo is a metadata element specifying a reference to a source analog to the argument being described. -->
+<!ELEMENT isAnalogTo  @judicialArgumentType; >
+<!--- The element applies is a metadata element specifying a reference to a source applyed by the argument being described. -->
+<!ELEMENT applies  @judicialArgumentType; >
+<!--- The element extends is a metadata element specifying a reference to a source extended by the argument being described. -->
+<!ELEMENT extends  @judicialArgumentType; >
+<!--- The element restricts is a metadata element specifying a reference to a source restricted by the argument being described. -->
+<!ELEMENT restricts  @judicialArgumentType; >
+<!--- The element derogates is a metadata element specifying a reference to a source derogated by the argument being described. -->
+<!ELEMENT derogates  @judicialArgumentType; >
+<!--- The element contrasts is a metadata element specifying a reference to a source contrasted by the argument being described. -->
+<!ELEMENT contrasts  @judicialArgumentType; >
+<!--- The element overrules is a metadata element specifying a reference to a source overruled by the argument being described. -->
+<!ELEMENT overrules  @judicialArgumentType; >
+<!--- The element dissentsFrom is a metadata element specifying a reference to a source dissented from the argument being described. -->
+<!ELEMENT dissentsFrom  @judicialArgumentType; >
+<!--- The element questions is a metadata element specifying a reference to a source questioned by the argument being described. -->
+<!ELEMENT putsInQuestion  @judicialArgumentType; >
+<!--- The element distinguishes is a metadata element specifying a reference to a source being distinguished by the argument being described. -->
+<!ELEMENT distinguishes  @judicialArgumentType; > 
+
+
+<!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
+<!ENTITY @ argumentType      ""                            "##idopt; ##link; upTo   #ANYURI #IMPLIED" >
+<!--- the complex type periodType defines the empty content model and the list of attributes for metadata elements in the analysis section using periods -->
+<!ENTITY @ periodType        ""                            "##idopt; ##period;" >                 
+
 <!--- The element source is a metadata element specifying the URI of the source of the modification. -->
 <!ELEMENT source           @argumentType;>
 <!--- The element destination is a metadata element specifying the URI of the destination of the modification. -->
@@ -829,7 +884,6 @@
 <!ELEMENT new              @anyOtherType; >
 <!--- The element domain is a metadata element containing (in some unmanaged form) the domain to which the modification applies. -->
 <!ELEMENT domain           @anyOtherType; >
-
 
 
 <!--- The group docrefs is a list of types of legal references to documents. -->
@@ -879,6 +933,11 @@
 <!--- The element TLCreference is a generic metadata reference to the Akoma Ntoso URI of an ontology instance of a class specified through the name attribute -->
 <!ELEMENT TLCReference     @referenceType; >
 <!ATTLIST TLCReference     ##name; >
+
+
+
+
+
 
 <!--- The element notes is a metadata container of all the note elements used as footnotes and endnotes in the document. -->
 <!ELEMENT notes        (note)+>

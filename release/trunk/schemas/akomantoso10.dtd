@@ -7,7 +7,7 @@
 Akoma Ntoso main schema
 
 
-Release  11/05/2009
+Release  21/10/2009
 technical supervision Fabio Vitali - University of Bologna
 legal domain supervision Monica Palmirani - University of Bologna
 
@@ -35,7 +35,7 @@ Main element groups
 
 <!ENTITY % ANinline        "def | remark | ref | mref | rref | mod | mmod | rmod | ins | del | omissis" >
 
-<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | docPurpose" >
+<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docketNumber | docProponent | docDate | docPurpose" >
 
 <!ENTITY % ANheaderInline  "courtType | neutralCitation | party | judge | lawyer | signature | opinion" >
 
@@ -53,9 +53,15 @@ Main element groups
 <!ENTITY % HTMLmarker        "img" >
 
 
+<!ENTITY % judgementBlock    "introduction | background | motivation | decision" >
+
+<!ENTITY % speechSection     "administrationOfOath | declarationOfVote | communication | petitions | papers | noticesOfMotion | questions | address | proceduralMotions | pointOfOrder | subdivision" >
+
+
+
 <!ENTITY % hierElements      "%ANhier; | hcontainer" >
 
-<!ENTITY % containerElements "%ANcontainers; | %HTMLcontainers; | container" >
+<!ENTITY % containerElements "%ANcontainers; | %HTMLcontainers; | %speechSection; | container" >
 
 <!ENTITY % blockElements     "%ANblock; | %HTMLblock; | block | foreign" >
 
@@ -65,11 +71,6 @@ Main element groups
 
 
 <!ENTITY % inlineCM          "%inlineElements; | %markerElements;" >
-
-
-<!ENTITY % judgementBlock    "introduction | background | motivation | decision" >
-
-<!ENTITY % speechSection     "administrationOfOath | declarationOfVote | communication | petitions | papers | noticesOfMotion | questions | address | proceduralMotions | pointOfOrder | subdivision" >
 
 <!--  =====================================================================
 
@@ -107,6 +108,10 @@ Attribute groups
 <!ENTITY % modifiers " exclusion %BOOLEAN; #IMPLIED incomplete %BOOLEAN; #IMPLIED" >
 
 <!ENTITY % role " as %ANYURI; #IMPLIED" >
+
+<!ENTITY % actor " actor %ANYURI; #IMPLIED" >
+
+<!ENTITY % outcome " outcome %ANYURI; #IMPLIED" >
 
 
 
@@ -153,6 +158,12 @@ Simple types (data values)
 <!ENTITY % outOfLineType  "(sideNote|publicationNote)" >
 <!ENTITY % EoutOfLineType "((sideNote|publicationNote))" >
 
+<!ENTITY % opinionType  "(dissenting|agreeing|null)" >
+<!ENTITY % EopinionType "((dissenting|agreeing|null))" >
+
+<!ENTITY % resultType  "(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)" >
+<!ENTITY % EresultType "((deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve))" >
+
 <!--  =====================================================================
 
 Complex types (markup structures)
@@ -164,7 +175,7 @@ Complex types (markup structures)
 
 <!ENTITY % hierarchy         "(%basehierarchy;,((%hierElements;)+ | content))" >
 
-<!ENTITY % althierarchy      "(%basehierarchy;,(%speechSection; | %containerElements;)*)" >
+<!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements;)*)" >
 
 <!ENTITY % blocksreq         "(%blockElements;)+" >
 
@@ -195,10 +206,6 @@ Complex types (markup structures)
 <!ENTITY % speechType        "(from,(%blockElements;)+)" >
 
 <!ENTITY % referenceType     "EMPTY" >
-
-<!ENTITY % argumentType      "EMPTY" >
-
-<!ENTITY % periodType        "EMPTY" >
 
 <!ENTITY % anyOtherType      "ANY" >
 
@@ -506,6 +513,9 @@ legal structure, regardless of their position in the document.
 <!ELEMENT docNumber    %inline; >
 <!ATTLIST docNumber %coreopt;  >
 
+<!ELEMENT docketNumber    %inline; >
+<!ATTLIST docketNumber %coreopt;  >
+
 <!ELEMENT docProponent %inline; >
 <!ATTLIST docProponent %coreopt;  >
 
@@ -537,10 +547,12 @@ legal structure, regardless of their position in the document.
 <!ELEMENT lawyer             %inlinereqreq; >
 <!ATTLIST lawyer %corereqreq;  >
 
-<!ATTLIST lawyer %role;  represents %ANYURI; #IMPLIED >
+<!ATTLIST lawyer %role;  for %ANYURI; #IMPLIED empoweredBy %ANYURI; #IMPLIED >
 
 <!ELEMENT opinion            %inline; >
 <!ATTLIST opinion %coreopt;  >
+
+<!ATTLIST opinion type %opinionType; #IMPLIED >
 
 
 <!ELEMENT signature          %inline; >
@@ -844,17 +856,17 @@ Metadata elements for all documents
 <!ATTLIST event %date;  %source;  type %eventType; #IMPLIED >
 
 
-<!ELEMENT workflow   (action+)>
+<!ELEMENT workflow   (step+)>
 
 <!ATTLIST workflow %source;  >
 
-<!ELEMENT action     %metareq; >
-<!ATTLIST action %idreq;  >
+<!ELEMENT step     %metareq; >
+<!ATTLIST step %idreq;  >
 
-<!ATTLIST action %date;  %source;  %role;  type %eventType; #IMPLIED >
+<!ATTLIST step %date;  %actor;  %role;  %outcome;  >
 
 
-<!ELEMENT analysis              (activeModifications?,passiveModifications?)>
+<!ELEMENT analysis              (activeModifications?,passiveModifications?,judicial?)>
 
 <!ATTLIST analysis %source;  >
 
@@ -918,6 +930,59 @@ Metadata elements for all documents
 <!ATTLIST legalSystemMod type %LegalSystemMods; #REQUIRED >
 
 
+<!ENTITY % judicialArguments          "(result,(supports | isAnalogTo | applies | extends | restricts | derogates | contrasts | overrules | dissentsFrom | putsInQuestion | distinguishes)+)" >
+
+<!ENTITY % judicialArgumentType       "(source+,destination+,condition?)" >
+
+
+<!ELEMENT judicial   %judicialArguments; >
+
+<!ELEMENT result   %anyOtherType; >
+<!ATTLIST result %idopt;  %linkopt;  >
+
+<!ATTLIST result type %resultType; #REQUIRED >
+
+
+<!ELEMENT supports  %judicialArgumentType; >
+<!ATTLIST supports %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT isAnalogTo  %judicialArgumentType; >
+<!ATTLIST isAnalogTo %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT applies  %judicialArgumentType; >
+<!ATTLIST applies %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT extends  %judicialArgumentType; >
+<!ATTLIST extends %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT restricts  %judicialArgumentType; >
+<!ATTLIST restricts %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT derogates  %judicialArgumentType; >
+<!ATTLIST derogates %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT contrasts  %judicialArgumentType; >
+<!ATTLIST contrasts %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT overrules  %judicialArgumentType; >
+<!ATTLIST overrules %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT dissentsFrom  %judicialArgumentType; >
+<!ATTLIST dissentsFrom %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT putsInQuestion  %judicialArgumentType; >
+<!ATTLIST putsInQuestion %idreq;  %enactment;  %modifiers;  %refers;  >
+
+<!ELEMENT distinguishes  %judicialArgumentType; >
+<!ATTLIST distinguishes %idreq;  %enactment;  %modifiers;  %refers;  >
+
+
+
+<!ENTITY % argumentType      "EMPTY" >
+
+<!ENTITY % periodType        "EMPTY" >
+
+
 <!ELEMENT source           %argumentType; >
 <!ATTLIST source %idopt;  %link;  upTo %ANYURI; #IMPLIED >
 
@@ -949,7 +1014,6 @@ Metadata elements for all documents
 
 <!ELEMENT domain           %anyOtherType; >
 <!ATTLIST domain %idopt;  %linkopt;  >
-
 
 
 
@@ -1019,6 +1083,11 @@ Metadata elements for all documents
 <!ATTLIST TLCReference %idreq;  %link;  %show;  >
 
 <!ATTLIST TLCReference %name;  >
+
+
+
+
+
 
 
 <!ELEMENT notes        (note)+>

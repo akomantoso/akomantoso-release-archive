@@ -11,7 +11,7 @@
 		Akoma Ntoso main schema
 		
 		
-		Release  05/05/2009
+		Release  21/10/2009
 		technical supervision Fabio Vitali - University of Bologna
 		legal domain supervision Monica Palmirani - University of Bologna
 		
@@ -133,6 +133,7 @@
 			      <xsd:element ref="docType"/>
 			      <xsd:element ref="docTitle"/>
 			      <xsd:element ref="docNumber"/>
+			      <xsd:element ref="docketNumber"/>
 			      <xsd:element ref="docProponent"/>
 			      <xsd:element ref="docDate"/>
 			      <xsd:element ref="docPurpose"/>
@@ -253,6 +254,47 @@
 		    </xsd:sequence>
 	  </xsd:group>
 
+	  <xsd:group name="judgementBlock">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>judgementBlock</name>
+            <comment>The group judgementBlock lists the structures that should be found in a judgement</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:choice>
+			      <xsd:element ref="introduction"/>
+			      <xsd:element ref="background"/>
+			      <xsd:element ref="motivation"/>
+			      <xsd:element ref="decision"/>
+		    </xsd:choice>
+	  </xsd:group>
+
+	  <xsd:group name="speechSection">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>speechSection</name>
+            <comment>The group speechSection lists the structures that should contain speeches</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:choice>
+			      <xsd:element ref="administrationOfOath"/>
+			      <xsd:element ref="declarationOfVote"/>
+			      <xsd:element ref="communication"/>
+			      <xsd:element ref="petitions"/>
+			      <xsd:element ref="papers"/>
+			      <xsd:element ref="noticesOfMotion"/>
+			      <xsd:element ref="questions"/>
+			      <xsd:element ref="address"/>
+			      <xsd:element ref="proceduralMotions"/>
+			      <xsd:element ref="pointOfOrder"/>
+			      <xsd:element ref="subdivision"/>
+		    </xsd:choice>
+	  </xsd:group>
+
 	  <xsd:group name="hierElements">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -280,6 +322,7 @@
 		    <xsd:choice>
 			      <xsd:group ref="ANcontainers"/>
 			      <xsd:group ref="HTMLcontainers"/>
+			      <xsd:group ref="speechSection"/>
 			      <xsd:element ref="container"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -348,47 +391,6 @@
 		    <xsd:choice>
 			      <xsd:group ref="inlineElements"/>
 			      <xsd:group ref="markerElements"/>
-		    </xsd:choice>
-	  </xsd:group>
-
-	  <xsd:group name="judgementBlock">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>judgementBlock</name>
-            <comment>The group judgementBlock lists the structures that should be found in a judgement</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:choice>
-			      <xsd:element ref="introduction"/>
-			      <xsd:element ref="background"/>
-			      <xsd:element ref="motivation"/>
-			      <xsd:element ref="decision"/>
-		    </xsd:choice>
-	  </xsd:group>
-
-	  <xsd:group name="speechSection">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>speechSection</name>
-            <comment>The group speechSection lists the structures that should contain speeches</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:choice>
-			      <xsd:element ref="administrationOfOath"/>
-			      <xsd:element ref="declarationOfVote"/>
-			      <xsd:element ref="communication"/>
-			      <xsd:element ref="petitions"/>
-			      <xsd:element ref="papers"/>
-			      <xsd:element ref="noticesOfMotion"/>
-			      <xsd:element ref="questions"/>
-			      <xsd:element ref="address"/>
-			      <xsd:element ref="proceduralMotions"/>
-			      <xsd:element ref="pointOfOrder"/>
-			      <xsd:element ref="subdivision"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -571,11 +573,35 @@
 			      <xsd:documentation>
 			         <type>Attlist</type>
             <name>role</name>
-            <comment>The attribute role is used to identify the role of an individual mentioned in the text. It is a reference to a person or organization element in the references section</comment>
+            <comment>The attribute role is used to identify the role of an individual mentioned in the text. It is a reference to a TLCRole element in the references section</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:attribute name="as" type="xsd:anyURI"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="actor">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>actor</name>
+            <comment>The attribute actor is used to identify the actor of a step of a workflow of the document. It is a reference to a TLCPerson or TLCOrganization element in the references section</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="actor" type="xsd:anyURI"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="outcome">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>outcome</name>
+            <comment>The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="outcome" type="xsd:anyURI"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="cellattrs">
@@ -804,6 +830,43 @@
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
+	  <xsd:simpleType name="opinionType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>opinionType</name>
+            <comment>This is the list of allowed values for the type attribute of the opinion element</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="dissenting"/>
+			      <xsd:enumeration value="agreeing"/>
+			      <xsd:enumeration value="null"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="resultType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>resultType</name>
+            <comment>This is the list of allowed values for the type attribute of the result element</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="deny"/>
+			      <xsd:enumeration value="dismiss"/>
+			      <xsd:enumeration value="uphold"/>
+			      <xsd:enumeration value="revert"/>
+			      <xsd:enumeration value="replaceOrder"/>
+			      <xsd:enumeration value="remit"/>
+			      <xsd:enumeration value="decide"/>
+			      <xsd:enumeration value="approve"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
 	  <xsd:annotation>
 		    <xsd:documentation>
 		 =====================================================================
@@ -861,10 +924,9 @@
 
 		    <xsd:complexContent>
 			      <xsd:extension base="basehierarchy">
-				        <xsd:choice minOccurs="0" maxOccurs="unbounded">
-					          <xsd:group ref="speechSection"/>
+				        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
 					          <xsd:group ref="containerElements"/>
-				        </xsd:choice>
+				        </xsd:sequence>
 				        <xsd:attributeGroup ref="corereq"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
@@ -1043,33 +1105,6 @@
 		    <xsd:attributeGroup ref="show"/>
 	  </xsd:complexType>
 
-	  <xsd:complexType name="argumentType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Complex</type>
-            <name>argumentType</name>
-            <comment>the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:attributeGroup ref="idopt"/>
-		    <xsd:attributeGroup ref="link"/>
-		    <xsd:attribute name="upTo" type="xsd:anyURI"/>
-	  </xsd:complexType>
-
-	  <xsd:complexType name="periodType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Complex</type>
-            <name>periodType</name>
-            <comment>the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the analysis section</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:attributeGroup ref="idopt"/>
-		    <xsd:attributeGroup ref="period"/>
-	  </xsd:complexType>
-
 	  <xsd:complexType name="anyOtherType">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -1080,7 +1115,7 @@
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:any namespace="##other"/>
+			      <xsd:any namespace="##other" processContents="lax"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="idopt"/>
 		    <xsd:attributeGroup ref="linkopt"/>
@@ -2118,6 +2153,18 @@
 		
 
 
+	  <xsd:element name="docketNumber" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>docketNumber</name>
+            <comment>the element docketNumber is an inline element within preface to identify the string used by the document for the number of the docket, case, file, etc which the document belongs to</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
 	  <xsd:element name="docProponent" type="inline">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -2225,7 +2272,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>lawyer</name>
-            <comment>the element lawyer is an inline element within judgements to identify where the document defines one of the lawyers, his/her role, and which party it represents</comment>
+            <comment>the element lawyer is an inline element within judgements to identify where the document defines one of the lawyers, his/her role, which party it represents, and the other lawyer, if any, this lawyer received the power delegation of power in some role</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -2233,23 +2280,30 @@
 			      <xsd:complexContent>
 				        <xsd:extension base="inlinereqreq">
 					          <xsd:attributeGroup ref="role"/>
-					          <xsd:attribute name="represents" type="xsd:anyURI"/>
+					          <xsd:attribute name="for" type="xsd:anyURI"/>
+					          <xsd:attribute name="empoweredBy" type="xsd:anyURI"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="opinion" type="inline">
-      <xsd:annotation>
+	  <xsd:element name="opinion">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>opinion</name>
             <comment>the element opinion is an inline element within judgements to identify where the document defines the opinion of one of the judges</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attribute name="type" type="opinionType"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="signature" type="inline">
       <xsd:annotation>
@@ -3231,18 +3285,18 @@
 	  <xsd:element name="workflow">
 		    <xsd:complexType>
 			      <xsd:sequence>
-				        <xsd:element ref="action" minOccurs="1" maxOccurs="unbounded"/>
+				        <xsd:element ref="step" minOccurs="1" maxOccurs="unbounded"/>
 			      </xsd:sequence>
 				     <xsd:attributeGroup ref="source"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="action">
+	  <xsd:element name="step">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>action</name>
-            <comment>The element action is a metadata element specifying facts about a workflow action occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced.</comment>
+            <name>step</name>
+            <comment>The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -3250,9 +3304,9 @@
 			      <xsd:complexContent>
 				        <xsd:extension base="metareq">
 					          <xsd:attributeGroup ref="date"/>
-					          <xsd:attributeGroup ref="source"/>
+					          <xsd:attributeGroup ref="actor"/>
 					          <xsd:attributeGroup ref="role"/>
-					          <xsd:attribute name="type" type="eventType"/>
+					          <xsd:attributeGroup ref="outcome"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -3263,6 +3317,7 @@
 			      <xsd:sequence>
 				        <xsd:element ref="activeModifications" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="passiveModifications" minOccurs="0" maxOccurs="1"/>
+				        <xsd:element ref="judicial" minOccurs="0" maxOccurs="1"/>
 			      </xsd:sequence>
 				     <xsd:attributeGroup ref="source"/>
 		    </xsd:complexType>
@@ -3565,6 +3620,242 @@
 			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
+
+	  <xsd:complexType name="judicialArguments">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>judicialArguments</name>
+            <comment>The complex type judicialArguments is a list of all the judicial analysis elements that can be used on the analysis of a judgment</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="result"/>
+			      <xsd:choice minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="supports"/>
+				        <xsd:element ref="isAnalogTo"/>
+				        <xsd:element ref="applies"/>
+				        <xsd:element ref="extends"/>
+				        <xsd:element ref="restricts"/>
+				        <xsd:element ref="derogates"/>
+				        <xsd:element ref="contrasts"/>
+				        <xsd:element ref="overrules"/>
+				        <xsd:element ref="dissentsFrom"/>
+				        <xsd:element ref="putsInQuestion"/>
+				        <xsd:element ref="distinguishes"/>
+			      </xsd:choice>
+		    </xsd:sequence>
+	  </xsd:complexType>
+
+	  <xsd:complexType name="judicialArgumentType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>judicialArgumentType</name>
+            <comment>The complex type judicialArgumentType lists all the properties associated to judicial elements.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="source" minOccurs="1" maxOccurs="unbounded"/>
+			      <xsd:element ref="destination" minOccurs="1" maxOccurs="unbounded"/>
+			      <xsd:element ref="condition" minOccurs="0" maxOccurs="1"/>
+		    </xsd:sequence>
+		    <xsd:attributeGroup ref="idreq"/>
+		    <xsd:attributeGroup ref="enactment"/>
+		    <xsd:attributeGroup ref="modifiers"/>
+		    <xsd:attributeGroup ref="refers"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="judicial" type="judicialArguments">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>judicial</name>
+            <comment>The element judicial is a metadata container of the analysis of the judicial arguments of a judgement.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="result">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>result</name>
+            <comment>The element result is a metadata element specifying the overall result of the judgement.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="anyOtherType">
+					          <xsd:attribute name="type" type="resultType" use="required"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="supports" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>supports</name>
+            <comment>The element supports is a metadata element specifying a reference to a source supported by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="isAnalogTo" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>isAnalogTo</name>
+            <comment>The element isAnalogTo is a metadata element specifying a reference to a source analog to the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="applies" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>applies</name>
+            <comment>The element applies is a metadata element specifying a reference to a source applyed by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="extends" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>extends</name>
+            <comment>The element extends is a metadata element specifying a reference to a source extended by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="restricts" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>restricts</name>
+            <comment>The element restricts is a metadata element specifying a reference to a source restricted by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="derogates" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>derogates</name>
+            <comment>The element derogates is a metadata element specifying a reference to a source derogated by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="contrasts" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>contrasts</name>
+            <comment>The element contrasts is a metadata element specifying a reference to a source contrasted by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="overrules" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>overrules</name>
+            <comment>The element overrules is a metadata element specifying a reference to a source overruled by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="dissentsFrom" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>dissentsFrom</name>
+            <comment>The element dissentsFrom is a metadata element specifying a reference to a source dissented from the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="putsInQuestion" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>putsInQuestion</name>
+            <comment>The element questions is a metadata element specifying a reference to a source questioned by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="distinguishes" type="judicialArgumentType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>distinguishes</name>
+            <comment>The element distinguishes is a metadata element specifying a reference to a source being distinguished by the argument being described.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:complexType name="argumentType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>argumentType</name>
+            <comment>the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attributeGroup ref="idopt"/>
+		    <xsd:attributeGroup ref="link"/>
+		    <xsd:attribute name="upTo" type="xsd:anyURI"/>
+	  </xsd:complexType>
+
+	  <xsd:complexType name="periodType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>periodType</name>
+            <comment>the complex type periodType defines the empty content model and the list of attributes for metadata elements in the analysis section using periods</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attributeGroup ref="idopt"/>
+		    <xsd:attributeGroup ref="period"/>
+	  </xsd:complexType>
 
 	  <xsd:element name="source" type="argumentType">
       <xsd:annotation>
