@@ -3,7 +3,7 @@
        Akoma Ntoso main schema                                                  
                                                                            
                                                                            
-       Release  21/10/2009
+       Release  09/12/2009
        technical supervision Fabio Vitali - University of Bologna
        legal domain supervision Monica Palmirani - University of Bologna
                                                                            
@@ -142,9 +142,9 @@ papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder|subdivis
 <!ENTITY ## idopt        "id           #ID           #IMPLIED">
 
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
-<!ENTITY ## refersreq    "refersTo           #IDREF         #REQUIRED" >
+<!ENTITY ## refersreq    "refersTo           #ANYURI         #REQUIRED" >
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is optional -->
-<!ENTITY ## refers       "refersTo           #IDREF         #IMPLIED" >
+<!ENTITY ## refers       "refersTo           #ANYURI         #IMPLIED" >
 
 <!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the id attribute is required -->
 <!ENTITY ## corereq      "##HTMLattrs; ##enactment; ##idreq; ##refers;" >

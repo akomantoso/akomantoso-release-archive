@@ -11,7 +11,7 @@
 		Akoma Ntoso main schema
 		
 		
-		Release  21/10/2009
+		Release  09/12/2009
 		technical supervision Fabio Vitali - University of Bologna
 		legal domain supervision Monica Palmirani - University of Bologna
 		
@@ -664,7 +664,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="refersTo" type="xsd:IDREF" use="required"/>
+		    <xsd:attribute name="refersTo" type="xsd:anyURI" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="refers">
@@ -676,7 +676,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="refersTo" type="xsd:IDREF"/>
+		    <xsd:attribute name="refersTo" type="xsd:anyURI"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="corereq">
@@ -1115,7 +1115,7 @@
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:any namespace="##other" processContents="lax"/>
+			      <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="idopt"/>
 		    <xsd:attributeGroup ref="linkopt"/>
