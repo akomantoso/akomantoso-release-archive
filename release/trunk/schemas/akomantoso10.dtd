@@ -7,7 +7,7 @@
 Akoma Ntoso main schema
 
 
-Release  21/10/2009
+Release  09/12/2009
 technical supervision Fabio Vitali - University of Bologna
 legal domain supervision Monica Palmirani - University of Bologna
 
@@ -124,9 +124,9 @@ Attribute groups
 <!ENTITY % idopt        " id ID #IMPLIED" >
 
 
-<!ENTITY % refersreq    " refersTo IDREF #REQUIRED" >
+<!ENTITY % refersreq    " refersTo %ANYURI; #REQUIRED" >
 
-<!ENTITY % refers       " refersTo IDREF #IMPLIED" >
+<!ENTITY % refers       " refersTo %ANYURI; #IMPLIED" >
 
 
 <!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers; " >
