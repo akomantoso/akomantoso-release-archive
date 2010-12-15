@@ -7,7 +7,7 @@
 Akoma Ntoso main schema
 
 
-Release  09/12/2009
+Tentative Release  07/10/2010
 technical supervision Fabio Vitali - University of Bologna
 legal domain supervision Monica Palmirani - University of Bologna
 
@@ -17,6 +17,7 @@ A few of them are explicitly mentioned, when their use or approach
 was not felt clear or natural enough. Others are just used without
 mentions.
 =====================================================================  -->
+
 
 
 
@@ -35,7 +36,7 @@ Main element groups
 
 <!ENTITY % ANinline        "def | remark | ref | mref | rref | mod | mmod | rmod | ins | del | omissis" >
 
-<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docketNumber | docProponent | docDate | docPurpose" >
+<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docketNumber | docProponent | docDate | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction" >
 
 <!ENTITY % ANheaderInline  "courtType | neutralCitation | party | judge | lawyer | signature | opinion" >
 
@@ -87,6 +88,9 @@ Attribute groups
 
 <!ENTITY % time         " time %TIME; #REQUIRED" >
 
+<!ENTITY % yesNoType    "(yes|no)" >
+<!ENTITY % EyesNoType "((yes|no))" ><!ENTITY % authoritative       " authoritative %yesNoType; #IMPLIED" >
+
 <!ENTITY % link         " href %ANYURI; #REQUIRED" >
 
 <!ENTITY % linkopt      " href %ANYURI; #IMPLIED" >
@@ -99,7 +103,7 @@ Attribute groups
 
 <!ENTITY % show         " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
 
-<!ENTITY % period " start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED startEfficacy %ANYURI; #IMPLIED endEfficacy %ANYURI; #IMPLIED"
+<!ENTITY % period " period %ANYURI; #IMPLIED"
 >
 
 <!ENTITY % statusType     "(omissis|repealed|suspended|editorial)" >
@@ -128,18 +132,24 @@ Attribute groups
 
 <!ENTITY % refers       " refersTo %ANYURI; #IMPLIED" >
 
+<!ENTITY % xmllang       " xml:lang %STRING; #IMPLIED" >
 
-<!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers; " >
+<!ENTITY % lang       " language %STRING; #IMPLIED" >
 
-<!ENTITY % corereqreq   " %HTMLattrs;  %enactment;  %idreq;  %refersreq; " >
 
-<!ENTITY % coreopt      " %HTMLattrs;  %enactment;  %idopt;  %refers; " >
+<!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang; " >
+
+<!ENTITY % corereqreq   " %HTMLattrs;  %enactment;  %idreq;  %refersreq;  %xmllang; " >
+
+<!ENTITY % coreopt      " %HTMLattrs;  %enactment;  %idopt;  %refers;  %xmllang; " >
 
 <!--  =====================================================================
 
 Simple types (data values)
 
 =====================================================================  -->
+
+
 
 <!ENTITY % versionType    "(originalVersion|singleVersion|multipleVersions)" >
 <!ENTITY % EversionType "((originalVersion|singleVersion|multipleVersions))" >
@@ -220,6 +230,8 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 
 
 
+<!ENTITY % collectionDocs  "amendmentList | officialGazette | documentCollection" >
+
 <!ENTITY % legislativeDocs  "act | bill" >
 
 <!ENTITY % judgementDocs    "judgement" >
@@ -227,9 +239,10 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 <!ENTITY % debateDocs       "report | debateRecord" >
 
 
-<!ENTITY % documentType      "(%legislativeDocs; | %debateDocs; | %judgementDocs; | doc)" >
+<!ENTITY % documentType      "%collectionDocs; | %legislativeDocs; | %debateDocs; | %judgementDocs; | doc" >
 
-<!ELEMENT     akomaNtoso        %documentType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://www.akomantoso.org/1.0" >
+<!ELEMENT     akomaNtoso        (%documentType;)><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://www.akomantoso.org/1.0"
+ xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 <!--  =====================================================================
 
@@ -239,6 +252,9 @@ Pattern: Consistent Element Set
 Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 =====================================================================  -->
+
+
+<!ENTITY % collectionStructure "(meta,preface?,collectionContent,conclusions?,outOfLines?,attachments?)" >
 
 
 <!ENTITY % hierarchicalStructure "(meta,preface?,preamble?,body,conclusions?,outOfLines?,attachments?)" >
@@ -252,6 +268,15 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % openStructure         "(meta,preface?,preamble?,mainContent,conclusions?,outOfLines?,attachments?)" >
 
+
+<!ELEMENT amendmentList           %collectionStructure; >
+<!ATTLIST amendmentList contains %versionType; 'originalVersion'  >
+
+<!ELEMENT officialGazette           %collectionStructure; >
+<!ATTLIST officialGazette contains %versionType; 'originalVersion'  >
+
+<!ELEMENT documentCollection           %collectionStructure; >
+<!ATTLIST documentCollection contains %versionType; 'originalVersion'  >
 
 <!ELEMENT act           %hierarchicalStructure; >
 <!ATTLIST act contains %versionType; 'originalVersion'  >
@@ -302,7 +327,15 @@ AN common containers elements
 <!ELEMENT outOfLine   %blocksreq; >
 <!ATTLIST outOfLine %corereq;  >
 
-<!ATTLIST outOfLine %link;  type %outOfLineType; #REQUIRED >
+<!ATTLIST outOfLine %link;  %authoritative;  type %outOfLineType; #REQUIRED >
+
+<!ELEMENT interstitial  %blocksreq; >
+<!ATTLIST interstitial %corereq;  >
+
+
+<!ELEMENT collectionContent       ((%documentType;),interstitial?)+>
+
+<!ATTLIST collectionContent %coreopt;  >
 
 
 <!ELEMENT body            (%hierElements;)+>
@@ -527,6 +560,21 @@ legal structure, regardless of their position in the document.
 <!ELEMENT docPurpose   %inline; >
 <!ATTLIST docPurpose %coreopt;  >
 
+<!ELEMENT docCommittee   %inline; >
+<!ATTLIST docCommittee %coreopt;  >
+
+<!ELEMENT docIntroducer   %inline; >
+<!ATTLIST docIntroducer %coreopt;  >
+
+<!ELEMENT docStage   %inline; >
+<!ATTLIST docStage %coreopt;  >
+
+<!ELEMENT docStatus   %inline; >
+<!ATTLIST docStatus %coreopt;  >
+
+<!ELEMENT docJurisdiction   %inline; >
+<!ATTLIST docJurisdiction %coreopt;  >
+
 
 <!ELEMENT courtType          %inline; >
 <!ATTLIST courtType %coreopt;  >
@@ -627,7 +675,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT noteRef      %markeropt; >
 <!ATTLIST noteRef %coreopt;  >
 
-<!ATTLIST noteRef %link;  num %STRING; #REQUIRED >
+<!ATTLIST noteRef %link;  %authoritative;  num %STRING; #REQUIRED >
 
 
 <!ELEMENT recordedTime   %markeropt; >
@@ -773,7 +821,7 @@ Metadata elements for all documents
 =====================================================================  -->
 
 
-<!ELEMENT meta             (identification,publication,classification*,lifecycle*,workflow*,analysis*,references*,notes*,proprietary*)>
+<!ELEMENT meta             (identification,publication,classification*,lifecycle*,workflow*,analysis*,temporalData*,references*,notes*,proprietary*)>
 
 
 <!ELEMENT identification   (FRBRWork,FRBRExpression,FRBRManifestation,FRBRItem?)>
@@ -783,9 +831,12 @@ Metadata elements for all documents
 
 <!ENTITY % coreProperties   "(FRBRthis,FRBRuri+,FRBRalias*,FRBRdate,FRBRauthor+,components?,preservation?)" >
 
+<!ENTITY % langProperties   "FRBRlanguage* , FRBRtranslation*" >
+
+
 <!ELEMENT FRBRWork             %coreProperties; >
 
-<!ELEMENT FRBRExpression       %coreProperties; >
+ <!ENTITY       % FRBRExpression_entity "(%coreProperties;,(%langProperties;))" ><!ELEMENT FRBRExpression %FRBRExpression_entity;>
 
 <!ELEMENT FRBRManifestation    %coreProperties; >
 
@@ -818,6 +869,18 @@ Metadata elements for all documents
 
 <!ATTLIST FRBRauthor %link;  as %ANYURI; #IMPLIED >
 
+<!ELEMENT FRBRlanguage            %metaopt; >
+<!ATTLIST FRBRlanguage %idopt;  >
+
+<!ATTLIST FRBRlanguage %lang;  >
+
+
+<!ELEMENT FRBRtranslation            %metaopt; >
+<!ATTLIST FRBRtranslation %idopt;  >
+
+<!ATTLIST FRBRtranslation %link;  %lang;  %authoritative;  by %ANYURI; #REQUIRED >
+
+
 
 <!ELEMENT components          (component)*>
 
@@ -827,6 +890,9 @@ Metadata elements for all documents
 
 <!ELEMENT preservation        %anyOtherType; >
 <!ATTLIST preservation %idopt;  %linkopt;  >
+
+
+
 
 
 <!ELEMENT publication      %metaopt; >
@@ -1015,6 +1081,21 @@ Metadata elements for all documents
 <!ELEMENT domain           %anyOtherType; >
 <!ATTLIST domain %idopt;  %linkopt;  >
 
+
+<!ELEMENT temporalData  (temporalGroup)+>
+
+<!ATTLIST temporalData %source;  >
+
+<!--  The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept.  -->
+<!ELEMENT temporalGroup  (timeInterval+)>
+
+<!ATTLIST temporalGroup %idreq;  >
+
+<!--  The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values are of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section  -->
+<!ELEMENT timeInterval  %metaopt; >
+<!ATTLIST timeInterval %idopt;  >
+
+<!ATTLIST timeInterval %refersreq;  start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED duration %DURATION; #IMPLIED >
 
 
 <!ENTITY % docRefs        "original | passiveRef | activeRef | jurisprudence | hasAttachment | attachmentOf" >

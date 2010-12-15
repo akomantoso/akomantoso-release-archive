@@ -4,6 +4,8 @@
             elementFormDefault="qualified">
 
 
+	  <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
+               schemaLocation="http://www.w3.org/2001/xml.xsd"/>
 
 	  <xsd:annotation>
 		    <xsd:documentation>
@@ -11,7 +13,7 @@
 		Akoma Ntoso main schema
 		
 		
-		Release  09/12/2009
+		Tentative Release  07/10/2010
 		technical supervision Fabio Vitali - University of Bologna
 		legal domain supervision Monica Palmirani - University of Bologna
 		
@@ -137,6 +139,11 @@
 			      <xsd:element ref="docProponent"/>
 			      <xsd:element ref="docDate"/>
 			      <xsd:element ref="docPurpose"/>
+			      <xsd:element ref="docCommittee"/>
+			      <xsd:element ref="docIntroducer"/>
+			      <xsd:element ref="docStage"/>
+			      <xsd:element ref="docStatus"/>
+			      <xsd:element ref="docJurisdiction"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -421,7 +428,7 @@
 			      <xsd:documentation>
 			         <type>Attlist</type>
             <name>source</name>
-            <comment>The attribute source links to the aent (person, organization) providing the specific annotation or markup</comment>
+            <comment>The attribute source links to the agent (person, organization) providing the specific annotation or markup</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -450,6 +457,18 @@
 		    </xsd:annotation>
 
 		    <xsd:attribute name="time" type="xsd:time" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="authoritative">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>authoritative</name>
+            <comment>The attribute authoritative specifies whether the element (notes and outofLine elements) is authoritative or not</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="authoritative" type="yesNoType"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="link">
@@ -532,14 +551,11 @@
 			      <xsd:documentation>
 			         <type>Attlist</type>
             <name>period</name>
-            <comment>These attributes are used in versioned content and metadata elements to indicate a period of time in which they were in force and/or in efficacy. Values are NOT dates, but references to event elements in the metadata section</comment>
+            <comment>The period attribute is used in versioned content and metadata elements to indicate a time interval in which they were in force, in efficacy, or in any other type of interval as specified in the corresponding temporalGroup.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="start" type="xsd:anyURI"/>
-		    <xsd:attribute name="end" type="xsd:anyURI"/>
-		    <xsd:attribute name="startEfficacy" type="xsd:anyURI"/>
-		    <xsd:attribute name="endEfficacy" type="xsd:anyURI"/>
+		    <xsd:attribute name="period" type="xsd:anyURI"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="enactment">
@@ -679,6 +695,30 @@
 		    <xsd:attribute name="refersTo" type="xsd:anyURI"/>
 	  </xsd:attributeGroup>
 
+	  <xsd:attributeGroup name="xmllang">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>xmllang</name>
+            <comment>This attribute specifies the human language in which the content of the element is expressed. Values are taken from the RFC 4646. xml:lang is a reserved attribute of XML, and cannot be used for any other purpose than this one.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute ref="xml:lang"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="lang">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>lang</name>
+            <comment>This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="language" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
 	  <xsd:attributeGroup name="corereq">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -692,6 +732,7 @@
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="refers"/>
+		    <xsd:attributeGroup ref="xmllang"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="corereqreq">
@@ -707,6 +748,7 @@
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="refersreq"/>
+		    <xsd:attributeGroup ref="xmllang"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="coreopt">
@@ -722,6 +764,7 @@
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="idopt"/>
 		    <xsd:attributeGroup ref="refers"/>
+		    <xsd:attributeGroup ref="xmllang"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:annotation>
@@ -733,6 +776,21 @@
 		===================================================================== 
 		</xsd:documentation>
 	  </xsd:annotation>
+
+	  <xsd:simpleType name="yesNoType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>yesNoType</name>
+            <comment>This is the list of allowed values for the authoritative attribute</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="yes"/>
+			      <xsd:enumeration value="no"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
 
 	  <xsd:simpleType name="versionType">
 		    <xsd:annotation>
@@ -1134,6 +1192,22 @@
 		</xsd:documentation>
 	  </xsd:annotation>
 
+	  <xsd:group name="collectionDocs">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>collectionDocs</name>
+            <comment>the group collectionDocs specifies all the document types that are collections of other documents, that may or may not be addressed individually. Many documents are of this type, such as individual issues of the official gazette, amendment lists, and many others</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:choice>
+			      <xsd:element ref="amendmentList"/>
+			      <xsd:element ref="officialGazette"/>
+			      <xsd:element ref="documentCollection"/>
+		    </xsd:choice>
+	  </xsd:group>
+
 	  <xsd:group name="legislativeDocs">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -1178,37 +1252,27 @@
 		    </xsd:choice>
 	  </xsd:group>
 
-	  <xsd:complexType name="documentType">
+	  <xsd:group name="documentType">
 		    <xsd:annotation>
 			      <xsd:documentation>
-			         <type>Complex</type>
+			         <type>Group</type>
             <name>documentType</name>
             <comment>the type documentType lists all the document types that are managed by Akoma Ntoso</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:choice>
+			      <xsd:group ref="collectionDocs"/>
 			      <xsd:group ref="legislativeDocs"/>
 			      <xsd:group ref="debateDocs"/>
 			      <xsd:group ref="judgementDocs"/>
 			      <xsd:element ref="doc"/>
 		    </xsd:choice>
-	  </xsd:complexType>
+	  </xsd:group>
 
-	  <xsd:element name="akomaNtoso" type="documentType">
+	  <xsd:element name="akomaNtoso">
       <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Elementroot</type>
-            <name>NAME</name>
-            <comment>NAMEakomaNtosothe element akomaNtoso is the root element of all document types in Akoma Ntoso. It follows the pattern Universal Root (http://www.xmlpatterns.com/UniversalRootMain.shtml)</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-   </xsd:element>
-		
-
-
-	  <xsd:annotation>
-		    <xsd:documentation>
+		       <xsd:documentation>
 		 =====================================================================
 		
 		Document elements
@@ -1218,7 +1282,35 @@
 		
 		===================================================================== 
 		</xsd:documentation>
-	  </xsd:annotation>
+	     </xsd:annotation>
+		    <xsd:complexType>
+			      <xsd:sequence>
+				        <xsd:group ref="documentType"/>
+			      </xsd:sequence>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	
+
+	  <xsd:complexType name="collectionStructure">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>collectionStructure</name>
+            <comment>the type collectionStructure specifies the overall content model of the document types that are collections of other documents</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="meta"/>
+			      <xsd:element ref="preface" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="collectionContent"/>
+			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="outOfLines" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
+		    </xsd:sequence>
+		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+	  </xsd:complexType>
 
 	  <xsd:complexType name="hierarchicalStructure">
 		    <xsd:annotation>
@@ -1301,6 +1393,42 @@
 		    </xsd:sequence>
 		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
 	  </xsd:complexType>
+
+	  <xsd:element name="amendmentList" type="collectionStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>amendmentList</name>
+            <comment>Element amendmentList is used for descriving the structure and content of a collection of amendments</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="officialGazette" type="collectionStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>officialGazette</name>
+            <comment>Element officialGazette is used for descriving the structure and content of an issue of an official gazette</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="documentCollection" type="collectionStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>documentCollection</name>
+            <comment>Element documentCollection is used for descriving the structure and content of a collection of other documents chosen and combined for any reason whatsoever</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:element name="act" type="hierarchicalStructure">
       <xsd:annotation>
@@ -1474,9 +1602,34 @@
 			      <xsd:complexContent>
 				        <xsd:extension base="blocksreq">
 					          <xsd:attributeGroup ref="link"/>
+					          <xsd:attributeGroup ref="authoritative"/>
 					          <xsd:attribute name="type" type="outOfLineType" use="required"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="interstitial" type="blocksreq">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>interstitial</name>
+            <comment>the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="collectionContent">
+		    <xsd:complexType>
+			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				        <xsd:sequence>
+					          <xsd:group ref="documentType"/>
+				        </xsd:sequence>
+				        <xsd:element ref="interstitial" minOccurs="0" maxOccurs="1"/>
+			      </xsd:sequence>
+				     <xsd:attributeGroup ref="coreopt"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -2207,6 +2360,66 @@
 		
 
 
+	  <xsd:element name="docCommittee" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>docCommittee</name>
+            <comment>the element docCommittee is an inline element within preface to identify the string used by the document detailing the committee within which the document originated</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="docIntroducer" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>docIntroducer</name>
+            <comment>the element docIntroducer is an inline element within preface to identify the string used by the document detailing the individual introducing of the document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="docStage" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>docStage</name>
+            <comment>the element docStage is an inline element within preface to identify the string used by the document detailing the stage in which the document sits</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="docStatus" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>docStatus</name>
+            <comment>the element docStatus is an inline element within preface to identify the string used by the document detailing the status of the document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="docJurisdiction" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>docJurisdiction</name>
+            <comment>the element docJurisdiction is an inline element within preface to identify the string used by the document detailing the jurisdiction of the document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
 	  <xsd:element name="courtType" type="inline">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -2557,6 +2770,7 @@
 			      <xsd:complexContent>
 				        <xsd:extension base="markeropt">
 					          <xsd:attributeGroup ref="link"/>
+					          <xsd:attributeGroup ref="authoritative"/>
 					          <xsd:attribute name="num" type="xsd:string" use="required"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
@@ -2992,6 +3206,7 @@
 				        <xsd:element ref="lifecycle" minOccurs="0" maxOccurs="unbounded"/>
 				        <xsd:element ref="workflow" minOccurs="0" maxOccurs="unbounded"/>
 				        <xsd:element ref="analysis" minOccurs="0" maxOccurs="unbounded"/>
+				        <xsd:element ref="temporalData" minOccurs="0" maxOccurs="unbounded"/>
 				        <xsd:element ref="references" minOccurs="0" maxOccurs="unbounded"/>
 				        <xsd:element ref="notes" minOccurs="0" maxOccurs="unbounded"/>
 				        <xsd:element ref="proprietary" minOccurs="0" maxOccurs="unbounded"/>
@@ -3016,7 +3231,7 @@
 			      <xsd:documentation>
 			         <type>Complex</type>
             <name>coreProperties</name>
-            <comment>The complexType corePropetties lists the identifying properties available at any of the FRBR hierarchy levels.</comment>
+            <comment>The complexType coreProperties lists the identifying properties available at any of the FRBR hierarchy levels.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -3031,6 +3246,21 @@
 		    </xsd:sequence>
 	  </xsd:complexType>
 
+	  <xsd:group name="langProperties">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>langProperties</name>
+            <comment>The group langProperties lists the language-specific properties that are characteristics of the FRBR Expression level.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="FRBRlanguage" minOccurs="0" maxOccurs="unbounded"/>
+			      <xsd:element ref="FRBRtranslation" minOccurs="0" maxOccurs="unbounded"/>
+		    </xsd:sequence>
+	  </xsd:group>
+
 	  <xsd:element name="FRBRWork" type="coreProperties">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -3043,17 +3273,25 @@
 		
 
 
-	  <xsd:element name="FRBRExpression" type="coreProperties">
-      <xsd:annotation>
+	  <xsd:element name="FRBRExpression">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRExpression</name>
             <comment>The element FRBRExpression is the metadata container of identifying properties related to the Expression level according to the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="coreProperties">
+					          <xsd:sequence>
+						            <xsd:group ref="langProperties"/>
+					          </xsd:sequence>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="FRBRManifestation" type="coreProperties">
       <xsd:annotation>
@@ -3166,6 +3404,45 @@
 				        <xsd:extension base="metaopt">
 					          <xsd:attributeGroup ref="link"/>
 					          <xsd:attribute name="as" type="xsd:anyURI"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="FRBRlanguage">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRlanguage</name>
+            <comment>The element FRBRlanguage is the metadata property containing a RFC4646 (three-letter code) of the main human language used in the content of this expression</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="metaopt">
+					          <xsd:attributeGroup ref="lang"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="FRBRtranslation">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRtranslation</name>
+            <comment>The element FRBRtranslation is the metadata property specifying the source of which this expression is a translation of. A translation is defined as an expression less authoritative than the original one.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="metaopt">
+					          <xsd:attributeGroup ref="link"/>
+					          <xsd:attributeGroup ref="lang"/>
+					          <xsd:attributeGroup ref="authoritative"/>
+					          <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -3982,6 +4259,53 @@
    </xsd:element>
 		
 
+
+	  <xsd:element name="temporalData">
+      <xsd:annotation>
+		       <xsd:documentation>
+		 The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept. 
+		</xsd:documentation>
+	     </xsd:annotation>
+		    <xsd:complexType>
+			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="temporalGroup"/>
+			      </xsd:sequence>
+				     <xsd:attributeGroup ref="source"/>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	
+
+	  <xsd:element name="temporalGroup">
+      <xsd:annotation>
+		       <xsd:documentation>
+		 The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values are of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section 
+		</xsd:documentation>
+	     </xsd:annotation>
+		    <xsd:complexType>
+			      <xsd:sequence>
+				        <xsd:element ref="timeInterval" minOccurs="1" maxOccurs="unbounded"/>
+			      </xsd:sequence>
+				     <xsd:attributeGroup ref="idreq"/>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	
+
+	  <xsd:element name="timeInterval">
+		
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="metaopt">
+					          <xsd:attributeGroup ref="refersreq"/>
+					          <xsd:attribute name="start" type="xsd:anyURI"/>
+					          <xsd:attribute name="end" type="xsd:anyURI"/>
+					          <xsd:attribute name="duration" type="xsd:duration"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:group name="docRefs">
 		    <xsd:annotation>
