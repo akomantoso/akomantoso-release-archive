@@ -5,7 +5,7 @@
 Akoma Ntoso main schema
 
 
-Tentative Release 12/01/2011
+Tentative Release 16/03/2011
 Complete version.
 
 
@@ -33,20 +33,22 @@ Main element groups
 
 
 
-<!ENTITY % ANcontainers    "speech | question | answer | other | scene" >
+<!ENTITY % ANcontainers    "speech | question | answer | other | scene | narrative | summary" >
 
 
 
-<!ENTITY % preambleContainers    "recital | citation | subdivision" >
+<!ENTITY % basicContainers    "subdivision" >
+
+<!ENTITY % preambleContainers    "recitals | citation | subdivision" >
 
 <!ENTITY % prefaceContainers    "longTitle | subdivision" >
 
 
 <!ENTITY % ANblock         "list | toc | tblock" >
 
-<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | ins | del | omissis | placeholder" >
+<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | placeholder" >
 
-<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
+<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
 
 
 
@@ -55,10 +57,10 @@ Main element groups
 
 
 
-<!ENTITY % ANotherInline   "def | entity | person | date" >
+<!ENTITY % ANsemanticInline   "date | person | organization | concept | object | event | location | process | role | term | quantity | def | entity" >
 
 
-<!ENTITY % ANmarker        "noteRef | eol | eop | recordedTime" >
+<!ENTITY % ANmarker        "noteRef | eol | eop" >
 
 
 <!ENTITY % ANpopup          "authorialNote" >
@@ -88,7 +90,7 @@ Main element groups
 
 
 
-<!ENTITY % speechSection     "administrationOfOath | declarationOfVote | communication | petitions | papers | noticesOfMotion | questions | address | proceduralMotions | pointOfOrder | debateSection" >
+<!ENTITY % speechSection     "administrationOfOath | rollCall | prayers | oralStatements | writtenStatements | personalStatements | ministerialStatements | resolutions | nationalInterest | declarationOfVote | communication | petitions | papers | noticesOfMotion | questions | address | proceduralMotions | pointOfOrder | debateSection" >
 
 
 
@@ -96,11 +98,11 @@ Main element groups
 <!ENTITY % hierElements      "%ANhier; | hcontainer" >
 
 
-<!ENTITY % containerElements "%ANcontainers; | %speechSection; | %HTMLcontainers; | container" >
+<!ENTITY % containerElements "%speechSection; | %HTMLcontainers; | container" >
 
 <!ENTITY % blockElements     "%ANblock; | %HTMLblock; | foreign | block" >
 
-<!ENTITY % inlineElements    "%ANinline; | %HTMLinline; | %ANtitleInline; | %ANotherInline; | %ANheaderInline; | %amendmentInline; | inline" >
+<!ENTITY % inlineElements    "%ANinline; | %HTMLinline; | %ANtitleInline; | %ANsemanticInline; | %ANheaderInline; | %amendmentInline; | inline" >
 
 
 <!ENTITY % popupElements    "%ANpopup; | popup" >
@@ -117,6 +119,8 @@ Attribute groups
 
 =====================================================================  -->
 
+
+<!ENTITY % alt         " alternativeTo %ANYURI; #IMPLIED" >
 
 <!ENTITY % name         " name %STRING; #REQUIRED" >
 
@@ -136,6 +140,7 @@ Attribute groups
 
 
 <!ENTITY % speechAtts   " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED to %ANYURI; #IMPLIED" >
+<!ENTITY % voteAtts     " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED choice %ANYURI; #IMPLIED" >
 
 
 <!ENTITY % show         " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
@@ -143,16 +148,14 @@ Attribute groups
 <!ENTITY % period " period %ANYURI; #IMPLIED"
 >
 
-<!ENTITY % statusType     "(omissis|repealed|suspended|editorial|ignore)" >
-<!ENTITY % EstatusType "((omissis|repealed|suspended|editorial|ignore))" ><!ENTITY % enactment " %period;  status %statusType; #IMPLIED" >
+<!ENTITY % statusType     "(omissis|repealed|suspended|editorial|ignore|translated|edited|verbatim)" >
+<!ENTITY % EstatusType "((omissis|repealed|suspended|editorial|ignore|translated|edited|verbatim))" ><!ENTITY % enactment " %period;  status %statusType; #IMPLIED" >
 
 <!ENTITY % placementType    "(side|left|right|bottom|inline)" >
-<!ENTITY % EplacementType "((side|left|right|bottom|inline))" ><!ENTITY % notes " marker %STRING; #REQUIRED placement %placementType; #IMPLIED" >
-
+<!ENTITY % EplacementType "((side|left|right|bottom|inline))" ><!ENTITY % notes " marker %STRING; #IMPLIED placement %placementType; #IMPLIED placementBase %ANYURI; #IMPLIED" >
 
 
 <!ENTITY % modifiers " exclusion %BOOLEAN; #IMPLIED incomplete %BOOLEAN; #IMPLIED" >
-
 
 <!ENTITY % role " as %ANYURI; #IMPLIED" >
 
@@ -183,11 +186,11 @@ Attribute groups
 <!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % xmllang       " xml:lang %language; #IMPLIED" >
 
 
-<!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang; " >
+<!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang;  %alt; " >
 
-<!ENTITY % corereqreq   " %HTMLattrs;  %enactment;  %idreq;  %refersreq;  %xmllang; " >
+<!ENTITY % corereqreq   " %HTMLattrs;  %enactment;  %idreq;  %refersreq;  %xmllang;  %alt; " >
 
-<!ENTITY % coreopt      " %HTMLattrs;  %enactment;  %idopt;  %refers;  %xmllang; " >
+<!ENTITY % coreopt      " %HTMLattrs;  %enactment;  %idopt;  %refers;  %xmllang;  %alt; " >
 
 <!--  =====================================================================
 
@@ -248,7 +251,7 @@ Complex types (markup structures)
 <!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(%hierElements;)+,wrap?) | content))" >
 
 
-<!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements;)*)" >
+<!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements; | %ANcontainers; | %blockElements;)*)" >
 
 <!ENTITY % blocksreq         "(%blockElements;)+" >
 
@@ -277,7 +280,7 @@ Complex types (markup structures)
 
 
 
-<!ENTITY % speechType        "(from,(%blockElements;)+)" >
+<!ENTITY % speechType        "(%basehierarchy;,(from?,(%blockElements;)+))" >
 
 
 
@@ -312,14 +315,13 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 
 
 
-<!ENTITY % debateDocs       "report | debateRecord" >
+<!ENTITY % debateDocs       "report | debate" >
 
 
 
 <!ENTITY % documentType      "%collectionDocs; | %legislativeDocs; | %debateDocs; | %amendmentDocs; | %judgementDocs; | doc" >
 
-<!ELEMENT     akomaNtoso        ((%documentType;),components?)><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://www.akomantoso.org/1.0"
- xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
+
 
 <!--  =====================================================================
 
@@ -331,8 +333,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 =====================================================================  -->
 
 
+<!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ENTITY % openStructure     "(meta,preface?,preamble?,mainContent,conclusions?,attachments?)" >
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://www.akomantoso.org/1.0"
+ xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
+
+
+
+<!ENTITY % openStructure     "(meta,coverPage?,preface?,preamble?,mainContent,conclusions?,attachments?)" >
 
 
 <!ELEMENT doc           %openStructure; >
@@ -344,7 +352,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % collectionStructure "(meta,preface?,collectionContent,conclusions?,attachments?)" >
+<!ENTITY % collectionStructure "(meta,coverPage?,preface?,collectionContent,conclusions?,attachments?)" >
 
 
 <!ELEMENT amendmentList           %collectionStructure; >
@@ -356,22 +364,26 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT documentCollection           %collectionStructure; >
 <!ATTLIST documentCollection contains %versionType; 'originalVersion'  >
 
+<!ATTLIST documentCollection %name;  >
+
+
 
 <!ELEMENT interstitial  %blocksreq; >
 <!ATTLIST interstitial %corereq;  >
 
-<!ELEMENT collectionContent       ((%documentType; | componentRef),interstitial?)+>
-
+<!ENTITY % collectionContentType  "(%documentType; | componentRef | interstitial?)+" >
+<!ELEMENT collectionContent       %collectionContentType; >
 <!ATTLIST collectionContent %coreopt;  >
 
 
 
 
-<!ENTITY % hierarchicalStructure "(meta,preface?,preamble?,body,conclusions?,attachments?)" >
+<!ENTITY % hierarchicalStructure "(meta,coverPage?,preface?,preamble?,body,conclusions?,attachments?)" >
 
 
 <!ELEMENT act           %hierarchicalStructure; >
 <!ATTLIST act contains %versionType; 'originalVersion'  >
+
 
 
 <!ELEMENT bill          %hierarchicalStructure; >
@@ -384,24 +396,24 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % debateStructure     "(meta,preface?,debate,conclusions?,attachments?)" >
+<!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateContent,conclusions?,attachments?)" >
 
 
 <!ELEMENT report        %openStructure; >
 <!ATTLIST report %name;  contains %versionType; 'originalVersion'  >
 
-<!ELEMENT debateRecord  %debateStructure; >
-<!ATTLIST debateRecord contains %versionType; 'originalVersion'  >
+<!ELEMENT debate  %debateStructure; >
+<!ATTLIST debate contains %versionType; 'originalVersion'  >
 
 
-<!ELEMENT debate          (%speechSection;)+>
+<!ELEMENT debateContent          (%speechSection;)+>
 
-<!ATTLIST debate %coreopt;  >
-
-
+<!ATTLIST debateContent %coreopt;  >
 
 
-<!ENTITY % judgementStructure     "(meta,header,judgementBody,conclusions,attachments?)" >
+
+
+<!ENTITY % judgementStructure     "(meta,coverPage?,header,judgementBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT judgement     %judgementStructure; >
@@ -415,7 +427,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % amendmentStructure     "(meta,preface,amendmentBody,conclusions,attachments?)" >
+<!ENTITY % amendmentStructure     "(meta,coverPage?,preface?,amendmentBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT amendment     %amendmentStructure; >
@@ -428,6 +440,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
+
+<!ELEMENT recitals    (recital+)>
 
 <!ELEMENT recital    %blocksopt; >
 <!ATTLIST recital %coreopt;  >
@@ -445,6 +459,10 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
+<!ENTITY % basicopt         "(%blockElements; | %basicContainers;)+" >
+
+<!ELEMENT coverPage    %basicopt; >
+<!ATTLIST coverPage %coreopt;  >
 
 <!ENTITY % preambleopt         "(%blockElements; | %preambleContainers;)+" >
 
@@ -456,7 +474,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT preface     %prefaceopt; >
 <!ATTLIST preface %coreopt;  >
 
-<!ELEMENT conclusions %blocksopt; >
+<!ELEMENT conclusions %basicopt; >
 <!ATTLIST conclusions %coreopt;  >
 
 <!ELEMENT header      %blocksopt; >
@@ -534,6 +552,10 @@ Elements for hierarchical documents
 
 
 
+<!ELEMENT transitional    %hierarchy; >
+<!ATTLIST transitional %corereq;  >
+
+
 <!ELEMENT content       %blocksopt; >
 <!ATTLIST content %coreopt;  >
 
@@ -568,6 +590,32 @@ Elements for debates documents
 
 <!ELEMENT administrationOfOath  %althierarchy; >
 <!ATTLIST administrationOfOath %corereq;  >
+
+
+<!ELEMENT rollCall  %althierarchy; >
+<!ATTLIST rollCall %corereq;  >
+
+<!ELEMENT prayers  %althierarchy; >
+<!ATTLIST prayers %corereq;  >
+
+<!ELEMENT oralStatements  %althierarchy; >
+<!ATTLIST oralStatements %corereq;  >
+
+<!ELEMENT writtenStatements  %althierarchy; >
+<!ATTLIST writtenStatements %corereq;  >
+
+<!ELEMENT personalStatements  %althierarchy; >
+<!ATTLIST personalStatements %corereq;  >
+
+<!ELEMENT ministerialStatements  %althierarchy; >
+<!ATTLIST ministerialStatements %corereq;  >
+
+<!ELEMENT resolutions  %althierarchy; >
+<!ATTLIST resolutions %corereq;  >
+
+<!ELEMENT nationalInterest  %althierarchy; >
+<!ATTLIST nationalInterest %corereq;  >
+
 
 <!ELEMENT declarationOfVote     %althierarchy; >
 <!ATTLIST declarationOfVote %corereq;  >
@@ -621,8 +669,24 @@ Elements for debates documents
 <!ELEMENT scene               %inline; >
 <!ATTLIST scene %coreopt;  >
 
+<!ELEMENT narrative               %inline; >
+<!ATTLIST narrative %coreopt;  >
+
+<!ELEMENT summary               %inline; >
+<!ATTLIST summary %coreopt;  >
+
 <!ELEMENT from          %inline; >
 <!ATTLIST from %coreopt;  >
+
+
+<!ELEMENT vote               %inline; >
+<!ATTLIST vote %coreopt;  >
+
+<!ATTLIST vote %voteAtts;  >
+
+<!ELEMENT outcome               %inline; >
+<!ATTLIST outcome %coreopt;  >
+
 
 
 
@@ -645,6 +709,8 @@ Elements for debates documents
 
 <!ELEMENT affectedDocument        %inline; >
 <!ATTLIST affectedDocument %coreopt;  >
+
+<!ATTLIST affectedDocument %link;  >
 
 
 <!ELEMENT amendmentHeading        %blocksopt; >
@@ -729,9 +795,16 @@ legal structure, regardless of their position in the document.
 
 <!ATTLIST docDate %date;  >
 
+<!ELEMENT legislature      %inline; >
+<!ATTLIST legislature %coreopt;  >
+
+<!ELEMENT session      %inline; >
+<!ATTLIST session %coreopt;  >
+
+
+
 <!ELEMENT docPurpose   %inline; >
 <!ATTLIST docPurpose %coreopt;  >
-
 
 <!ELEMENT docCommittee   %inline; >
 <!ATTLIST docCommittee %coreopt;  >
@@ -794,11 +867,47 @@ legal structure, regardless of their position in the document.
 
 <!ATTLIST date %date;  >
 
+
 <!ELEMENT entity             %inlinereqreq; >
 <!ATTLIST entity %corereqreq;  >
 
+<!ATTLIST entity %name;  >
+
+
 <!ELEMENT person             %inlinereqreq; >
 <!ATTLIST person %corereqreq;  >
+
+<!ATTLIST person as %ANYURI; #IMPLIED >
+
+<!ELEMENT organization  %inlinereqreq; >
+<!ATTLIST organization %corereqreq;  >
+
+<!ELEMENT concept       %inlinereqreq; >
+<!ATTLIST concept %corereqreq;  >
+
+<!ELEMENT object        %inlinereqreq; >
+<!ATTLIST object %corereqreq;  >
+
+<!ELEMENT event         %inlinereqreq; >
+<!ATTLIST event %corereqreq;  >
+
+<!ELEMENT location         %inlinereqreq; >
+<!ATTLIST location %corereqreq;  >
+
+<!ELEMENT process       %inlinereqreq; >
+<!ATTLIST process %corereqreq;  >
+
+<!ELEMENT role          %inlinereqreq; >
+<!ATTLIST role %corereqreq;  >
+
+<!ELEMENT term          %inlinereqreq; >
+<!ATTLIST term %corereqreq;  >
+
+<!ELEMENT quantity          %inlinereqreq; >
+<!ATTLIST quantity %corereqreq;  >
+
+<!ATTLIST quantity normalized %STRING; #IMPLIED >
+
 
 <!ELEMENT def          %inline; >
 <!ATTLIST def %coreopt;  >
@@ -849,6 +958,12 @@ legal structure, regardless of their position in the document.
 
 <!ATTLIST remark type %remarkType; #IMPLIED >
 
+<!ELEMENT recordedTime   %inline; >
+<!ATTLIST recordedTime %coreopt;  >
+
+<!ATTLIST recordedTime type %timeType; #IMPLIED %time;  >
+
+
 
 
 <!ELEMENT ins          %inline; >
@@ -886,14 +1001,6 @@ there is text.
 
 
 
-<!ELEMENT recordedTime   %markeropt; >
-<!ATTLIST recordedTime %coreopt;  >
-
-<!ATTLIST recordedTime type %timeType; #IMPLIED %time;  >
-
-
-
-
 <!ENTITY % eolType  "%markeropt;" >
 
 <!ELEMENT eol   %eolType; >
@@ -913,12 +1020,14 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % popupStructure "(%hierElements; | %blockElements; | %containerElements;)+" >
+<!ENTITY % popupStructure "(%hierElements; | %blockElements; | %containerElements; | %ANcontainers; | %preambleContainers;)+" >
 
 
 
 <!ELEMENT quotedStructure   %popupStructure; >
 <!ATTLIST quotedStructure %corereq;  >
+
+<!ATTLIST quotedStructure for %ANYURI; #IMPLIED >
 
 
 
@@ -1046,9 +1155,14 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 
 
 
-<!ELEMENT table (tr+)>
+<!ELEMENT table (caption?,tr+)>
 
 <!ATTLIST table %corereq;  width %INTEGER; #IMPLIED border %INTEGER; #IMPLIED cellspacing %INTEGER; #IMPLIED cellpadding %INTEGER; #IMPLIED >
+
+
+<!ELEMENT caption    %inline; >
+<!ATTLIST caption %coreopt;  >
+
 
 <!ELEMENT tr (th | td)+>
 
@@ -1166,14 +1280,14 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT lifecycle (event+)>
+<!ELEMENT lifecycle (eventRef+)>
 
 <!ATTLIST lifecycle %source;  >
 
-<!ELEMENT event %anyOtherType; >
-<!ATTLIST event %idopt;  %linkopt;  >
+<!ELEMENT eventRef %anyOtherType; >
+<!ATTLIST eventRef %idopt;  %linkopt;  >
 
-<!ATTLIST event %date;  %source;  type %eventType; #IMPLIED originatingExpression %yesNoType; #IMPLIED >
+<!ATTLIST eventRef %date;  %source;  type %eventType; #IMPLIED originatingExpression %yesNoType; #IMPLIED >
 
 
 <!ELEMENT workflow   (step+)>
@@ -1188,7 +1302,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT analysis              (activeModifications?,passiveModifications?,judicial?)>
+<!ELEMENT analysis              (activeModifications?,passiveModifications?,judicial?,parliamentary?,otherAnalysis)>
 
 <!ATTLIST analysis %source;  >
 
@@ -1303,6 +1417,42 @@ Metadata elements for all documents
 
 
 
+
+<!ENTITY % parliamentaryAnalysis          "(quorumVerification | voting | recount)+" >
+
+<!ELEMENT parliamentary   %parliamentaryAnalysis; >
+
+
+<!ENTITY % parliamentaryAnalysisType       "(quorum | count)+" >
+
+<!ELEMENT quorumVerification  %parliamentaryAnalysisType; >
+<!ATTLIST quorumVerification %idreq;  %outcome;  %refers;  %linkopt;  >
+
+<!ELEMENT voting   %parliamentaryAnalysisType; >
+<!ATTLIST voting %idreq;  %outcome;  %refers;  %linkopt;  >
+
+<!ELEMENT recount   %parliamentaryAnalysisType; >
+<!ATTLIST recount %idreq;  %outcome;  %refers;  %linkopt;  >
+
+
+<!ENTITY % countType       "ANY" >
+
+<!ELEMENT quorum  %countType; >
+<!ATTLIST quorum %idreq;  %value;  %refers;  %linkopt;  >
+
+<!ELEMENT count  %countType; >
+<!ATTLIST count %idreq;  %value;  %refers;  %linkopt;  >
+
+
+
+
+<!ELEMENT otherAnalysis %anyOtherType; >
+<!ATTLIST otherAnalysis %idopt;  %linkopt;  >
+
+<!ATTLIST otherAnalysis %source;  >
+
+
+
 <!ENTITY % pos " pos %posType; #IMPLIED" >
 
 <!ENTITY % argumentType      "EMPTY" >
@@ -1364,7 +1514,7 @@ Metadata elements for all documents
 
 <!ENTITY % docRefs        "original | passiveRef | activeRef | jurisprudence | hasAttachment | attachmentOf" >
 
-<!ENTITY % TLCs           "TLCPerson | TLCOrganization | TLCConcept | TLCObject | TLCEvent | TLCPlace | TLCProcess | TLCRole | TLCTerm | TLCReference" >
+<!ENTITY % TLCs           "TLCPerson | TLCOrganization | TLCConcept | TLCObject | TLCEvent | TLCLocation | TLCProcess | TLCRole | TLCTerm | TLCReference" >
 
 <!ENTITY % refItems       "%docRefs; | %TLCs;" >
 
@@ -1412,8 +1562,8 @@ Metadata elements for all documents
 <!ELEMENT TLCEvent         %referenceType; >
 <!ATTLIST TLCEvent %idreq;  %link;  %show;  >
 
-<!ELEMENT TLCPlace         %referenceType; >
-<!ATTLIST TLCPlace %idreq;  %link;  %show;  >
+<!ELEMENT TLCLocation         %referenceType; >
+<!ATTLIST TLCLocation %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCProcess       %referenceType; >
 <!ATTLIST TLCProcess %idreq;  %link;  %show;  >
@@ -1458,7 +1608,7 @@ Components
 
 
 <!ELEMENT components (component+)>
-<!ELEMENT component (intro,(%documentType;))>
+<!ELEMENT component (%documentType;)>
 
 <!ATTLIST component %idreq;  >
 
