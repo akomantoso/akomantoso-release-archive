@@ -12,7 +12,7 @@
        Akoma Ntoso main schema
 
 
-        <report version="Tentative Release 16/03/2011"/>
+        <report version="Release 15/07/2011 - Initial for Akoma Ntoso 2.0"/>
 
        technical supervision Fabio Vitali - University of Bologna
        legal domain supervision Monica Palmirani - University of Bologna
@@ -24,7 +24,7 @@
        mentions.
      ===================================================================== -->
 
-&lt;!TARGETNS          'http://www.akomantoso.org/1.0'>
+&lt;!TARGETNS          'http://www.akomantoso.org/2.0'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -34,7 +34,7 @@
      ===================================================================== -->
 <include if="legislativeDocs">
 &lt;!--- The group ANhier lists the elements that belong to the Akoma Ntoso legislative hierarchy -->
-&lt;!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title<include if="optHierarchy" v="|book|tome"/><include if="civilLaw"  v="|article"/> <include if="additionalHierarchy" v="|point|indent|subsection|subpart|subparagraph|subchapter|subtitle|subclause"/>)" >
+&lt;!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title<include if="optHierarchy" v="|book|tome"/><include if="civilLaw"  v="|article"/> <include if="smallHierarchy" v="|point|indent|alinea"/><include if="additionalHierarchy" v="|subsection|subpart|subparagraph|subchapter|subtitle|subclause"/>)" >
 </include>
 <include if="debateDocs">	
 &lt;!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
@@ -44,7 +44,7 @@
 &lt;!--- The group basicContainers lists the elements that are containers and are specific to vocabulary of preambles, prefaces, conclusions and coverPages -->
 &lt;!ENTITY @@ basicContainers    "(subdivision)" >
 &lt;!--- The group preambleContainers lists the elements that are containers and are specific to the Akoma Ntoso preamble vocabulary -->
-&lt;!ENTITY @@ preambleContainers    "(recitals | citation | subdivision)" >
+&lt;!ENTITY @@ preambleContainers    "(recitals | citations | subdivision)" >
 &lt;!--- The group prefaceContainers lists the elements that are containers and are specific to the Akoma Ntoso preface vocabulary -->
 &lt;!ENTITY @@ prefaceContainers    "(longTitle | subdivision)" >
 </include>
@@ -91,14 +91,14 @@
 &lt;!--- The group amendmentBlock lists the structures that should be found in an amendment  -->
 &lt;!ENTITY @@ amendmentBlock    "(amendmentHeading | amendmentContent | amendmentReference | amendmentJustification)">
 &lt;!--- The group amendmentInline lists the inline elements that should be found in the preface of an amendment  -->
-&lt;!ENTITY @@ amendmentInline    "(affectedDocument)">
+&lt;!ENTITY @@ amendmentInline    "(affectedDocument | relatedDocument | change)">
 </include>
 <include if="debateDocs">	
 &lt;!--- The group speechSection lists the structures that should contain speeches -->
 &lt;!ENTITY @@ speechSection     "(administrationOfOath|rollCall|prayers|oralStatements|writtenStatements|personalStatements|
                                    ministerialStatements|resolutions|nationalInterest|declarationOfVote|communication|
                                    petitions|papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder| 
-                                   debateSection)">                                   
+                                   adjournment|debateSection)">                                   
 </include>
 
 <include if="legislativeDocs">
@@ -201,10 +201,12 @@
 &lt;!ENTITY ## HTMLattrs    "class        #STRING      #IMPLIED    
                           style        #STRING      #IMPLIED
                           title        #STRING      #IMPLIED">
-&lt;!--- This attribute identifies the element in an absolute manner. In elements using this attribute definition the id attribute is required -->
-&lt;!ENTITY ## idreq        "id           #ID           #REQUIRED">
-&lt;!--- This attribute identifies the element in an absolute manner. In elements using this attribute definition the id attribute is optional -->
-&lt;!ENTITY ## idopt        "id           #ID           #IMPLIED">
+&lt;!--- This attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is required. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id. -->
+&lt;!ENTITY ## idreq        "id           #ID           #REQUIRED
+                             evolvingId   #NMTOKEN           #IMPLIED  ">
+&lt;!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is optional. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id. -->
+&lt;!ENTITY ## idopt        "id           #ID           #IMPLIED
+                             evolvingId   #NMTOKEN           #IMPLIED  ">
 
 &lt;!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
 &lt;!ENTITY ## refersreq    "refersTo           #ANYURI         #REQUIRED" >
@@ -271,7 +273,7 @@
 &lt;!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, @@hierElements;+, wrap?) | content)"            "##corereq;">
 </include>
 &lt;!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
-&lt;!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | @@ANcontainers; | @@blockElements;)*" "##corereq;">
+&lt;!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | <include if="debateDocs" v="@@ANcontainers; |"/> @@blockElements;)*" "##corereq;">
 &lt;!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the id attribute is required -->
 &lt;!ENTITY @ blocksreq         "(@@blockElements;)+" "##corereq;">
 &lt;!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the id attribute is optional -->
@@ -300,6 +302,8 @@
 &lt;!ENTITY @ speechType        "@basehierarchy;, (from?, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 </include>
 
+&lt;!--- The complex type itemType is similar to a hierarchical element, but is isolated and does not belong to a full hierarchy. -->
+&lt;!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 &lt;!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the references section -->
 &lt;!ENTITY @ referenceType     ""                            "##idreq; ##link; ##show;" >
 &lt;!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
@@ -332,7 +336,7 @@
 </include>
 <include if="debateDocs">
 &lt;!--- the group debateDocs specifies all the document types that are related to debates -->
-&lt;!ENTITY @@ debateDocs       "(report | debate)" >
+&lt;!ENTITY @@ debateDocs       "(debateReport | debate)" >
 </include>
 		
 &lt;!--- the type documentType lists all the document types that are managed by Akoma Ntoso -->
@@ -423,7 +427,7 @@
 &lt;!ELEMENT body            (@@hierElements;)+ >
 &lt;!ATTLIST body            ##coreopt; >	
 </include>
-<include if="debateDocs" label="Documents for parliamentary debates and hansards" desc="Document elements $report and $debate">
+<include if="debateDocs" label="Documents for parliamentary debates and hansards" desc="Document elements $debateReport and $debate">
 &lt;!--- the type debateStructure specifies the overall content model of the document types that describe debates -->
 &lt;!ENTITY @ debateStructure     "(meta, 
                                    coverPage?,
@@ -433,8 +437,8 @@
                                    attachments?)" 
                                  " contains #versionType; 'originalVersion'">
 
-&lt;!--- Element report is used for descriving the structure and content of a report -->
-&lt;!ELEMENT report        @openStructure; >
+&lt;!--- Element debateReport is used for descriving the structure and content of a report -->
+&lt;!ELEMENT debateReport        @openStructure; >
 &lt;!--- Element debate is used for descriving the structure and content of a debat record -->
 &lt;!ELEMENT debate  @debateStructure; >
 
@@ -481,11 +485,13 @@
 	
 <include if="preambleContainers"  desc="Substructures for hierarchical prefaces and preambles">	
 &lt;!--- the element recitals is the section of the preface that contains recitals -->
-&lt;!ELEMENT recitals    (recital+) >
+&lt;!ELEMENT recitals    (intro?, recital+) >
 &lt;!--- the element recital is the individual element of the preface that is called recital -->
-&lt;!ELEMENT recital    @blocksopt; >
-&lt;!--- the element citation is the section of the preface that is called citation -->
-&lt;!ELEMENT citation    @blocksopt; >
+&lt;!ELEMENT recital    @itemType; >
+&lt;!--- the element citations is the section of the preface that contains citations -->
+&lt;!ELEMENT citations    (intro?,citation+) >
+&lt;!--- the element citation is the individual element of the preface that is called citation -->
+&lt;!ELEMENT citation    @itemType; >
 &lt;!--- the element longTitle is the section of the preface that is called long title -->
 &lt;!ELEMENT longTitle    @blocksopt; >
 &lt;!--- the element subdivision is a generic section of the preamble  -->
@@ -544,11 +550,15 @@
 &lt;!--- this element is a hierarchical container called "article" either explicitly or due to the local tradition -->
 &lt;!ELEMENT article       @hierarchy; >
 </include>
-<include if="additionalHierarchy" dependsOn="legislativeDocs" label="Additional hierarchy" desc="infrequent hierarchical elements $point, $indent, $subsection, $subpart, $subparagraph, $subchapter, $subtitle, and $subclause">
+<include if="smallHierarchy" dependsOn="legislativeDocs" label="Small hierarchical elements" desc="hierarchical elements of smaller fragments of a hierarchy, such as $point, $indent, $alinea">
 &lt;!--- this element is a hierarchical container called "point" either explicitly or due to the local tradition -->
 &lt;!ELEMENT point    @hierarchy; >
 &lt;!--- this element is a hierarchical container called "indent" either explicitly or due to the local tradition -->
 &lt;!ELEMENT indent    @hierarchy; >
+&lt;!--- this element is a hierarchical container called "alinea" either explicitly or due to the local tradition -->
+&lt;!ELEMENT alinea    @hierarchy; >
+</include>
+<include if="additionalHierarchy" dependsOn="legislativeDocs" label="Additional hierarchy" desc="infrequent hierarchical elements $subsection, $subpart, $subparagraph, $subchapter, $subtitle, and $subclause">
 &lt;!--- this element is a hierarchical container called "subsection" either explicitly or due to the local tradition -->
 &lt;!ELEMENT subsection    @hierarchy; >
 &lt;!--- this element is a hierarchical container called "subpart" either explicitly or due to the local tradition -->
@@ -630,6 +640,8 @@
 &lt;!ELEMENT proceduralMotions     @althierarchy; >
 &lt;!--- this element is a structural container for parts of a debates that are relevant to points of order -->
 &lt;!ELEMENT pointOfOrder          @althierarchy; >
+&lt;!--- this element is a structural container for parts of a debates that contain adjournment notices -->
+&lt;!ELEMENT adjournment  @althierarchy; >
 </include>
 <include if="debateDocs" desc="Generic structural container $debateSection">
 &lt;!--- this element is a generic structural container for all other parts of a debates that are not explicitly supported with a named element -->
@@ -679,6 +691,11 @@
 &lt;!--- the element affectedDocument is an inline element within preamble to identify the document that this amendment affects -->
 &lt;!ELEMENT affectedDocument        @inline; >
 &lt;!ATTLIST affectedDocument        ##link; >
+&lt;!--- the element relatedDocument is an inline element to identify the document for which this document is a report of -->
+&lt;!ELEMENT relatedDocument        @inline; >
+&lt;!ATTLIST relatedDocument        ##link; >
+&lt;!--- the element change is an inline element that identifies the changes expressed in the two columns of an amendment document -->
+&lt;!ELEMENT change                  @inline; >
 
 &lt;!--- this element is a structural container for the section of an amendment containing the heading -->
 &lt;!ELEMENT amendmentHeading        @blocksopt; >
@@ -702,8 +719,6 @@
 &lt;!--- the element list is used as a container of many individual item elements put in a list -->
 &lt;!ELEMENT list                (listIntroduction?, item+, listConclusion?) >
 &lt;!ATTLIST list                ##corereq; >
-&lt;!--- The complex type itemType is similar to a hierarchical element, but is isolated and does not belong to a full hierarchy. -->
-&lt;!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 &lt;!-- The element item is a container belonging to a list -->
 &lt;!ELEMENT item                @itemType; >
 &lt;!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
@@ -914,7 +929,7 @@
      ===================================================================== -->
 
 
-&lt;!ENTITY @ popupStructure " (<include if="legislativeDocs" v="@@hierElements; |"/> @@blockElements; | @@containerElements;  <include if="debateDocs" v="| @@ANcontainers;"/> <include if="preambleContainers" v="| @@preambleContainers;" />)+" "##corereq; ">
+&lt;!ENTITY @ popupStructure " (<include if="legislativeDocs" v="@@hierElements; |"/> @@blockElements; | intro | wrap | heading | content | num | @@containerElements;  <include if="debateDocs" v="| @@ANcontainers;"/> <include if="preambleContainers" v="| recital | citation" />)+" "##corereq; ">
 
 <include if="modifications" dependsOn="legislativeDocs">
 &lt;!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
@@ -996,11 +1011,13 @@ element. -->
 &lt;!--- The element span is an HTML element and is used in Akoma Ntoso as in HTML, for the generic inline -->
 &lt;!ELEMENT span @inline; >
 
-<include if="html" dependsOn="core" label="Elements from HTML" desc="Elements introduced in HTML  used here with the same meaning and purpose: $b, $i, $a, $img, $ul, $ol, $li">
+<include if="html" dependsOn="core" label="Elements from HTML" desc="Elements introduced in HTML  used here with the same meaning and purpose: $b, $i, $u, $a, $img, $ul, $ol, $li">
 &lt;!--- The element b is an HTML element and is used in Akoma Ntoso as in HTML, for the bold style (an inline) -->
 &lt;!ELEMENT b    @inline; >
 &lt;!--- The element i is an HTML element and is used in Akoma Ntoso as in HTML, for the italic style (an inline) -->
 &lt;!ELEMENT i    @inline; >
+&lt;!--- The element u is an HTML element and is used in Akoma Ntoso as in HTML, for the underline style (an inline) -->
+&lt;!ELEMENT u    @inline; >
 &lt;!--- The element a is an HTML element and is used in Akoma Ntoso as in HTML, for the generic link to a web resource (NOT to an Akoma Ntoso document: use ref for that). It is an inline. -->
 &lt;!ELEMENT a    @inline; >
 &lt;!ATTLIST a
@@ -1045,14 +1062,14 @@ element. -->
 &lt;!--- The element tr is an HTML element and is used in Akoma Ntoso as in HTML, for a row of cells of a table -->
 &lt;!ELEMENT tr (th | td)+>
 &lt;!ATTLIST tr
-    ##corereq;
+    ##coreopt;
 >
 &lt;!--- The element th is an HTML element and is used in Akoma Ntoso as in HTML, for a header cell of a table -->
-&lt;!ELEMENT th @blocksreq;>
+&lt;!ELEMENT th @blocksopt;>
 &lt;!ATTLIST th  ##cellattrs; >
 
 &lt;!--- The element td is an HTML element and is used in Akoma Ntoso as in HTML, for a data cell of a table -->
-&lt;!ELEMENT td @blocksreq;>
+&lt;!ELEMENT td @blocksopt;>
 &lt;!ATTLIST td  ##cellattrs; >
 </include>
 
@@ -1063,7 +1080,7 @@ element. -->
      ===================================================================== -->
 &lt;!--- The element meta is the overall container of all metadata elements. It contains all specific metadata containers. -->
 &lt;!ELEMENT meta             (identification, publication?, classification*, <include if="advancedMetadata" v="lifecycle*, workflow*, "/>
-                            <include if="analysis" v="analysis*, "/> temporalData*, references*, notes* <include if="additionalGeneric" v=", proprietary*"/>) >
+                            <include if="analysis" v="analysis*, "/> temporalData*, references*, notes* <include if="additionalGeneric" v=", proprietary*, presentation*"/>) >
 
 <include desc="Basic metadata elements for FRBR levels: $FRBRWork, $FRBRExpression, $FRBRManifestation, $FRBRItem"/>
 &lt;!--- The element identification is the metadata container of identifying information of the document according to the FRBR hierarchy -->
@@ -1169,7 +1186,7 @@ element. -->
 <include if="analysis">
 &lt;!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events -->
 &lt;!ELEMENT analysis              (<include if="legislativeDocs" v="activeModifications?, passiveModifications?,"/>
-				 <include if="judgementDocs" v="judicial?,"/> <include if="debateDocs" v="parliamentary?,"/> otherAnalysis) >
+				 <include if="judgementDocs" v="judicial?,"/> <include if="debateDocs" v="parliamentary?,"/> otherAnalysis*) >
 &lt;!ATTLIST analysis              ##source; >
 
 <include if="modifications"  dependsOn="legislativeDocs" desc="Metadata for the analysis of modification acts: amendments and relative metadata">
@@ -1396,11 +1413,13 @@ with respect to the element being identified with the relative id. -->
 &lt;!--- The element note is a metadata element containing the text of the footnote and endnote specified. -->
 &lt;!ELEMENT note         @blocksreq;>
 
-<include if="additionalGeneric" dependsOn="core" desc="Container $proprietary for the specification of metadata elements not belonging to Akoma Ntoso">
-&lt;!--- The element proprietary is a metadata container of any additional metadata property that does not belong to the Akoma Ntoso properties. Anything can be placed in this element.. -->
+<include if="additionalGeneric" dependsOn="core" desc="Container $proprietary for the specification of metadata elements not belonging to Akoma Ntoso and $presentation for the specification of presentations styles (e.g., CSS fragments) for the visual rendering of elements of the document">
+&lt;!--- The element proprietary is a metadata container of any additional metadata property that does not belong to the Akoma Ntoso properties. Anything can be placed in this element. -->
 &lt;!ELEMENT proprietary @anyOtherType; >
 &lt;!ATTLIST proprietary ##source; >
-</include>
+&lt;!--- The element presentation is a metadata container of any presentation specification for the visual rendering of Akoam Ntoso elements. Anything can be placed in this element. -->
+&lt;!ELEMENT presentation @anyOtherType; >
+&lt;!ATTLIST presentation ##source; ></include>
 	
 &lt;!-- =====================================================================
 

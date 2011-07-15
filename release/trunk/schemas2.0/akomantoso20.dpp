@@ -1,16 +1,8 @@
-
-	
-		
-		
-		
-		
-		
-	
 <!-- ===================================================================== 
        Akoma Ntoso main schema
 
 
-        Tentative Release 16/03/2011 
+        Release 15/07/2011 - Initial for Akoma Ntoso 2.0 
 				Complete version. 
 			
 
@@ -24,7 +16,7 @@
        mentions.
      ===================================================================== -->
 
-<!TARGETNS          'http://www.akomantoso.org/1.0'>
+<!TARGETNS          'http://www.akomantoso.org/2.0'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -34,7 +26,7 @@
      ===================================================================== -->
 
 <!--- The group ANhier lists the elements that belong to the Akoma Ntoso legislative hierarchy -->
-<!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title|book|tome|article |point|indent|subsection|subpart|subparagraph|subchapter|subtitle|subclause)" >
+<!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title|book|tome|article |point|indent|alinea|subsection|subpart|subparagraph|subchapter|subtitle|subclause)" >
 
 	
 <!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
@@ -44,7 +36,7 @@
 <!--- The group basicContainers lists the elements that are containers and are specific to vocabulary of preambles, prefaces, conclusions and coverPages -->
 <!ENTITY @@ basicContainers    "(subdivision)" >
 <!--- The group preambleContainers lists the elements that are containers and are specific to the Akoma Ntoso preamble vocabulary -->
-<!ENTITY @@ preambleContainers    "(recitals | citation | subdivision)" >
+<!ENTITY @@ preambleContainers    "(recitals | citations | subdivision)" >
 <!--- The group prefaceContainers lists the elements that are containers and are specific to the Akoma Ntoso preface vocabulary -->
 <!ENTITY @@ prefaceContainers    "(longTitle | subdivision)" >
 
@@ -91,14 +83,14 @@
 <!--- The group amendmentBlock lists the structures that should be found in an amendment  -->
 <!ENTITY @@ amendmentBlock    "(amendmentHeading | amendmentContent | amendmentReference | amendmentJustification)">
 <!--- The group amendmentInline lists the inline elements that should be found in the preface of an amendment  -->
-<!ENTITY @@ amendmentInline    "(affectedDocument)">
+<!ENTITY @@ amendmentInline    "(affectedDocument | relatedDocument | change)">
 
 	
 <!--- The group speechSection lists the structures that should contain speeches -->
 <!ENTITY @@ speechSection     "(administrationOfOath|rollCall|prayers|oralStatements|writtenStatements|personalStatements|
                                    ministerialStatements|resolutions|nationalInterest|declarationOfVote|communication|
                                    petitions|papers|noticesOfMotion|questions|address|proceduralMotions|pointOfOrder| 
-                                   debateSection)">                                   
+                                   adjournment|debateSection)">                                   
 
 
 
@@ -201,10 +193,12 @@
 <!ENTITY ## HTMLattrs    "class        #STRING      #IMPLIED    
                           style        #STRING      #IMPLIED
                           title        #STRING      #IMPLIED">
-<!--- This attribute identifies the element in an absolute manner. In elements using this attribute definition the id attribute is required -->
-<!ENTITY ## idreq        "id           #ID           #REQUIRED">
-<!--- This attribute identifies the element in an absolute manner. In elements using this attribute definition the id attribute is optional -->
-<!ENTITY ## idopt        "id           #ID           #IMPLIED">
+<!--- This attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is required. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id. -->
+<!ENTITY ## idreq        "id           #ID           #REQUIRED
+                             evolvingId   #NMTOKEN           #IMPLIED  ">
+<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is optional. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id. -->
+<!ENTITY ## idopt        "id           #ID           #IMPLIED
+                             evolvingId   #NMTOKEN           #IMPLIED  ">
 
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
 <!ENTITY ## refersreq    "refersTo           #ANYURI         #REQUIRED" >
@@ -300,6 +294,8 @@
 <!ENTITY @ speechType        "@basehierarchy;, (from?, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 
 
+<!--- The complex type itemType is similar to a hierarchical element, but is isolated and does not belong to a full hierarchy. -->
+<!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 <!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the references section -->
 <!ENTITY @ referenceType     ""                            "##idreq; ##link; ##show;" >
 <!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
@@ -332,7 +328,7 @@
 
 
 <!--- the group debateDocs specifies all the document types that are related to debates -->
-<!ENTITY @@ debateDocs       "(report | debate)" >
+<!ENTITY @@ debateDocs       "(debateReport | debate)" >
 
 		
 <!--- the type documentType lists all the document types that are managed by Akoma Ntoso -->
@@ -433,8 +429,8 @@
                                    attachments?)" 
                                  " contains #versionType; 'originalVersion'">
 
-<!--- Element report is used for descriving the structure and content of a report -->
-<!ELEMENT report        @openStructure; >
+<!--- Element debateReport is used for descriving the structure and content of a report -->
+<!ELEMENT debateReport        @openStructure; >
 <!--- Element debate is used for descriving the structure and content of a debat record -->
 <!ELEMENT debate  @debateStructure; >
 
@@ -481,11 +477,13 @@
 	
 	
 <!--- the element recitals is the section of the preface that contains recitals -->
-<!ELEMENT recitals    (recital+) >
+<!ELEMENT recitals    (intro?, recital+) >
 <!--- the element recital is the individual element of the preface that is called recital -->
-<!ELEMENT recital    @blocksopt; >
-<!--- the element citation is the section of the preface that is called citation -->
-<!ELEMENT citation    @blocksopt; >
+<!ELEMENT recital    @itemType; >
+<!--- the element citations is the section of the preface that contains citations -->
+<!ELEMENT citations    (intro?,citation+) >
+<!--- the element citation is the individual element of the preface that is called citation -->
+<!ELEMENT citation    @itemType; >
 <!--- the element longTitle is the section of the preface that is called long title -->
 <!ELEMENT longTitle    @blocksopt; >
 <!--- the element subdivision is a generic section of the preamble  -->
@@ -549,6 +547,10 @@
 <!ELEMENT point    @hierarchy; >
 <!--- this element is a hierarchical container called "indent" either explicitly or due to the local tradition -->
 <!ELEMENT indent    @hierarchy; >
+<!--- this element is a hierarchical container called "alinea" either explicitly or due to the local tradition -->
+<!ELEMENT alinea    @hierarchy; >
+
+
 <!--- this element is a hierarchical container called "subsection" either explicitly or due to the local tradition -->
 <!ELEMENT subsection    @hierarchy; >
 <!--- this element is a hierarchical container called "subpart" either explicitly or due to the local tradition -->
@@ -630,6 +632,8 @@
 <!ELEMENT proceduralMotions     @althierarchy; >
 <!--- this element is a structural container for parts of a debates that are relevant to points of order -->
 <!ELEMENT pointOfOrder          @althierarchy; >
+<!--- this element is a structural container for parts of a debates that contain adjournment notices -->
+<!ELEMENT adjournment  @althierarchy; >
 
 
 <!--- this element is a generic structural container for all other parts of a debates that are not explicitly supported with a named element -->
@@ -679,6 +683,11 @@
 <!--- the element affectedDocument is an inline element within preamble to identify the document that this amendment affects -->
 <!ELEMENT affectedDocument        @inline; >
 <!ATTLIST affectedDocument        ##link; >
+<!--- the element relatedDocument is an inline element to identify the document for which this document is a report of -->
+<!ELEMENT relatedDocument        @inline; >
+<!ATTLIST relatedDocument        ##link; >
+<!--- the element change is an inline element that identifies the changes expressed in the two columns of an amendment document -->
+<!ELEMENT change                  @inline; >
 
 <!--- this element is a structural container for the section of an amendment containing the heading -->
 <!ELEMENT amendmentHeading        @blocksopt; >
@@ -702,8 +711,6 @@
 <!--- the element list is used as a container of many individual item elements put in a list -->
 <!ELEMENT list                (listIntroduction?, item+, listConclusion?) >
 <!ATTLIST list                ##corereq; >
-<!--- The complex type itemType is similar to a hierarchical element, but is isolated and does not belong to a full hierarchy. -->
-<!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 <!-- The element item is a container belonging to a list -->
 <!ELEMENT item                @itemType; >
 <!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
@@ -914,7 +921,7 @@
      ===================================================================== -->
 
 
-<!ENTITY @ popupStructure " (@@hierElements; | @@blockElements; | @@containerElements;  | @@ANcontainers; | @@preambleContainers;)+" "##corereq; ">
+<!ENTITY @ popupStructure " (@@hierElements; | @@blockElements; | intro | wrap | heading | content | num | @@containerElements;  | @@ANcontainers; | recital | citation)+" "##corereq; ">
 
 
 <!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
@@ -1001,6 +1008,8 @@ element. -->
 <!ELEMENT b    @inline; >
 <!--- The element i is an HTML element and is used in Akoma Ntoso as in HTML, for the italic style (an inline) -->
 <!ELEMENT i    @inline; >
+<!--- The element u is an HTML element and is used in Akoma Ntoso as in HTML, for the underline style (an inline) -->
+<!ELEMENT u    @inline; >
 <!--- The element a is an HTML element and is used in Akoma Ntoso as in HTML, for the generic link to a web resource (NOT to an Akoma Ntoso document: use ref for that). It is an inline. -->
 <!ELEMENT a    @inline; >
 <!ATTLIST a
@@ -1045,14 +1054,14 @@ element. -->
 <!--- The element tr is an HTML element and is used in Akoma Ntoso as in HTML, for a row of cells of a table -->
 <!ELEMENT tr (th | td)+>
 <!ATTLIST tr
-    ##corereq;
+    ##coreopt;
 >
 <!--- The element th is an HTML element and is used in Akoma Ntoso as in HTML, for a header cell of a table -->
-<!ELEMENT th @blocksreq;>
+<!ELEMENT th @blocksopt;>
 <!ATTLIST th  ##cellattrs; >
 
 <!--- The element td is an HTML element and is used in Akoma Ntoso as in HTML, for a data cell of a table -->
-<!ELEMENT td @blocksreq;>
+<!ELEMENT td @blocksopt;>
 <!ATTLIST td  ##cellattrs; >
 
 
@@ -1063,7 +1072,7 @@ element. -->
      ===================================================================== -->
 <!--- The element meta is the overall container of all metadata elements. It contains all specific metadata containers. -->
 <!ELEMENT meta             (identification, publication?, classification*, lifecycle*, workflow*, 
-                            analysis*,  temporalData*, references*, notes* , proprietary*) >
+                            analysis*,  temporalData*, references*, notes* , proprietary*, presentation*) >
 
 
 <!--- The element identification is the metadata container of identifying information of the document according to the FRBR hierarchy -->
@@ -1169,7 +1178,7 @@ element. -->
 
 <!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events -->
 <!ELEMENT analysis              (activeModifications?, passiveModifications?,
-				 judicial?, parliamentary?, otherAnalysis) >
+				 judicial?, parliamentary?, otherAnalysis*) >
 <!ATTLIST analysis              ##source; >
 
 
@@ -1397,10 +1406,12 @@ with respect to the element being identified with the relative id. -->
 <!ELEMENT note         @blocksreq;>
 
 
-<!--- The element proprietary is a metadata container of any additional metadata property that does not belong to the Akoma Ntoso properties. Anything can be placed in this element.. -->
+<!--- The element proprietary is a metadata container of any additional metadata property that does not belong to the Akoma Ntoso properties. Anything can be placed in this element. -->
 <!ELEMENT proprietary @anyOtherType; >
 <!ATTLIST proprietary ##source; >
-
+<!--- The element presentation is a metadata container of any presentation specification for the visual rendering of Akoam Ntoso elements. Anything can be placed in this element. -->
+<!ELEMENT presentation @anyOtherType; >
+<!ATTLIST presentation ##source; >
 	
 <!-- =====================================================================
 
