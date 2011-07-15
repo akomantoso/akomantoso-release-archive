@@ -5,7 +5,7 @@
 Akoma Ntoso main schema
 
 
-Tentative Release 16/03/2011
+Release 15/07/2011 - Initial for Akoma Ntoso 2.0
 Complete version.
 
 
@@ -29,7 +29,7 @@ Main element groups
 =====================================================================  -->
 
 
-<!ENTITY % ANhier          "clause | section | part | paragraph | chapter | title | book | tome | article | point | indent | subsection | subpart | subparagraph | subchapter | subtitle | subclause" >
+<!ENTITY % ANhier          "clause | section | part | paragraph | chapter | title | book | tome | article | point | indent | alinea | subsection | subpart | subparagraph | subchapter | subtitle | subclause" >
 
 
 
@@ -39,7 +39,7 @@ Main element groups
 
 <!ENTITY % basicContainers    "subdivision" >
 
-<!ENTITY % preambleContainers    "recitals | citation | subdivision" >
+<!ENTITY % preambleContainers    "recitals | citations | subdivision" >
 
 <!ENTITY % prefaceContainers    "longTitle | subdivision" >
 
@@ -86,11 +86,11 @@ Main element groups
 
 <!ENTITY % amendmentBlock    "amendmentHeading | amendmentContent | amendmentReference | amendmentJustification" >
 
-<!ENTITY % amendmentInline    "affectedDocument" >
+<!ENTITY % amendmentInline    "affectedDocument | relatedDocument | change" >
 
 
 
-<!ENTITY % speechSection     "administrationOfOath | rollCall | prayers | oralStatements | writtenStatements | personalStatements | ministerialStatements | resolutions | nationalInterest | declarationOfVote | communication | petitions | papers | noticesOfMotion | questions | address | proceduralMotions | pointOfOrder | debateSection" >
+<!ENTITY % speechSection     "administrationOfOath | rollCall | prayers | oralStatements | writtenStatements | personalStatements | ministerialStatements | resolutions | nationalInterest | declarationOfVote | communication | petitions | papers | noticesOfMotion | questions | address | proceduralMotions | pointOfOrder | adjournment | debateSection" >
 
 
 
@@ -173,9 +173,9 @@ Attribute groups
 
 <!ENTITY % HTMLattrs    " class %STRING; #IMPLIED style %STRING; #IMPLIED title %STRING; #IMPLIED" >
 
-<!ENTITY % idreq        " id ID #REQUIRED" >
+<!ENTITY % idreq        " id ID #REQUIRED evolvingId NMTOKEN #IMPLIED" >
 
-<!ENTITY % idopt        " id ID #IMPLIED" >
+<!ENTITY % idopt        " id ID #IMPLIED evolvingId NMTOKEN #IMPLIED" >
 
 
 <!ENTITY % refersreq    " refersTo %ANYURI; #REQUIRED" >
@@ -284,6 +284,8 @@ Complex types (markup structures)
 
 
 
+<!ENTITY % itemType          "(%basehierarchy;,(%blockElements;)+)" >
+
 <!ENTITY % referenceType     "EMPTY" >
 
 <!ENTITY % anyOtherType      "ANY" >
@@ -315,7 +317,7 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 
 
 
-<!ENTITY % debateDocs       "report | debate" >
+<!ENTITY % debateDocs       "debateReport | debate" >
 
 
 
@@ -335,7 +337,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://www.akomantoso.org/1.0"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://www.akomantoso.org/2.0"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -399,8 +401,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateContent,conclusions?,attachments?)" >
 
 
-<!ELEMENT report        %openStructure; >
-<!ATTLIST report %name;  contains %versionType; 'originalVersion'  >
+<!ELEMENT debateReport        %openStructure; >
+<!ATTLIST debateReport %name;  contains %versionType; 'originalVersion'  >
 
 <!ELEMENT debate  %debateStructure; >
 <!ATTLIST debate contains %versionType; 'originalVersion'  >
@@ -441,13 +443,15 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ELEMENT recitals    (recital+)>
+<!ELEMENT recitals    (intro?,recital+)>
 
-<!ELEMENT recital    %blocksopt; >
-<!ATTLIST recital %coreopt;  >
+<!ELEMENT recital    %itemType; >
+<!ATTLIST recital %corereq;  >
 
-<!ELEMENT citation    %blocksopt; >
-<!ATTLIST citation %coreopt;  >
+<!ELEMENT citations    (intro?,citation+)>
+
+<!ELEMENT citation    %itemType; >
+<!ATTLIST citation %corereq;  >
 
 <!ELEMENT longTitle    %blocksopt; >
 <!ATTLIST longTitle %coreopt;  >
@@ -531,6 +535,11 @@ Elements for hierarchical documents
 
 <!ELEMENT indent    %hierarchy; >
 <!ATTLIST indent %corereq;  >
+
+<!ELEMENT alinea    %hierarchy; >
+<!ATTLIST alinea %corereq;  >
+
+
 
 <!ELEMENT subsection    %hierarchy; >
 <!ATTLIST subsection %corereq;  >
@@ -644,6 +653,9 @@ Elements for debates documents
 <!ELEMENT pointOfOrder          %althierarchy; >
 <!ATTLIST pointOfOrder %corereq;  >
 
+<!ELEMENT adjournment  %althierarchy; >
+<!ATTLIST adjournment %corereq;  >
+
 
 
 <!ELEMENT debateSection           %althierarchy; >
@@ -712,6 +724,14 @@ Elements for debates documents
 
 <!ATTLIST affectedDocument %link;  >
 
+<!ELEMENT relatedDocument        %inline; >
+<!ATTLIST relatedDocument %coreopt;  >
+
+<!ATTLIST relatedDocument %link;  >
+
+<!ELEMENT change                  %inline; >
+<!ATTLIST change %coreopt;  >
+
 
 <!ELEMENT amendmentHeading        %blocksopt; >
 <!ATTLIST amendmentHeading %coreopt;  >
@@ -739,8 +759,6 @@ main document, the list item and the titled block
 <!ELEMENT list                (listIntroduction?,item+,listConclusion?)>
 
 <!ATTLIST list %corereq;  >
-
-<!ENTITY % itemType          "(%basehierarchy;,(%blockElements;)+)" >
 <!--  The element item is a container belonging to a list  -->
 <!ELEMENT item                %itemType; >
 <!ATTLIST item %corereq;  >
@@ -1020,7 +1038,7 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % popupStructure "(%hierElements; | %blockElements; | %containerElements; | %ANcontainers; | %preambleContainers;)+" >
+<!ENTITY % popupStructure "(%hierElements; | %blockElements; | intro | wrap | heading | content | num | %containerElements; | %ANcontainers; | recital | citation)+" >
 
 
 
@@ -1128,6 +1146,9 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 <!ELEMENT i    %inline; >
 <!ATTLIST i %coreopt;  >
 
+<!ELEMENT u    %inline; >
+<!ATTLIST u %coreopt;  >
+
 <!ELEMENT a    %inline; >
 <!ATTLIST a %coreopt;  >
 
@@ -1166,16 +1187,16 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 
 <!ELEMENT tr (th | td)+>
 
-<!ATTLIST tr %corereq;  >
+<!ATTLIST tr %coreopt;  >
 
-<!ELEMENT th %blocksreq; >
-<!ATTLIST th %corereq;  >
+<!ELEMENT th %blocksopt; >
+<!ATTLIST th %coreopt;  >
 
 <!ATTLIST th %cellattrs;  >
 
 
-<!ELEMENT td %blocksreq; >
-<!ATTLIST td %corereq;  >
+<!ELEMENT td %blocksopt; >
+<!ATTLIST td %coreopt;  >
 
 <!ATTLIST td %cellattrs;  >
 
@@ -1186,7 +1207,7 @@ Metadata elements for all documents
 
 =====================================================================  -->
 
-<!ELEMENT meta             (identification,publication?,classification*,lifecycle*,workflow*,analysis*,temporalData*,references*,notes*,proprietary*)>
+<!ELEMENT meta             (identification,publication?,classification*,lifecycle*,workflow*,analysis*,temporalData*,references*,notes*,proprietary*,presentation*)>
 
 
 
@@ -1302,7 +1323,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT analysis              (activeModifications?,passiveModifications?,judicial?,parliamentary?,otherAnalysis)>
+<!ELEMENT analysis              (activeModifications?,passiveModifications?,judicial?,parliamentary?,otherAnalysis*)>
 
 <!ATTLIST analysis %source;  >
 
@@ -1599,6 +1620,10 @@ Metadata elements for all documents
 
 <!ATTLIST proprietary %source;  >
 
+<!ELEMENT presentation %anyOtherType; >
+<!ATTLIST presentation %idopt;  %linkopt;  >
+
+<!ATTLIST presentation %source;  >
 
 <!--  =====================================================================
 
