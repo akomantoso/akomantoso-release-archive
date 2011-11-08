@@ -9,38 +9,40 @@
 	  <xsd:annotation>
 		    <xsd:documentation>
 		 =====================================================================
-  	 Akoma Ntoso main schema
-	   supported by Africa i-Parliaments, a project sponsored by United
-	   Nations Department of Economic and Social Affairs
-	   Copyright (C) Africa i-Parliaments
-
-
-     Release 15/07/2011 - Initial for Akoma Ntoso 2.0
-
-     technical supervision Fabio Vitali - University of Bologna
-     legal domain supervision Monica Palmirani - University of Bologna
-        
-     The present schema uses systematically XML design patterns as
-     described in http://www.xmlpatterns.com/
-     A few of them are explicitly mentioned, when their use or approach
-     was not felt clear or natural enough. Others are just used without
-     mentions.
-
-     TERMS AND CONDITIONS
-     
-     This program is free software; you can redistribute it and/or
-     modify it under the terms of the GNU General Public License
-     as published by the Free Software Foundation; either version 2
-     of the License, or (at your option) any later version.
-     
-     This program is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     GNU General Public License for more details.
-     
-     You should have received a copy of the GNU General Public License
-     along with this program; if not, write to the Free Software
-     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+		Akoma Ntoso main schema
+		supported by Africa i-Parliaments, a project sponsored by United
+		Nations Department of Economic and Social Affairs
+		Copyright (C) Africa i-Parliaments
+		
+		
+		Release 12/10/2011 - Akoma Ntoso 2.0
+		Complete version.
+		
+		
+		technical supervision Fabio Vitali - University of Bologna
+		legal domain supervision Monica Palmirani - University of Bologna
+		
+		The present schema uses systematically XML design patterns as
+		described in http://www.xmlpatterns.com/
+		A few of them are explicitly mentioned, when their use or approach
+		was not felt clear or natural enough. Others are just used without
+		mentions.
+		
+		TERMS AND CONDITIONS
+		
+		This program is free software; you can redistribute it and/or
+		modify it under the terms of the GNU General Public License
+		as published by the Free Software Foundation; either version 2
+		of the License, or (at your option) any later version.
+		
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU General Public License for more details.
+		
+		You should have received a copy of the GNU General Public License
+		along with this program; if not, write to the Free Software
+		Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		===================================================================== 
 		</xsd:documentation>
 	  </xsd:annotation>
@@ -71,9 +73,11 @@
 			      <xsd:element ref="paragraph"/>
 			      <xsd:element ref="chapter"/>
 			      <xsd:element ref="title"/>
+			      <xsd:element ref="article"/>
 			      <xsd:element ref="book"/>
 			      <xsd:element ref="tome"/>
-			      <xsd:element ref="article"/>
+			      <xsd:element ref="division"/>
+			      <xsd:element ref="list"/>
 			      <xsd:element ref="point"/>
 			      <xsd:element ref="indent"/>
 			      <xsd:element ref="alinea"/>
@@ -83,6 +87,7 @@
 			      <xsd:element ref="subchapter"/>
 			      <xsd:element ref="subtitle"/>
 			      <xsd:element ref="subclause"/>
+			      <xsd:element ref="sublist"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -161,7 +166,7 @@
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:element ref="list"/>
+			      <xsd:element ref="blockList"/>
 			      <xsd:element ref="toc"/>
 			      <xsd:element ref="tblock"/>
 		    </xsd:choice>
@@ -190,7 +195,10 @@
 			      <xsd:element ref="ins"/>
 			      <xsd:element ref="del"/>
 			      <xsd:element ref="omissis"/>
+			      <xsd:element ref="extractText"/>
+			      <xsd:element ref="extractStructure"/>
 			      <xsd:element ref="placeholder"/>
+			      <xsd:element ref="fillin"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -335,6 +343,9 @@
 			      <xsd:element ref="b"/>
 			      <xsd:element ref="i"/>
 			      <xsd:element ref="a"/>
+			      <xsd:element ref="u"/>
+			      <xsd:element ref="sub"/>
+			      <xsd:element ref="sup"/>
 			      <xsd:element ref="span"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -583,6 +594,18 @@
 		    </xsd:annotation>
 
 		    <xsd:attribute name="name" type="xsd:string" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="number">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Attlist</type>
+            <name xmlns="http://www.akomantoso.org/1.0">number</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">The attribute number is used to specify a number in the publication of the document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="number" type="xsd:integer" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="source">
@@ -2202,6 +2225,30 @@
 		
 
 
+	  <xsd:element name="division" type="hierarchy">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">division</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">this element is a hierarchical container called "division" either explicitly or due to the local tradition</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="list" type="hierarchy">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">list</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">this element is a hierarchical container called "list" either explicitly or due to the local tradition</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
 	  <xsd:element name="point" type="hierarchy">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -2304,6 +2351,18 @@
 			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
             <name xmlns="http://www.akomantoso.org/1.0">subclause</name>
             <comment xmlns="http://www.akomantoso.org/1.0">this element is a hierarchical container called "subclause" either explicitly or due to the local tradition</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="sublist" type="hierarchy">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">sublist</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">this element is a hierarchical container called "sublist" either explicitly or due to the local tradition</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -2933,7 +2992,7 @@
 		</xsd:documentation>
 	  </xsd:annotation>
 
-	  <xsd:element name="list">
+	  <xsd:element name="blockList">
       <xsd:annotation>
 		       <xsd:documentation>
 		 The element item is a container belonging to a list 
@@ -3592,12 +3651,42 @@
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="quotedText" type="inline">
-      <xsd:annotation>
+	  <xsd:element name="quotedText">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
             <name xmlns="http://www.akomantoso.org/1.0">quotedText</name>
-            <comment xmlns="http://www.akomantoso.org/1.0">the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place.</comment>
+            <comment xmlns="http://www.akomantoso.org/1.0">the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Use attribute for when quotedText is used in a mmod or rmod to point to the id of the corresponding ref element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attribute name="for" type="xsd:anyURI"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="extractText" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">extractText</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">the element extractText is an inline element containing a string used as an extract from another document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="extractStructure" type="popupStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">extractStructure</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">the element extractStructure is a popup element containing a full structure used as an extract from another document or position.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3682,7 +3771,7 @@
 			      <xsd:documentation>
 			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
             <name xmlns="http://www.akomantoso.org/1.0">placeholder</name>
-            <comment xmlns="http://www.akomantoso.org/1.0">the element placeholder is an inline element inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value</comment>
+            <comment xmlns="http://www.akomantoso.org/1.0">the element placeholder is an inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -3690,6 +3779,24 @@
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
 					          <xsd:attribute name="originalText" type="xsd:string"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="fillin">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">fillin</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">the element fillin is an inline element shown as a dotted line or any other typohtaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attribute name="width" type="xsd:string"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -3778,6 +3885,7 @@
 			      <xsd:element ref="intro"/>
 			      <xsd:element ref="wrap"/>
 			      <xsd:element ref="heading"/>
+			      <xsd:element ref="subheading"/>
 			      <xsd:element ref="content"/>
 			      <xsd:element ref="num"/>
 			      <xsd:group ref="containerElements"/>
@@ -4023,6 +4131,30 @@
 			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
             <name xmlns="http://www.akomantoso.org/1.0">u</name>
             <comment xmlns="http://www.akomantoso.org/1.0">The element u is an HTML element and is used in Akoma Ntoso as in HTML, for the underline style (an inline)</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="sup" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">sup</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">The element sup is an HTML element and is used in Akoma Ntoso as in HTML, for the superscript style (an inline)</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="sub" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type xmlns="http://www.akomantoso.org/1.0">Element</type>
+            <name xmlns="http://www.akomantoso.org/1.0">sub</name>
+            <comment xmlns="http://www.akomantoso.org/1.0">The element sub is an HTML element and is used in Akoma Ntoso as in HTML, for the subscript style (an inline)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -4502,6 +4634,7 @@
 					          <xsd:attributeGroup ref="date"/>
 					          <xsd:attributeGroup ref="show"/>
 					          <xsd:attributeGroup ref="name"/>
+					          <xsd:attributeGroup ref="number"/>
 					          <xsd:attributeGroup ref="refers"/>
 				        </xsd:extension>
 			      </xsd:complexContent>

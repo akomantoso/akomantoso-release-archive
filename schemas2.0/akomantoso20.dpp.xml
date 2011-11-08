@@ -2,9 +2,9 @@
 <modular xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="./modular.xsd">
 	<combos>
-		<combo id="acts" name="Acts" desc="All elements for describing acts and existing legislative documents" content="core legislativeDocs act modifications tblock semantic advancedRefs authorialNote placeholder delimiters table"/>
-		<combo id="bills" name="Bills" desc="All elements for describing bills and legislative documents being drafted and discussed" content="core legislativeDocs bill tblock semantic advancedRefs authorialNote placeholder delimiters table"/>
-		<combo id="amendments" name="Amendments" desc="All elements for describing amendments and proposed modifications to bills" content="core legislativeDocs collectionDocs amendmentDocs advancedPreface placeholder authorialNote"/>
+		<combo id="acts" name="Acts" desc="All elements for describing acts and existing legislative documents" content="core legislativeDocs act modifications tblock semantic advancedRefs authorialNote specials delimiters table"/>
+		<combo id="bills" name="Bills" desc="All elements for describing bills and legislative documents being drafted and discussed" content="core legislativeDocs bill tblock semantic advancedRefs authorialNote specials delimiters table"/>
+		<combo id="amendments" name="Amendments" desc="All elements for describing amendments and proposed modifications to bills" content="core legislativeDocs collectionDocs amendmentDocs advancedPreface specials authorialNote"/>
 		<combo id="debates" name="Debates and hansards" desc="All elements for describing hansards and debates" content="core debateDocs advancedPreface authorialNote toc delimiters"/>
 		<combo id="judgements" name="Judgements" desc="All elements for describing amendments and proposed modifications to bills" content="core judgementDocs advancedPreface tblock authorialNote"/>
 	</combos>
@@ -15,7 +15,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 15/07/2011 - Initial for Akoma Ntoso 2.0"/>
+     <report version="Release 12/10/2011 - Akoma Ntoso 2.0"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -53,7 +53,7 @@
      ===================================================================== -->
 <include if="legislativeDocs">
 &lt;!--- The group ANhier lists the elements that belong to the Akoma Ntoso legislative hierarchy -->
-&lt;!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title<include if="optHierarchy" v="|book|tome"/><include if="civilLaw"  v="|article"/> <include if="smallHierarchy" v="|point|indent|alinea"/><include if="additionalHierarchy" v="|subsection|subpart|subparagraph|subchapter|subtitle|subclause"/>)" >
+&lt;!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title<include if="optHierarchy" v="|article|book|tome|division|list"/> <include if="smallHierarchy" v="|point|indent|alinea"/><include if="additionalHierarchy" v="|subsection|subpart|subparagraph|subchapter|subtitle|subclause|sublist"/>)" >
 </include>
 <include if="debateDocs">	
 &lt;!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
@@ -68,9 +68,9 @@
 &lt;!ENTITY @@ prefaceContainers    "(longTitle | subdivision)" >
 </include>
 &lt;!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
-&lt;!ENTITY @@ ANblock         "(list <include if="toc" v="| toc"/> <include if="tblock" v="| tblock"/>)" >
+&lt;!ENTITY @@ ANblock         "(blockList <include if="toc" v="| toc"/> <include if="tblock" v="| tblock"/>)" >
 &lt;!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
-&lt;!ENTITY @@ ANinline        "(ref <include if="advancedRefs" v="| mref | rref"/> <include if="modifications" v="| mod | mmod | rmod"/><include if="debateDocs" v="| remark | recordedTime | vote | outcome"/> <include if="publishing" v=" | ins | del | omissis"/> <include if="placeholder" v="| placeholder"/>)" >
+&lt;!ENTITY @@ ANinline        "(ref <include if="advancedRefs" v="| mref | rref"/> <include if="modifications" v="| mod | mmod | rmod"/><include if="debateDocs" v="| remark | recordedTime | vote | outcome"/> <include if="publishing" v=" | ins | del | omissis"/> <include if="extracts" v="| extractText | extractStructure"/> <include if="specials" v="| placeholder | fillin"/>)" >
 &lt;!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
 &lt;!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | legislature | session <include if="advancedPreface" v="| docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber"/>)" >
 
@@ -95,7 +95,7 @@
 &lt;!--- The group HTMLblock lists the elements that are blocks and were inherited from the HTML vocabulary -->
 &lt;!ENTITY @@ HTMLblock         "(<include if="html" v="ul|ol|"/><include if="table" v="table|"/> p)" >
 &lt;!--- The group HTMLinline lists the elements that are inline and were inherited from the HTML vocabulary -->
-&lt;!ENTITY @@ HTMLinline        "(<include if="html" v="b | i | a |"/> span)" >
+&lt;!ENTITY @@ HTMLinline        "(<include if="html" v="b | i | a | u | sub | sup |"/> span)" >
 	
 <include if="html">
 &lt;!--- The group HTMLmarker lists the elements that are marker and were inherited from the HTML vocabulary -->
@@ -150,6 +150,8 @@
 &lt;!ENTITY ## alt         "alternativeTo         #ANYURI        #IMPLIED" >
 &lt;!--- The attribute name is used to give a name to all generic elements -->
 &lt;!ENTITY ## name         "name         #STRING        #REQUIRED" >
+&lt;!--- The attribute number is used to specify a number in the publication of the document -->
+&lt;!ENTITY ## number       "number       #INTEGER        #REQUIRED" >
 &lt;!--- The attribute source links to the agent (person, organization) providing the specific annotation or markup -->
 &lt;!ENTITY ## source       "source       #ANYURI        #REQUIRED" >
 &lt;!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD -->
@@ -561,13 +563,17 @@
 &lt;!ELEMENT chapter       @hierarchy; >
 &lt;!--- this element is a hierarchical container called "title" either explicitly or due to the local tradition -->
 &lt;!ELEMENT title         @hierarchy; >
-<include if="optHierarchy" dependsOn="legislativeDocs"  label="Optional hierarchy" desc="optional hierarchical elements $article, $book and $tome">
+<include if="optHierarchy" dependsOn="legislativeDocs"  label="Optional hierarchy" desc="optional hierarchical elements $article, $book, $tome, $division and $list">
 &lt;!--- this element is a hierarchical container called "book" either explicitly or due to the local tradition -->
 &lt;!ELEMENT book          @hierarchy; >
 &lt;!--- this element is a hierarchical container called "tome" either explicitly or due to the local tradition -->
 &lt;!ELEMENT tome          @hierarchy; >
 &lt;!--- this element is a hierarchical container called "article" either explicitly or due to the local tradition -->
 &lt;!ELEMENT article       @hierarchy; >
+&lt;!--- this element is a hierarchical container called "division" either explicitly or due to the local tradition -->
+&lt;!ELEMENT division      @hierarchy; >
+&lt;!--- this element is a hierarchical container called "list" either explicitly or due to the local tradition -->
+&lt;!ELEMENT list          @hierarchy; >
 </include>
 <include if="smallHierarchy" dependsOn="legislativeDocs" label="Small hierarchical elements" desc="hierarchical elements of smaller fragments of a hierarchy, such as $point, $indent, $alinea">
 &lt;!--- this element is a hierarchical container called "point" either explicitly or due to the local tradition -->
@@ -577,7 +583,7 @@
 &lt;!--- this element is a hierarchical container called "alinea" either explicitly or due to the local tradition -->
 &lt;!ELEMENT alinea    @hierarchy; >
 </include>
-<include if="additionalHierarchy" dependsOn="legislativeDocs" label="Additional hierarchy" desc="infrequent hierarchical elements $subsection, $subpart, $subparagraph, $subchapter, $subtitle, and $subclause">
+<include if="additionalHierarchy" dependsOn="legislativeDocs" label="Additional hierarchy" desc="infrequent hierarchical elements $subsection, $subpart, $subparagraph, $subchapter, $subtitle, $subclause and $sublist">
 &lt;!--- this element is a hierarchical container called "subsection" either explicitly or due to the local tradition -->
 &lt;!ELEMENT subsection    @hierarchy; >
 &lt;!--- this element is a hierarchical container called "subpart" either explicitly or due to the local tradition -->
@@ -590,6 +596,8 @@
 &lt;!ELEMENT subtitle      @hierarchy; >
 &lt;!--- this element is a hierarchical container called "subclause" either explicitly or due to the local tradition -->
 &lt;!ELEMENT subclause     @hierarchy; >
+&lt;!--- this element is a hierarchical container called "sublist" either explicitly or due to the local tradition -->
+&lt;!ELEMENT sublist       @hierarchy; >
 </include>
 <include if="transitionalSection" dependsOn="legislativeDocs" label="Transitional section" desc="$transitional, a hierarchical element containing transitory clauses, often at the end of the whole hierarchy">
 &lt;!--- this element is a hierarchical container called "transitional" either explicitly or due to the local tradition -->
@@ -736,8 +744,8 @@
     ===================================================================== -->
 <include desc="Elements for lists: $list, $listIntroduction, $item, and $listConclusion"/>
 &lt;!--- the element list is used as a container of many individual item elements put in a list -->
-&lt;!ELEMENT list                (listIntroduction?, item+, listConclusion?) >
-&lt;!ATTLIST list                ##corereq; >
+&lt;!ELEMENT blockList                (listIntroduction?, item+, listConclusion?) >
+&lt;!ATTLIST blockList                ##corereq; >
 &lt;!-- The element item is a container belonging to a list -->
 &lt;!ELEMENT item                @itemType; >
 &lt;!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
@@ -879,7 +887,7 @@
 	
 <include if="modifications" dependsOn="legislativeDocs" label="Modifications" desc="elements for modification acts $mod, $mmod, $rmod, $quotedText and $quotedStructure">                       
 &lt;!--- the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements -->
-&lt;!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure )*" "##corereq;" >
+&lt;!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure)*" "##corereq;" >
 &lt;!--- the element mod is an inline element containing the specification of a modification on another document -->
 &lt;!ELEMENT mod   @modType;>
 &lt;!--- the element mmod is an inline element containing multiple specifications of modifications on another document -->
@@ -888,8 +896,10 @@
 &lt;!ELEMENT rmod  @modType;>
 &lt;!ATTLIST rmod  upTo   #ANYURI        #REQUIRED >
 
-&lt;!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. -->
+&lt;!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Use attribute for when quotedText is used in a mmod or rmod to point to the id of the corresponding ref element. -->
 &lt;!ELEMENT quotedText        @inline; >
+&lt;!ATTLIST quotedText        for #ANYURI #IMPLIED>
+
 </include>
 <include if="debateDocs" desc="inline element $remark for editorial remarks (e.g., applauses, laughters, etc.) and element $recordedTime to explicit mention a time in a debate">
 &lt;!--- the element remark is an inline element for the specification of editorial remarks (e.g., applauses, laughters, etc.) especially within debate records -->
@@ -909,10 +919,13 @@
 &lt;!--- the element omissis is an inline element for the specification of a text that substitues a textual omission (e.g., dots, spaces, the word "omissis", etc.  -->
 &lt;!ELEMENT omissis      @inline; >
 </include>
-<include if="placeholder" dependsOn="core" label="Placeholder" desc="$placeholder, an inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value">
-&lt;!--- the element placeholder is an inline element inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value -->
+<include if="specials" dependsOn="core" label="Special elements" desc="Special elements are two elements used in specific circumnstances, such as $placeholder, an inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value and $fillin, an inline element to represent (e.g., as a dotted line) the space where a eprson can fill in a value for a printed form">
+&lt;!--- the element placeholder is an inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value -->
 &lt;!ELEMENT placeholder  @inline; >
 &lt;!ATTLIST placeholder originalText #STRING #IMPLIED >
+&lt;!--- the element fillin is an inline element shown as a dotted line or any other typohtaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process. -->
+&lt;!ELEMENT fillin  @inline; >
+&lt;!ATTLIST fillin  width #STRING #IMPLIED >
 </include>
 	
 &lt;!-- =====================================================================
@@ -948,13 +961,22 @@
      ===================================================================== -->
 
 
-&lt;!ENTITY @ popupStructure " (<include if="legislativeDocs" v="@@hierElements; |"/> @@blockElements; | intro | wrap | heading | content | num | @@containerElements;  <include if="debateDocs" v="| @@ANcontainers;"/> <include if="preambleContainers" v="| recital | citation" />)+" "##corereq; ">
+&lt;!ENTITY @ popupStructure " (<include if="legislativeDocs" v="@@hierElements; |"/> @@blockElements; | intro | wrap | heading | subheading | content | num | @@containerElements;  <include if="debateDocs" v="| @@ANcontainers;"/> <include if="preambleContainers" v="| recital | citation" />)+" "##corereq; ">
 
 <include if="modifications" dependsOn="legislativeDocs">
 &lt;!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
 element. -->
 &lt;!ELEMENT quotedStructure   @popupStructure;>
 &lt;!ATTLIST quotedStructure  for #ANYURI #IMPLIED>
+
+</include>
+<include if="extract" desc="inline and popup elements $extractStructure and $extractText for the specification of extracts from other documents.">
+
+&lt;!--- the element extractText is an inline element containing a string used as an extract from another document -->
+&lt;!ELEMENT extractText        @inline; >
+&lt;!--- the element extractStructure is a popup element containing a full structure used as an extract from another document or position. -->
+&lt;!ELEMENT extractStructure   @popupStructure;>
+
 </include>
 
 <include if="authorialNote" dependsOn="core" label="Authorial Note" desc="Element $authorialNote for the specification of authoritative (non-editorial) notes that are out of the main flow of the text, yet are part of the official authoritative text." >
@@ -1030,13 +1052,17 @@ element. -->
 &lt;!--- The element span is an HTML element and is used in Akoma Ntoso as in HTML, for the generic inline -->
 &lt;!ELEMENT span @inline; >
 
-<include if="html" dependsOn="core" label="Elements from HTML" desc="Elements introduced in HTML  used here with the same meaning and purpose: $b, $i, $u, $a, $img, $ul, $ol, $li">
+<include if="html" dependsOn="core" label="Elements from HTML" desc="Elements introduced in HTML  used here with the same meaning and purpose: $b, $i, $u, $sup, $sub, $a, $img, $ul, $ol, $li">
 &lt;!--- The element b is an HTML element and is used in Akoma Ntoso as in HTML, for the bold style (an inline) -->
 &lt;!ELEMENT b    @inline; >
 &lt;!--- The element i is an HTML element and is used in Akoma Ntoso as in HTML, for the italic style (an inline) -->
 &lt;!ELEMENT i    @inline; >
 &lt;!--- The element u is an HTML element and is used in Akoma Ntoso as in HTML, for the underline style (an inline) -->
 &lt;!ELEMENT u    @inline; >
+&lt;!--- The element sup is an HTML element and is used in Akoma Ntoso as in HTML, for the superscript style (an inline) -->
+&lt;!ELEMENT sup    @inline; >
+&lt;!--- The element sub is an HTML element and is used in Akoma Ntoso as in HTML, for the subscript style (an inline) -->
+&lt;!ELEMENT sub    @inline; >
 &lt;!--- The element a is an HTML element and is used in Akoma Ntoso as in HTML, for the generic link to a web resource (NOT to an Akoma Ntoso document: use ref for that). It is an inline. -->
 &lt;!ELEMENT a    @inline; >
 &lt;!ATTLIST a
@@ -1163,7 +1189,7 @@ element. -->
 
 &lt;!--- The element publication is the metadata container specifying a publication event for the FRBR expression of the document. -->
 &lt;!ELEMENT publication      @metaopt; >
-&lt;!ATTLIST publication      ##date; ##show; ##name; ##refers; >
+&lt;!ATTLIST publication      ##date; ##show; ##name; ##number; ##refers; >
 
 &lt;!--- The element classification is the metadata container of a list of keywords associated to the FRBR expression of the document. -->
 &lt;!ELEMENT classification   (keyword+)>
