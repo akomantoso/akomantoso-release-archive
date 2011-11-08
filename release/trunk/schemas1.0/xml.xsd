@@ -1,9 +1,0 @@
-<xsd:schema xmlns="http://www.akomantoso.org/1.0" targetNamespace="http://www.w3.org/XML/1998/namespace" xmlns:xml="http://www.w3.org/XML/1998/namespace" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-
-	<xsd:import namespace="http://www.akomantoso.org/1.0" schemaLocation="./akomantoso10.dpp-test-temp.xsd"/>
-
-
-
-	<xsd:attribute name="lang" type="language"/>
-
-</xsd:schema>

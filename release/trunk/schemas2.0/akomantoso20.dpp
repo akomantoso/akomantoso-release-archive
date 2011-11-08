@@ -1,11 +1,21 @@
+
+	
+		
+		
+		
+		
+		
+	
 <!-- ===================================================================== 
-  	 Akoma Ntoso main schema
+ 	   Akoma Ntoso main schema
 	   supported by Africa i-Parliaments, a project sponsored by United
 	   Nations Department of Economic and Social Affairs
 	   Copyright (C) Africa i-Parliaments
 
 
-     Release 15/07/2011 - Initial for Akoma Ntoso 2.0
+     Release 12/10/2011 - Akoma Ntoso 2.0 
+				Complete version. 
+			
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -43,7 +53,7 @@
      ===================================================================== -->
 
 <!--- The group ANhier lists the elements that belong to the Akoma Ntoso legislative hierarchy -->
-<!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title|book|tome|article |point|indent|alinea|subsection|subpart|subparagraph|subchapter|subtitle|subclause)" >
+<!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title|article|book|tome|division|list |point|indent|alinea|subsection|subpart|subparagraph|subchapter|subtitle|subclause|sublist)" >
 
 	
 <!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
@@ -58,9 +68,9 @@
 <!ENTITY @@ prefaceContainers    "(longTitle | subdivision)" >
 
 <!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
-<!ENTITY @@ ANblock         "(list | toc | tblock)" >
+<!ENTITY @@ ANblock         "(blockList | toc | tblock)" >
 <!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
-<!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | placeholder)" >
+<!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | extractText | extractStructure | placeholder | fillin)" >
 <!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
 <!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | legislature | session | docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber)" >
 
@@ -85,7 +95,7 @@
 <!--- The group HTMLblock lists the elements that are blocks and were inherited from the HTML vocabulary -->
 <!ENTITY @@ HTMLblock         "(ul|ol|table| p)" >
 <!--- The group HTMLinline lists the elements that are inline and were inherited from the HTML vocabulary -->
-<!ENTITY @@ HTMLinline        "(b | i | a | span)" >
+<!ENTITY @@ HTMLinline        "(b | i | a | u | sub | sup | span)" >
 	
 
 <!--- The group HTMLmarker lists the elements that are marker and were inherited from the HTML vocabulary -->
@@ -140,6 +150,8 @@
 <!ENTITY ## alt         "alternativeTo         #ANYURI        #IMPLIED" >
 <!--- The attribute name is used to give a name to all generic elements -->
 <!ENTITY ## name         "name         #STRING        #REQUIRED" >
+<!--- The attribute number is used to specify a number in the publication of the document -->
+<!ENTITY ## number       "number       #INTEGER        #REQUIRED" >
 <!--- The attribute source links to the agent (person, organization) providing the specific annotation or markup -->
 <!ENTITY ## source       "source       #ANYURI        #REQUIRED" >
 <!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD -->
@@ -558,6 +570,10 @@
 <!ELEMENT tome          @hierarchy; >
 <!--- this element is a hierarchical container called "article" either explicitly or due to the local tradition -->
 <!ELEMENT article       @hierarchy; >
+<!--- this element is a hierarchical container called "division" either explicitly or due to the local tradition -->
+<!ELEMENT division      @hierarchy; >
+<!--- this element is a hierarchical container called "list" either explicitly or due to the local tradition -->
+<!ELEMENT list          @hierarchy; >
 
 
 <!--- this element is a hierarchical container called "point" either explicitly or due to the local tradition -->
@@ -580,6 +596,8 @@
 <!ELEMENT subtitle      @hierarchy; >
 <!--- this element is a hierarchical container called "subclause" either explicitly or due to the local tradition -->
 <!ELEMENT subclause     @hierarchy; >
+<!--- this element is a hierarchical container called "sublist" either explicitly or due to the local tradition -->
+<!ELEMENT sublist       @hierarchy; >
 
 
 <!--- this element is a hierarchical container called "transitional" either explicitly or due to the local tradition -->
@@ -726,8 +744,8 @@
     ===================================================================== -->
 
 <!--- the element list is used as a container of many individual item elements put in a list -->
-<!ELEMENT list                (listIntroduction?, item+, listConclusion?) >
-<!ATTLIST list                ##corereq; >
+<!ELEMENT blockList                (listIntroduction?, item+, listConclusion?) >
+<!ATTLIST blockList                ##corereq; >
 <!-- The element item is a container belonging to a list -->
 <!ELEMENT item                @itemType; >
 <!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
@@ -869,7 +887,7 @@
 	
                        
 <!--- the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements -->
-<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure )*" "##corereq;" >
+<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure)*" "##corereq;" >
 <!--- the element mod is an inline element containing the specification of a modification on another document -->
 <!ELEMENT mod   @modType;>
 <!--- the element mmod is an inline element containing multiple specifications of modifications on another document -->
@@ -878,8 +896,10 @@
 <!ELEMENT rmod  @modType;>
 <!ATTLIST rmod  upTo   #ANYURI        #REQUIRED >
 
-<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. -->
+<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Use attribute for when quotedText is used in a mmod or rmod to point to the id of the corresponding ref element. -->
 <!ELEMENT quotedText        @inline; >
+<!ATTLIST quotedText        for #ANYURI #IMPLIED>
+
 
 
 <!--- the element remark is an inline element for the specification of editorial remarks (e.g., applauses, laughters, etc.) especially within debate records -->
@@ -900,9 +920,12 @@
 <!ELEMENT omissis      @inline; >
 
 
-<!--- the element placeholder is an inline element inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value -->
+<!--- the element placeholder is an inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value -->
 <!ELEMENT placeholder  @inline; >
 <!ATTLIST placeholder originalText #STRING #IMPLIED >
+<!--- the element fillin is an inline element shown as a dotted line or any other typohtaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process. -->
+<!ELEMENT fillin  @inline; >
+<!ATTLIST fillin  width #STRING #IMPLIED >
 
 	
 <!-- =====================================================================
@@ -938,13 +961,22 @@
      ===================================================================== -->
 
 
-<!ENTITY @ popupStructure " (@@hierElements; | @@blockElements; | intro | wrap | heading | content | num | @@containerElements;  | @@ANcontainers; | recital | citation)+" "##corereq; ">
+<!ENTITY @ popupStructure " (@@hierElements; | @@blockElements; | intro | wrap | heading | subheading | content | num | @@containerElements;  | @@ANcontainers; | recital | citation)+" "##corereq; ">
 
 
 <!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
 element. -->
 <!ELEMENT quotedStructure   @popupStructure;>
 <!ATTLIST quotedStructure  for #ANYURI #IMPLIED>
+
+
+
+
+<!--- the element extractText is an inline element containing a string used as an extract from another document -->
+<!ELEMENT extractText        @inline; >
+<!--- the element extractStructure is a popup element containing a full structure used as an extract from another document or position. -->
+<!ELEMENT extractStructure   @popupStructure;>
+
 
 
 
@@ -1027,6 +1059,10 @@ element. -->
 <!ELEMENT i    @inline; >
 <!--- The element u is an HTML element and is used in Akoma Ntoso as in HTML, for the underline style (an inline) -->
 <!ELEMENT u    @inline; >
+<!--- The element sup is an HTML element and is used in Akoma Ntoso as in HTML, for the superscript style (an inline) -->
+<!ELEMENT sup    @inline; >
+<!--- The element sub is an HTML element and is used in Akoma Ntoso as in HTML, for the subscript style (an inline) -->
+<!ELEMENT sub    @inline; >
 <!--- The element a is an HTML element and is used in Akoma Ntoso as in HTML, for the generic link to a web resource (NOT to an Akoma Ntoso document: use ref for that). It is an inline. -->
 <!ELEMENT a    @inline; >
 <!ATTLIST a
@@ -1153,7 +1189,7 @@ element. -->
 
 <!--- The element publication is the metadata container specifying a publication event for the FRBR expression of the document. -->
 <!ELEMENT publication      @metaopt; >
-<!ATTLIST publication      ##date; ##show; ##name; ##refers; >
+<!ATTLIST publication      ##date; ##show; ##name; ##number; ##refers; >
 
 <!--- The element classification is the metadata container of a list of keywords associated to the FRBR expression of the document. -->
 <!ELEMENT classification   (keyword+)>
