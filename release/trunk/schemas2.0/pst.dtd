@@ -1,38 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--  =====================================================================
-  	 Akoma Ntoso Predefined Simple Types
-	   supported by Africa i-Parliaments, a project sponsored by United
-	   Nations Department of Economic and Social Affairs
-	   Copyright (C) Africa i-Parliaments
-
-
-     Release 15/07/2011 - Initial for Akoma Ntoso 2.0
-
-     technical supervision Fabio Vitali - University of Bologna
-     legal domain supervision Monica Palmirani - University of Bologna
-        
-     The present schema uses systematically XML design patterns as
-     described in http://www.xmlpatterns.com/
-     A few of them are explicitly mentioned, when their use or approach
-     was not felt clear or natural enough. Others are just used without
-     mentions.
-
-     TERMS AND CONDITIONS
-     
-     This program is free software; you can redistribute it and/or
-     modify it under the terms of the GNU General Public License
-     as published by the Free Software Foundation; either version 2
-     of the License, or (at your option) any later version.
-     
-     This program is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     GNU General Public License for more details.
-     
-     You should have received a copy of the GNU General Public License
-     along with this program; if not, write to the Free Software
-     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-=====================================================================  -->
 
 <!ENTITY % CDATA '#PCDATA' >
 <!ENTITY % STRING 'CDATA' >

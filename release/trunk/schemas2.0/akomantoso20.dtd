@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 12/10/2011 - Akoma Ntoso 2.0
+Release 07/05/2012 take II - Akoma Ntoso 2.0
 Complete version.
 
 
@@ -56,18 +56,18 @@ Main element groups
 
 
 
-<!ENTITY % basicContainers    "subdivision" >
+<!ENTITY % basicContainers    "preambleSubdivision | formula" >
 
-<!ENTITY % preambleContainers    "recitals | citations | subdivision" >
+<!ENTITY % preambleContainers    "recitals | citations | formula | preambleSubdivision" >
 
-<!ENTITY % prefaceContainers    "longTitle | subdivision" >
+<!ENTITY % prefaceContainers    "longTitle | formula | preambleSubdivision" >
 
 
 <!ENTITY % ANblock         "blockList | toc | tblock" >
 
-<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | extractText | extractStructure | placeholder | fillin" >
+<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | extractText | extractStructure | placeholder | fillIn" >
 
-<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
+<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
 
 
 
@@ -80,6 +80,7 @@ Main element groups
 
 
 <!ENTITY % ANmarker        "noteRef | eol | eop" >
+
 
 
 <!ENTITY % ANpopup          "authorialNote" >
@@ -143,7 +144,7 @@ Attribute groups
 
 <!ENTITY % name         " name %STRING; #REQUIRED" >
 
-<!ENTITY % number       " number %INTEGER; #REQUIRED" >
+<!ENTITY % number       " number %STRING; #IMPLIED" >
 
 <!ENTITY % source       " source %ANYURI; #REQUIRED" >
 
@@ -160,11 +161,14 @@ Attribute groups
 <!ENTITY % optvalue     " value %STRING; #IMPLIED" >
 
 
-<!ENTITY % speechAtts   " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED to %ANYURI; #IMPLIED" >
-<!ENTITY % voteAtts     " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED choice %ANYURI; #IMPLIED" >
+<!ENTITY % speechAtts " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED startTime %DATETIME; #IMPLIED endTime %DATETIME; #IMPLIED to %ANYURI; #IMPLIED" >
+
+<!ENTITY % voteAtts   " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED choice %ANYURI; #IMPLIED" >
 
 
 <!ENTITY % show         " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
+
+<!ENTITY % src         " src %ANYURI; #REQUIRED alt %STRING; #IMPLIED" >
 
 <!ENTITY % period " period %ANYURI; #IMPLIED"
 >
@@ -194,6 +198,8 @@ Attribute groups
 
 <!ENTITY % HTMLattrs    " class %STRING; #IMPLIED style %STRING; #IMPLIED title %STRING; #IMPLIED" >
 
+<!ENTITY % core    " xxxdirtyTrick %STRING; #IMPLIED" >
+
 <!ENTITY % idreq        " id ID #REQUIRED evolvingId NMTOKEN #IMPLIED" >
 
 <!ENTITY % idopt        " id ID #IMPLIED evolvingId NMTOKEN #IMPLIED" >
@@ -207,11 +213,11 @@ Attribute groups
 <!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % xmllang       " xml:lang %language; #IMPLIED" >
 
 
-<!ENTITY % corereq      " %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang;  %alt; " >
+<!ENTITY % corereq      " %core;  %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang;  %alt; " >
 
-<!ENTITY % corereqreq   " %HTMLattrs;  %enactment;  %idreq;  %refersreq;  %xmllang;  %alt; " >
+<!ENTITY % corereqreq   " %core;  %HTMLattrs;  %enactment;  %idreq;  %refersreq;  %xmllang;  %alt; " >
 
-<!ENTITY % coreopt      " %HTMLattrs;  %enactment;  %idopt;  %refers;  %xmllang;  %alt; " >
+<!ENTITY % coreopt      " %core;  %HTMLattrs;  %enactment;  %idopt;  %refers;  %xmllang;  %alt; " >
 
 <!--  =====================================================================
 
@@ -269,10 +275,10 @@ Complex types (markup structures)
 <!ENTITY % basehierarchy     "(num?,heading?,subheading?)" >
 
 
-<!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(%hierElements;)+,wrap?) | content))" >
+<!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(componentRef | %hierElements;)+,wrap?) | content))" >
 
 
-<!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements; | %ANcontainers; | %blockElements;)*)" >
+<!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements; | componentRef | %ANcontainers; | %blockElements;)*)" >
 
 <!ENTITY % blocksreq         "(%blockElements;)+" >
 
@@ -297,7 +303,7 @@ Complex types (markup structures)
 <!ENTITY % metaopt           "EMPTY" >
 
 
-<!ENTITY % maincontent       "(%hierElements; | %blockElements; | %containerElements;)+" >
+<!ENTITY % maincontent       "(componentRef | %hierElements; | %blockElements; | %containerElements;)+" >
 
 
 
@@ -308,6 +314,8 @@ Complex types (markup structures)
 <!ENTITY % itemType          "(%basehierarchy;,(%blockElements;)+)" >
 
 <!ENTITY % referenceType     "EMPTY" >
+
+<!ENTITY % srcType     "EMPTY" >
 
 <!ENTITY % anyOtherType      "ANY" >
 
@@ -363,19 +371,19 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % openStructure     "(meta,coverPage?,preface?,preamble?,mainContent,conclusions?,attachments?)" >
+<!ENTITY % openStructure     "(meta,coverPage?,preface?,preamble?,mainBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT doc           %openStructure; >
 <!ATTLIST doc %name;  contains %versionType; 'originalVersion'  >
 
-<!ELEMENT mainContent     %maincontent; >
-<!ATTLIST mainContent %coreopt;  >
+<!ELEMENT mainBody     %maincontent; >
+<!ATTLIST mainBody %coreopt;  >
 
 
 
 
-<!ENTITY % collectionStructure "(meta,coverPage?,preface?,collectionContent,conclusions?,attachments?)" >
+<!ENTITY % collectionStructure "(meta,coverPage?,preface?,collectionBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT amendmentList           %collectionStructure; >
@@ -390,13 +398,29 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST documentCollection %name;  >
 
 
-
 <!ELEMENT interstitial  %blocksreq; >
 <!ATTLIST interstitial %corereq;  >
 
-<!ENTITY % collectionContentType  "(%documentType; | componentRef | interstitial?)+" >
-<!ELEMENT collectionContent       %collectionContentType; >
-<!ATTLIST collectionContent %coreopt;  >
+
+<!ENTITY % collectionBodyType  "(%documentType; | componentRef | interstitial?)+" >
+
+<!ELEMENT collectionBody       %collectionBodyType; >
+<!ATTLIST collectionBody %coreopt;  >
+
+
+
+
+<!ENTITY % fragmentStructure   "(meta,fragmentBody)" >
+
+
+<!ELEMENT fragment           %fragmentStructure; >
+<!ATTLIST fragment includedIn %ANYURI; #REQUIRED >
+
+
+<!ENTITY % fragmentBodyType  "(%hierElements; | %containerElements;)" >
+
+<!ELEMENT fragmentBody       %fragmentBodyType; >
+<!ATTLIST fragmentBody %coreopt;  >
 
 
 
@@ -413,13 +437,16 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST bill contains %versionType; 'originalVersion'  >
 
 
-<!ELEMENT body            (%hierElements;)+>
 
+<!ENTITY % bodyType  "(componentRef | %hierElements;)+" >
+
+<!ELEMENT body            %bodyType; >
 <!ATTLIST body %coreopt;  >
 
 
 
-<!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateContent,conclusions?,attachments?)" >
+
+<!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT debateReport        %openStructure; >
@@ -429,36 +456,39 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST debate contains %versionType; 'originalVersion'  >
 
 
-<!ELEMENT debateContent          (%speechSection;)+>
+<!ENTITY % debateBodyType  "(%speechSection;)+" >
 
-<!ATTLIST debateContent %coreopt;  >
+<!ELEMENT debateBody        %debateBodyType;   >
+<!ATTLIST debateBody %coreopt;  >
 
 
 
 
-<!ENTITY % judgementStructure     "(meta,coverPage?,header,judgementBody,conclusions?,attachments?)" >
+<!ENTITY % judgementStructure  "(meta,coverPage?,header,judgementBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT judgement     %judgementStructure; >
 <!ATTLIST judgement contains %versionType; 'originalVersion'  >
 
 
-<!ELEMENT judgementBody   (%judgementBlock;)+>
+<!ENTITY % judgementBodyType  "(%judgementBlock;)+" >
 
+<!ELEMENT judgementBody   %judgementBodyType; >
 <!ATTLIST judgementBody %coreopt;  >
 
 
 
 
-<!ENTITY % amendmentStructure     "(meta,coverPage?,preface?,amendmentBody,conclusions?,attachments?)" >
+<!ENTITY % amendmentStructure  "(meta,coverPage?,preface?,amendmentBody,conclusions?,attachments?)" >
 
 
 <!ELEMENT amendment     %amendmentStructure; >
 <!ATTLIST amendment contains %versionType; 'originalVersion'  >
 
 
-<!ELEMENT amendmentBody   (%amendmentBlock;)+>
+<!ENTITY % amendmentBodyType  "(%amendmentBlock;)+" >
 
+<!ELEMENT amendmentBody   %amendmentBodyType; >
 <!ATTLIST amendmentBody %coreopt;  >
 
 
@@ -466,10 +496,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ELEMENT recitals    (intro?,recital+)>
 
+<!ATTLIST recitals %coreopt;  >
+
 <!ELEMENT recital    %itemType; >
 <!ATTLIST recital %corereq;  >
 
 <!ELEMENT citations    (intro?,citation+)>
+
+<!ATTLIST citations %coreopt;  >
 
 <!ELEMENT citation    %itemType; >
 <!ATTLIST citation %corereq;  >
@@ -477,8 +511,13 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT longTitle    %blocksopt; >
 <!ATTLIST longTitle %coreopt;  >
 
-<!ELEMENT subdivision    %blocksopt; >
-<!ATTLIST subdivision %coreopt;  >
+<!ELEMENT formula    %blocksopt; >
+<!ATTLIST formula %coreopt;  >
+
+<!ELEMENT preambleSubdivision    %blocksreq; >
+<!ATTLIST preambleSubdivision %corereq;  >
+
+<!ATTLIST preambleSubdivision %name;  >
 
 
 
@@ -509,8 +548,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ATTLIST attachments %coreopt;  >
 
-<!ELEMENT componentRef  %referenceType; >
-<!ATTLIST componentRef %idreq;  %link;  %show;  >
+<!ELEMENT componentRef  %srcType; >
+<!ATTLIST componentRef %core;  %idopt;  %src;  %show;  >
 
 
 
@@ -582,6 +621,9 @@ Elements for hierarchical documents
 
 <!ELEMENT subtitle      %hierarchy; >
 <!ATTLIST subtitle %corereq;  >
+
+<!ELEMENT subdivision      %hierarchy; >
+<!ATTLIST subdivision %corereq;  >
 
 <!ELEMENT subclause     %hierarchy; >
 <!ATTLIST subclause %corereq;  >
@@ -843,11 +885,15 @@ legal structure, regardless of their position in the document.
 
 <!ATTLIST docDate %date;  >
 
+
 <!ELEMENT legislature      %inline; >
 <!ATTLIST legislature %coreopt;  >
 
 <!ELEMENT session      %inline; >
 <!ATTLIST session %coreopt;  >
+
+<!ELEMENT shortTitle      %inline; >
+<!ATTLIST shortTitle %coreopt;  >
 
 
 
@@ -976,7 +1022,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT rref         %inlinereq; >
 <!ATTLIST rref %corereq;  >
 
-<!ATTLIST rref %link;  upTo %ANYURI; #REQUIRED >
+<!ATTLIST rref from %ANYURI; #REQUIRED upTo %ANYURI; #REQUIRED >
 
 
 
@@ -993,7 +1039,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT rmod  %modType; >
 <!ATTLIST rmod %corereq;  >
 
-<!ATTLIST rmod upTo %ANYURI; #REQUIRED >
+<!ATTLIST rmod from %ANYURI; #REQUIRED upTo %ANYURI; #REQUIRED >
 
 
 <!ELEMENT quotedText        %inline; >
@@ -1033,10 +1079,10 @@ legal structure, regardless of their position in the document.
 
 <!ATTLIST placeholder originalText %STRING; #IMPLIED >
 
-<!ELEMENT fillin  %inline; >
-<!ATTLIST fillin %coreopt;  >
+<!ELEMENT fillIn  %inline; >
+<!ATTLIST fillIn %coreopt;  >
 
-<!ATTLIST fillin width %STRING; #IMPLIED >
+<!ATTLIST fillIn width %STRING; #IMPLIED >
 
 
 <!--  =====================================================================
@@ -1076,7 +1122,7 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % popupStructure "(%hierElements; | %blockElements; | intro | wrap | heading | subheading | content | num | %containerElements; | %ANcontainers; | recital | citation)+" >
+<!ENTITY % popupStructure "(%hierElements; | %blockElements; | intro | wrap | heading | subheading | content | num | %containerElements; | %ANcontainers; | recital | citation | componentRef)+" >
 
 
 
@@ -1112,7 +1158,7 @@ within a text content, but are not of textual nature.
 
 
 <!ELEMENT foreign    %anyOtherType; >
-<!ATTLIST foreign %idopt;  %linkopt;  >
+<!ATTLIST foreign %core;  %idopt;  %linkopt;  >
 
 
 
@@ -1187,6 +1233,9 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 <!ELEMENT span %inline; >
 <!ATTLIST span %coreopt;  >
 
+<!ELEMENT br %markeropt; >
+<!ATTLIST br %coreopt;  >
+
 
 
 <!ELEMENT b    %inline; >
@@ -1213,7 +1262,7 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 <!ELEMENT img %markeropt; >
 <!ATTLIST img %coreopt;  >
 
-<!ATTLIST img src %ANYURI; #REQUIRED alt %STRING; #IMPLIED width %INTEGER; #IMPLIED height %INTEGER; #IMPLIED >
+<!ATTLIST img %src;  width %INTEGER; #IMPLIED height %INTEGER; #IMPLIED >
 
 
 <!ENTITY % listItems "(li+)" >
@@ -1273,54 +1322,70 @@ Metadata elements for all documents
 
 <!ENTITY % coreProperties   "(FRBRthis,FRBRuri+,FRBRalias*,FRBRdate,FRBRauthor+,componentInfo?,preservation?)" >
 
-<!ENTITY % langProperties   "FRBRlanguage* , FRBRtranslation*" >
+<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber? , FRBRtitle?" >
+
+<!ENTITY % exprProperties   "FRBRlanguage+ , FRBRtranslation*" >
+
+<!ENTITY % manifProperties   "FRBRformat?" >
 
 
-<!ELEMENT FRBRWork             %coreProperties; >
+ <!ENTITY             % FRBRWork_entity "(%coreProperties;,(%workProperties;))" ><!ELEMENT FRBRWork %FRBRWork_entity;>
 
- <!ENTITY       % FRBRExpression_entity "(%coreProperties;,(%langProperties;))" ><!ELEMENT FRBRExpression %FRBRExpression_entity;>
+ <!ENTITY       % FRBRExpression_entity "(%coreProperties;,(%exprProperties;))" ><!ELEMENT FRBRExpression %FRBRExpression_entity;>
 
-<!ELEMENT FRBRManifestation    %coreProperties; >
+ <!ENTITY    % FRBRManifestation_entity "(%coreProperties;,(%manifProperties;))" ><!ELEMENT FRBRManifestation %FRBRManifestation_entity;>
 
 <!ELEMENT FRBRItem             %coreProperties; >
 
 
+<!ENTITY % valueType   "%metaopt;" >
 
-<!ELEMENT FRBRthis             %metaopt; >
-<!ATTLIST FRBRthis %idopt;  >
+<!ELEMENT FRBRthis             %valueType; >
+<!ATTLIST FRBRthis %value;  %core;  %idopt;  >
 
-<!ATTLIST FRBRthis %value;  >
+<!ELEMENT FRBRuri              %valueType; >
+<!ATTLIST FRBRuri %value;  %core;  %idopt;  >
 
-<!ELEMENT FRBRuri              %metaopt; >
-<!ATTLIST FRBRuri %idopt;  >
-
-<!ATTLIST FRBRuri %value;  >
-
-<!ELEMENT FRBRalias            %metaopt; >
-<!ATTLIST FRBRalias %idopt;  >
-
-<!ATTLIST FRBRalias %value;  >
+<!ELEMENT FRBRalias            %valueType; >
+<!ATTLIST FRBRalias %value;  %core;  %idopt;  >
 
 <!ELEMENT FRBRdate             %metaopt; >
-<!ATTLIST FRBRdate %idopt;  >
+<!ATTLIST FRBRdate %core;  %idopt;  >
 
 <!ATTLIST FRBRdate %date;  %name;  >
 
 <!ELEMENT FRBRauthor           %metaopt; >
-<!ATTLIST FRBRauthor %idopt;  >
+<!ATTLIST FRBRauthor %core;  %idopt;  >
 
 <!ATTLIST FRBRauthor %link;  as %ANYURI; #IMPLIED >
 
 <!ELEMENT FRBRlanguage            %metaopt; >
-<!ATTLIST FRBRlanguage %idopt;  >
+<!ATTLIST FRBRlanguage %core;  %idopt;  >
 
 <!ATTLIST FRBRlanguage language %language; #REQUIRED >
 
 
 <!ELEMENT FRBRtranslation      %metaopt; >
-<!ATTLIST FRBRtranslation %idopt;  >
+<!ATTLIST FRBRtranslation %core;  %idopt;  >
 
-<!ATTLIST FRBRtranslation %link;  fromLanguage %language; #REQUIRED pivot %language; #IMPLIED by %ANYURI; #REQUIRED >
+<!ATTLIST FRBRtranslation %link;  fromLanguage %language; #REQUIRED authoritative %yesNoType; #IMPLIED pivot %language; #IMPLIED by %ANYURI; #REQUIRED >
+
+
+<!ELEMENT FRBRsubtype            %valueType; >
+<!ATTLIST FRBRsubtype %value;  %core;  %idopt;  >
+
+<!ELEMENT FRBRcountry            %valueType; >
+<!ATTLIST FRBRcountry %value;  %core;  %idopt;  >
+
+<!ELEMENT FRBRnumber            %valueType; >
+<!ATTLIST FRBRnumber %value;  %core;  %idopt;  >
+
+<!ELEMENT FRBRtitle            %valueType; >
+<!ATTLIST FRBRtitle %value;  %core;  %idopt;  >
+
+<!ELEMENT FRBRformat            %valueType; >
+<!ATTLIST FRBRformat %value;  %core;  %idopt;  >
+
 
 
 
@@ -1328,10 +1393,10 @@ Metadata elements for all documents
 
 <!ELEMENT componentData           (componentData)*>
 
-<!ATTLIST componentData %idreq;  %name;  %link;  %show;  >
+<!ATTLIST componentData %core;  %idreq;  %name;  %link;  %show;  >
 
 <!ELEMENT preservation        %anyOtherType; >
-<!ATTLIST preservation %idopt;  %linkopt;  >
+<!ATTLIST preservation %core;  %idopt;  %linkopt;  >
 
 
 
@@ -1339,7 +1404,7 @@ Metadata elements for all documents
 
 
 <!ELEMENT publication      %metaopt; >
-<!ATTLIST publication %idopt;  >
+<!ATTLIST publication %core;  %idopt;  >
 
 <!ATTLIST publication %date;  %show;  %name;  %number;  %refers;  >
 
@@ -1350,7 +1415,7 @@ Metadata elements for all documents
 
 
 <!ELEMENT keyword %metaopt; >
-<!ATTLIST keyword %idopt;  >
+<!ATTLIST keyword %core;  %idopt;  >
 
 <!ATTLIST keyword %value;  %show;  dictionary %ANYURI; #REQUIRED >
 
@@ -1361,7 +1426,7 @@ Metadata elements for all documents
 <!ATTLIST lifecycle %source;  >
 
 <!ELEMENT eventRef %anyOtherType; >
-<!ATTLIST eventRef %idopt;  %linkopt;  >
+<!ATTLIST eventRef %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST eventRef %date;  %source;  type %eventType; #IMPLIED originatingExpression %yesNoType; #IMPLIED >
 
@@ -1371,7 +1436,7 @@ Metadata elements for all documents
 <!ATTLIST workflow %source;  >
 
 <!ELEMENT step     %anyOtherType; >
-<!ATTLIST step %idopt;  %linkopt;  >
+<!ATTLIST step %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST step %date;  %actor;  %role;  %outcome;  >
 
@@ -1413,32 +1478,32 @@ Metadata elements for all documents
 <!ELEMENT passiveModifications  %Amendments; >
 
  <!ENTITY            % textualMod_entity "(%modificationType;,(old?,new?))" ><!ELEMENT textualMod %textualMod_entity;>
-<!ATTLIST textualMod %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST textualMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST textualMod type %TextualMods; #REQUIRED >
 
  <!ENTITY            % meaningMod_entity "(%modificationType;,(domain?))" ><!ELEMENT meaningMod %meaningMod_entity;>
-<!ATTLIST meaningMod %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST meaningMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST meaningMod type %MeaningMods; #REQUIRED >
 
  <!ENTITY              % scopeMod_entity "(%modificationType;,(domain?))" ><!ELEMENT scopeMod %scopeMod_entity;>
-<!ATTLIST scopeMod %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST scopeMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST scopeMod type %ScopeMods; #REQUIRED >
 
 <!ELEMENT forceMod              %modificationType; >
-<!ATTLIST forceMod %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST forceMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST forceMod type %ForceMods; #REQUIRED >
 
 <!ELEMENT efficacyMod           %modificationType; >
-<!ATTLIST efficacyMod %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST efficacyMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST efficacyMod type %EfficacyMods; #REQUIRED >
 
 <!ELEMENT legalSystemMod        %modificationType; >
-<!ATTLIST legalSystemMod %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST legalSystemMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST legalSystemMod type %LegalSystemMods; #REQUIRED >
 
@@ -1453,43 +1518,43 @@ Metadata elements for all documents
 <!ELEMENT judicial   %judicialArguments; >
 
 <!ELEMENT result   %anyOtherType; >
-<!ATTLIST result %idopt;  %linkopt;  >
+<!ATTLIST result %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST result type %resultType; #REQUIRED >
 
 
 <!ELEMENT supports  %judicialArgumentType; >
-<!ATTLIST supports %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST supports %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT isAnalogTo  %judicialArgumentType; >
-<!ATTLIST isAnalogTo %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST isAnalogTo %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT applies  %judicialArgumentType; >
-<!ATTLIST applies %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST applies %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT extends  %judicialArgumentType; >
-<!ATTLIST extends %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST extends %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT restricts  %judicialArgumentType; >
-<!ATTLIST restricts %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST restricts %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT derogates  %judicialArgumentType; >
-<!ATTLIST derogates %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST derogates %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT contrasts  %judicialArgumentType; >
-<!ATTLIST contrasts %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST contrasts %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT overrules  %judicialArgumentType; >
-<!ATTLIST overrules %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST overrules %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT dissentsFrom  %judicialArgumentType; >
-<!ATTLIST dissentsFrom %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST dissentsFrom %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT putsInQuestion  %judicialArgumentType; >
-<!ATTLIST putsInQuestion %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST putsInQuestion %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ELEMENT distinguishes  %judicialArgumentType; >
-<!ATTLIST distinguishes %idreq;  %enactment;  %modifiers;  %refers;  >
+<!ATTLIST distinguishes %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 
 
@@ -1502,28 +1567,28 @@ Metadata elements for all documents
 <!ENTITY % parliamentaryAnalysisType       "(quorum | count)+" >
 
 <!ELEMENT quorumVerification  %parliamentaryAnalysisType; >
-<!ATTLIST quorumVerification %idreq;  %outcome;  %refers;  %linkopt;  >
+<!ATTLIST quorumVerification %core;  %idreq;  %outcome;  %refers;  %linkopt;  >
 
 <!ELEMENT voting   %parliamentaryAnalysisType; >
-<!ATTLIST voting %idreq;  %outcome;  %refers;  %linkopt;  >
+<!ATTLIST voting %core;  %idreq;  %outcome;  %refers;  %linkopt;  >
 
 <!ELEMENT recount   %parliamentaryAnalysisType; >
-<!ATTLIST recount %idreq;  %outcome;  %refers;  %linkopt;  >
+<!ATTLIST recount %core;  %idreq;  %outcome;  %refers;  %linkopt;  >
 
 
 <!ENTITY % countType       "ANY" >
 
 <!ELEMENT quorum  %countType; >
-<!ATTLIST quorum %idreq;  %value;  %refers;  %linkopt;  >
+<!ATTLIST quorum %core;  %idreq;  %value;  %refers;  %linkopt;  >
 
 <!ELEMENT count  %countType; >
-<!ATTLIST count %idreq;  %value;  %refers;  %linkopt;  >
+<!ATTLIST count %core;  %idreq;  %value;  %refers;  %linkopt;  >
 
 
 
 
 <!ELEMENT otherAnalysis %anyOtherType; >
-<!ATTLIST otherAnalysis %idopt;  %linkopt;  >
+<!ATTLIST otherAnalysis %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST otherAnalysis %source;  >
 
@@ -1537,36 +1602,36 @@ Metadata elements for all documents
 
 
 <!ELEMENT source           %argumentType; >
-<!ATTLIST source %idopt;  %link;  %pos;  upTo %ANYURI; #IMPLIED >
+<!ATTLIST source %core;  %idopt;  %link;  %pos;  upTo %ANYURI; #IMPLIED >
 
 <!ELEMENT destination      %argumentType; >
-<!ATTLIST destination %idopt;  %link;  %pos;  upTo %ANYURI; #IMPLIED >
+<!ATTLIST destination %core;  %idopt;  %link;  %pos;  upTo %ANYURI; #IMPLIED >
 
 <!ELEMENT force            %periodType; >
-<!ATTLIST force %idopt;  %period;  >
+<!ATTLIST force %core;  %idopt;  %period;  >
 
 <!ELEMENT efficacy         %periodType; >
-<!ATTLIST efficacy %idopt;  %period;  >
+<!ATTLIST efficacy %core;  %idopt;  %period;  >
 
 <!ELEMENT application      %periodType; >
-<!ATTLIST application %idopt;  %period;  >
+<!ATTLIST application %core;  %idopt;  %period;  >
 
 <!ELEMENT duration         %periodType; >
-<!ATTLIST duration %idopt;  %period;  >
+<!ATTLIST duration %core;  %idopt;  %period;  >
 
 <!ELEMENT condition        %anyOtherType; >
-<!ATTLIST condition %idopt;  %linkopt;  >
+<!ATTLIST condition %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST condition frozen %BOOLEAN; #IMPLIED >
 
 <!ELEMENT old              %anyOtherType; >
-<!ATTLIST old %idopt;  %linkopt;  >
+<!ATTLIST old %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT new              %anyOtherType; >
-<!ATTLIST new %idopt;  %linkopt;  >
+<!ATTLIST new %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT domain           %anyOtherType; >
-<!ATTLIST domain %idopt;  %linkopt;  >
+<!ATTLIST domain %core;  %idopt;  %linkopt;  >
 
 
 
@@ -1579,11 +1644,11 @@ Metadata elements for all documents
 <!--  The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept.  -->
 <!ELEMENT temporalGroup  (timeInterval+)>
 
-<!ATTLIST temporalGroup %idreq;  >
+<!ATTLIST temporalGroup %core;  %idreq;  >
 
-<!--  The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values are of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section  -->
+<!--  The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section  -->
 <!ELEMENT timeInterval  %metaopt; >
-<!ATTLIST timeInterval %idopt;  >
+<!ATTLIST timeInterval %core;  %idopt;  >
 
 <!ATTLIST timeInterval %refersreq;  start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED duration %DURATION; #IMPLIED >
 
@@ -1592,66 +1657,65 @@ Metadata elements for all documents
 
 <!ENTITY % TLCs           "TLCPerson | TLCOrganization | TLCConcept | TLCObject | TLCEvent | TLCLocation | TLCProcess | TLCRole | TLCTerm | TLCReference" >
 
-<!ENTITY % refItems       "%docRefs; | %TLCs;" >
+<!ENTITY % refItems       "(%docRefs; | %TLCs;)+" >
 
 
-<!ELEMENT references     (%refItems;)+>
-
+<!ELEMENT references     %refItems; >
 <!ATTLIST references %source;  >
 
 
 <!ELEMENT original         %referenceType; >
-<!ATTLIST original %idreq;  %link;  %show;  >
+<!ATTLIST original %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT passiveRef       %referenceType; >
-<!ATTLIST passiveRef %idreq;  %link;  %show;  >
+<!ATTLIST passiveRef %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT activeRef        %referenceType; >
-<!ATTLIST activeRef %idreq;  %link;  %show;  >
+<!ATTLIST activeRef %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT jurisprudence    %referenceType; >
-<!ATTLIST jurisprudence %idreq;  %link;  %show;  >
+<!ATTLIST jurisprudence %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT hasAttachment    %referenceType; >
-<!ATTLIST hasAttachment %idreq;  %link;  %show;  >
+<!ATTLIST hasAttachment %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST hasAttachment type CDATA #IMPLIED >
 
 <!ELEMENT attachmentOf     %referenceType; >
-<!ATTLIST attachmentOf %idreq;  %link;  %show;  >
+<!ATTLIST attachmentOf %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST attachmentOf type CDATA #IMPLIED >
 
 
 <!ELEMENT TLCPerson        %referenceType; >
-<!ATTLIST TLCPerson %idreq;  %link;  %show;  >
+<!ATTLIST TLCPerson %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCOrganization  %referenceType; >
-<!ATTLIST TLCOrganization %idreq;  %link;  %show;  >
+<!ATTLIST TLCOrganization %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCConcept       %referenceType; >
-<!ATTLIST TLCConcept %idreq;  %link;  %show;  >
+<!ATTLIST TLCConcept %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCObject        %referenceType; >
-<!ATTLIST TLCObject %idreq;  %link;  %show;  >
+<!ATTLIST TLCObject %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCEvent         %referenceType; >
-<!ATTLIST TLCEvent %idreq;  %link;  %show;  >
+<!ATTLIST TLCEvent %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCLocation         %referenceType; >
-<!ATTLIST TLCLocation %idreq;  %link;  %show;  >
+<!ATTLIST TLCLocation %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCProcess       %referenceType; >
-<!ATTLIST TLCProcess %idreq;  %link;  %show;  >
+<!ATTLIST TLCProcess %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCRole          %referenceType; >
-<!ATTLIST TLCRole %idreq;  %link;  %show;  >
+<!ATTLIST TLCRole %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCTerm          %referenceType; >
-<!ATTLIST TLCTerm %idreq;  %link;  %show;  >
+<!ATTLIST TLCTerm %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCReference     %referenceType; >
-<!ATTLIST TLCReference %idreq;  %link;  %show;  >
+<!ATTLIST TLCReference %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST TLCReference %name;  >
 
@@ -1671,14 +1735,15 @@ Metadata elements for all documents
 
 
 <!ELEMENT proprietary %anyOtherType; >
-<!ATTLIST proprietary %idopt;  %linkopt;  >
+<!ATTLIST proprietary %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST proprietary %source;  >
 
 <!ELEMENT presentation %anyOtherType; >
-<!ATTLIST presentation %idopt;  %linkopt;  >
+<!ATTLIST presentation %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST presentation %source;  >
+
 
 <!--  =====================================================================
 
@@ -1687,10 +1752,12 @@ Components
 =====================================================================  -->
 
 
-<!ELEMENT components (component+)>
+<!ELEMENT components (component)+>
+
+
 <!ELEMENT component (%documentType;)>
 
-<!ATTLIST component %idreq;  >
+<!ATTLIST component %core;  %idreq;  >
 
 
 <!--  =====================================================================

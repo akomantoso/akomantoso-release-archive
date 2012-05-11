@@ -15,7 +15,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 12/10/2011 - Akoma Ntoso 2.0
+		Release 07/05/2012 take II - Akoma Ntoso 2.0
 		Complete version.
 		
 		
@@ -120,9 +120,10 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:sequence>
-			      <xsd:element ref="subdivision"/>
-		    </xsd:sequence>
+		    <xsd:choice>
+			      <xsd:element ref="preambleSubdivision"/>
+			      <xsd:element ref="formula"/>
+		    </xsd:choice>
 	  </xsd:group>
 
 	  <xsd:group name="preambleContainers">
@@ -137,7 +138,8 @@
 		    <xsd:choice>
 			      <xsd:element ref="recitals"/>
 			      <xsd:element ref="citations"/>
-			      <xsd:element ref="subdivision"/>
+			      <xsd:element ref="formula"/>
+			      <xsd:element ref="preambleSubdivision"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -152,7 +154,8 @@
 
 		    <xsd:choice>
 			      <xsd:element ref="longTitle"/>
-			      <xsd:element ref="subdivision"/>
+			      <xsd:element ref="formula"/>
+			      <xsd:element ref="preambleSubdivision"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -198,7 +201,7 @@
 			      <xsd:element ref="extractText"/>
 			      <xsd:element ref="extractStructure"/>
 			      <xsd:element ref="placeholder"/>
-			      <xsd:element ref="fillin"/>
+			      <xsd:element ref="fillIn"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -219,6 +222,7 @@
 			      <xsd:element ref="docDate"/>
 			      <xsd:element ref="legislature"/>
 			      <xsd:element ref="session"/>
+			      <xsd:element ref="shortTitle"/>
 			      <xsd:element ref="docPurpose"/>
 			      <xsd:element ref="docCommittee"/>
 			      <xsd:element ref="docIntroducer"/>
@@ -292,7 +296,13 @@
 	  </xsd:group>
 
 	  <xsd:group name="ANpopup">
-		
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>ANpopup</name>
+            <comment>The group ANpopup lists the elements that are popups and are specific to the Akoma Ntoso vocabulary</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
 
 		    <xsd:sequence>
 			      <xsd:element ref="authorialNote"/>
@@ -605,7 +615,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="number" type="xsd:integer" use="required"/>
+		    <xsd:attribute name="number" type="xsd:string"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="source">
@@ -697,17 +707,25 @@
 			      <xsd:documentation>
 			         <type>Attlist</type>
             <name>speechAtts</name>
-            <comment>These attributes are used in speeches to identify actors and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section</comment>
+            <comment>The attributes in speechAtts are used in speeches to identify actors and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
 		    <xsd:attribute name="as" type="xsd:anyURI"/>
+		    <xsd:attribute name="startTime" type="xsd:dateTime"/>
+		    <xsd:attribute name="endTime" type="xsd:dateTime"/>
 		    <xsd:attribute name="to" type="xsd:anyURI"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="voteAtts">
-		
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>voteAtts</name>
+            <comment>The attributes in voteAtts are used in votes to identify actors and choices in votes. In particular, attribute 'by' identifies the voter, optional attribute 'as' identifies the role under which the voter is acting, optional attribute 'choice' specifies the voe that was casted.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
 
 		    <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
 		    <xsd:attribute name="as" type="xsd:anyURI"/>
@@ -725,6 +743,19 @@
 
 		    <xsd:attribute name="showAs" type="xsd:string" use="required"/>
 		    <xsd:attribute name="shortForm" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="src">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>src</name>
+            <comment>These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level URI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="src" type="xsd:anyURI" use="required"/>
+		    <xsd:attribute name="alt" type="xsd:string"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="period">
@@ -842,12 +873,24 @@
 		    <xsd:attribute name="title" type="xsd:string"/>
 	  </xsd:attributeGroup>
 
+	  <xsd:attributeGroup name="core">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>core</name>
+            <comment>This attribute list are used to specify the fact that any attribute can be specified for this element if it belongs to a different namespace.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:anyAttribute namespace="##other" processContents="lax"/>
+	  </xsd:attributeGroup>
+
 	  <xsd:attributeGroup name="idreq">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Attlist</type>
             <name>idreq</name>
-            <comment>This attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is required. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id.</comment>
+            <comment>These attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is required. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -913,6 +956,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="HTMLattrs"/>
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="idreq"/>
@@ -930,6 +974,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="HTMLattrs"/>
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="idreq"/>
@@ -947,6 +992,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="HTMLattrs"/>
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="idopt"/>
@@ -1137,7 +1183,7 @@
 			      <xsd:documentation>
 			         <type>Simple</type>
             <name>posType</name>
-            <comment>This is the list of possible positions of the text being analyzed by the element in the analyis section</comment>
+            <comment>This is the list of possible positions of the text being analyzed by the element in the analysis section</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1191,7 +1237,10 @@
 				        <xsd:choice>
 					          <xsd:sequence>
 						            <xsd:element ref="intro" minOccurs="0" maxOccurs="1"/>
-						            <xsd:group ref="hierElements" minOccurs="1" maxOccurs="unbounded"/>
+						            <xsd:choice minOccurs="1" maxOccurs="unbounded">
+							              <xsd:element ref="componentRef"/>
+							              <xsd:group ref="hierElements"/>
+						            </xsd:choice>
 						            <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
 					          </xsd:sequence>
 					          <xsd:element ref="content"/>
@@ -1214,6 +1263,7 @@
 			      <xsd:extension base="basehierarchy">
 				        <xsd:choice minOccurs="0" maxOccurs="unbounded">
 					          <xsd:group ref="containerElements"/>
+					          <xsd:element ref="componentRef"/>
 					          <xsd:group ref="ANcontainers"/>
 					          <xsd:group ref="blockElements"/>
 				        </xsd:choice>
@@ -1330,6 +1380,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
 	  </xsd:complexType>
 
@@ -1342,6 +1393,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idopt"/>
 	  </xsd:complexType>
 
@@ -1355,6 +1407,7 @@
 		    </xsd:annotation>
 
 		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+			      <xsd:element ref="componentRef"/>
 			      <xsd:group ref="hierElements"/>
 			      <xsd:group ref="blockElements"/>
 			      <xsd:group ref="containerElements"/>
@@ -1413,8 +1466,24 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="link"/>
+		    <xsd:attributeGroup ref="show"/>
+	  </xsd:complexType>
+
+	  <xsd:complexType name="srcType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>srcType</name>
+            <comment>the complex type srcType defines the empty content model and the list of attributes for manifestation-level references  to external resources</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attributeGroup ref="core"/>
+		    <xsd:attributeGroup ref="idopt"/>
+		    <xsd:attributeGroup ref="src"/>
 		    <xsd:attributeGroup ref="show"/>
 	  </xsd:complexType>
 
@@ -1430,6 +1499,7 @@
 		    <xsd:choice>
 			      <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		    </xsd:choice>
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idopt"/>
 		    <xsd:attributeGroup ref="linkopt"/>
 	  </xsd:complexType>
@@ -1497,7 +1567,7 @@
 			      <xsd:documentation>
 			         <type>Group</type>
             <name>amendmentDocs</name>
-            <comment>the group judgementDocs specifies all the document types that are jurisprudential in nature</comment>
+            <comment>the group amendmentDocs specifies all the document types that are related to amendments</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1573,9 +1643,9 @@
 	  <xsd:element name="akomaNtoso" type="akomaNtosoType">
       <xsd:annotation>
 			      <xsd:documentation>
-			         <type>Elementroot</type>
-            <name>NAME</name>
-            <comment>NAMEakomaNtosothe element akomaNtoso is the root element of all document types in Akoma Ntoso. It follows the pattern Universal Root (http://www.xmlpatterns.com/UniversalRootMain.shtml)</comment>
+			         <type>Element (root)</type>
+            <name>akomaNtoso</name>
+            <comment>the element akomaNtoso is the root element of all document types in Akoma Ntoso. It follows the pattern Universal Root (http://www.xmlpatterns.com/UniversalRootMain.shtml)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1596,7 +1666,7 @@
 			      <xsd:element ref="coverPage" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="preface" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="preamble" minOccurs="0" maxOccurs="1"/>
-			      <xsd:element ref="mainContent"/>
+			      <xsd:element ref="mainBody"/>
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
@@ -1609,19 +1679,19 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>doc</name>
-            <comment>Element doc is used for descriving the structure and content of any other rdocument that is not included in the list of document explicitly managed by Akoma Ntoso</comment>
+            <comment>Element doc is used for describing the structure and content of any other document that is not included in the list of document explicitly managed by Akoma Ntoso</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
 
-	  <xsd:element name="mainContent" type="maincontent">
+	  <xsd:element name="mainBody" type="maincontent">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>mainContent</name>
-            <comment>the element mainContent is the container of the main part of all other document types</comment>
+            <name>mainBody</name>
+            <comment>the element mainBody is the container of the main part of all other document types</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1641,7 +1711,7 @@
 			      <xsd:element ref="meta"/>
 			      <xsd:element ref="coverPage" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="preface" minOccurs="0" maxOccurs="1"/>
-			      <xsd:element ref="collectionContent"/>
+			      <xsd:element ref="collectionBody"/>
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
@@ -1653,7 +1723,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>amendmentList</name>
-            <comment>Element amendmentList is used for descriving the structure and content of a collection of amendments</comment>
+            <comment>Element amendmentList is used for describing the structure and content of a collection of amendments</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1665,7 +1735,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>officialGazette</name>
-            <comment>Element officialGazette is used for descriving the structure and content of an issue of an official gazette</comment>
+            <comment>Element officialGazette is used for describing the structure and content of an issue of an official gazette</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1677,7 +1747,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>documentCollection</name>
-            <comment>Element documentCollection is used for descriving the structure and content of a collection of other documents chosen and combined for any reason whatsoever</comment>
+            <comment>Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1702,12 +1772,12 @@
 		
 
 
-	  <xsd:complexType name="collectionContentType">
+	  <xsd:complexType name="collectionBodyType">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Complex</type>
-            <name>collectionContentType</name>
-            <comment>the element collectionContent is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document</comment>
+            <name>collectionBodyType</name>
+            <comment>the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1719,7 +1789,71 @@
 		    <xsd:attributeGroup ref="coreopt"/>
 	  </xsd:complexType>
 
-	  <xsd:element name="collectionContent" type="collectionContentType"/>
+	  <xsd:element name="collectionBody" type="collectionBodyType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>collectionBody</name>
+            <comment>the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:complexType name="fragmentStructure">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>fragmentStructure</name>
+            <comment>the type fragmentStructure specifies the overall content model of the document type that is a fragment of another document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="meta"/>
+			      <xsd:element ref="fragmentBody"/>
+		    </xsd:sequence>
+		    <xsd:attribute name="includedIn" type="xsd:anyURI" use="required"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="fragment" type="fragmentStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>fragment</name>
+            <comment>Element fragment is used for describing the structure and content of an issue of an official gazette</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:complexType name="fragmentBodyType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>fragmentBodyType</name>
+            <comment>the type fragmentBodyType specifies a content model of a container of a fragment of another document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:choice>
+			      <xsd:group ref="hierElements"/>
+			      <xsd:group ref="containerElements"/>
+		    </xsd:choice>
+		    <xsd:attributeGroup ref="coreopt"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="fragmentBody" type="fragmentBodyType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>fragmentBody</name>
+            <comment>the element fragmentBody is the container of a fragment of another document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
 		
 
 
@@ -1749,7 +1883,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>act</name>
-            <comment>Element act is used for descriving the structure and content of an act</comment>
+            <comment>Element act is used for describing the structure and content of an act</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1761,21 +1895,40 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>bill</name>
-            <comment>Element bill is used for descriving the structure and content of a bill</comment>
+            <comment>Element bill is used for describing the structure and content of a bill</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
 
-	  <xsd:element name="body">
-		    <xsd:complexType>
-			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-				        <xsd:group ref="hierElements"/>
-			      </xsd:sequence>
-				     <xsd:attributeGroup ref="coreopt"/>
-		    </xsd:complexType>
-	  </xsd:element>
+	  <xsd:complexType name="bodyType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>bodyType</name>
+            <comment>the type bodyType specifies a content model of the main hierarchy of a hierarchical document (e.g, an act or a bill)</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+			      <xsd:element ref="componentRef"/>
+			      <xsd:group ref="hierElements"/>
+		    </xsd:choice>
+		    <xsd:attributeGroup ref="coreopt"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="body" type="bodyType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>body</name>
+            <comment>the element body is the container of the main hierarchy of a hierarchical document (e.g, an act or a bill)</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:complexType name="debateStructure">
 		    <xsd:annotation>
@@ -1790,7 +1943,7 @@
 			      <xsd:element ref="meta"/>
 			      <xsd:element ref="coverPage" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="preface" minOccurs="0" maxOccurs="1"/>
-			      <xsd:element ref="debateContent"/>
+			      <xsd:element ref="debateBody"/>
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
@@ -1802,7 +1955,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>debateReport</name>
-            <comment>Element debateReport is used for descriving the structure and content of a report</comment>
+            <comment>Element debateReport is used for describing the structure and content of a report</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1814,21 +1967,39 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>debate</name>
-            <comment>Element debate is used for descriving the structure and content of a debat record</comment>
+            <comment>Element debate is used for describing the structure and content of a debate record</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
 
-	  <xsd:element name="debateContent">
-		    <xsd:complexType>
-			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-				        <xsd:group ref="speechSection"/>
-			      </xsd:sequence>
-				     <xsd:attributeGroup ref="coreopt"/>
-		    </xsd:complexType>
-	  </xsd:element>
+	  <xsd:complexType name="debateBodyType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>debateBodyType</name>
+            <comment>the type debateBodyType specifies a content model of the main hierarchy of a debate</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+			      <xsd:group ref="speechSection"/>
+		    </xsd:sequence>
+		    <xsd:attributeGroup ref="coreopt"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="debateBody" type="debateBodyType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>debateBody</name>
+            <comment>the element debateBody is the container of the main hierarchy of a debate</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:complexType name="judgementStructure">
 		    <xsd:annotation>
@@ -1855,21 +2026,39 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>judgement</name>
-            <comment>Element judgement is used for descriving the structure and content of a judgement</comment>
+            <comment>Element judgement is used for describing the structure and content of a judgement</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
 
-	  <xsd:element name="judgementBody">
-		    <xsd:complexType>
-			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-				        <xsd:group ref="judgementBlock"/>
-			      </xsd:sequence>
-				     <xsd:attributeGroup ref="coreopt"/>
-		    </xsd:complexType>
-	  </xsd:element>
+	  <xsd:complexType name="judgementBodyType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>judgementBodyType</name>
+            <comment>the type judgementBodyType specifies a content model of the main hierarchy of a judgement document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+			      <xsd:group ref="judgementBlock"/>
+		    </xsd:sequence>
+		    <xsd:attributeGroup ref="coreopt"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="judgementBody" type="judgementBodyType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>judgementBody</name>
+            <comment>the element judgementBody is the container of the main hierarchy of a judgement document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:complexType name="amendmentStructure">
 		    <xsd:annotation>
@@ -1896,21 +2085,39 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>amendment</name>
-            <comment>Element amendment is used for descriving the structure and content of an amendment</comment>
+            <comment>Element amendment is used for describing the structure and content of an amendment</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
 
-	  <xsd:element name="amendmentBody">
-		    <xsd:complexType>
-			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-				        <xsd:group ref="amendmentBlock"/>
-			      </xsd:sequence>
-				     <xsd:attributeGroup ref="coreopt"/>
-		    </xsd:complexType>
-	  </xsd:element>
+	  <xsd:complexType name="amendmentBodyType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>amendmentBodyType</name>
+            <comment>the type amendmentBodyType specifies a content model of the main hierarchy of a amendment document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+			      <xsd:group ref="amendmentBlock"/>
+		    </xsd:sequence>
+		    <xsd:attributeGroup ref="coreopt"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="amendmentBody" type="amendmentBodyType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>amendmentBody</name>
+            <comment>the element amendmentBody is the container of the main hierarchy of a amendment document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:element name="recitals">
 		    <xsd:complexType>
@@ -1918,6 +2125,7 @@
 				        <xsd:element ref="intro" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="recital" minOccurs="1" maxOccurs="unbounded"/>
 			      </xsd:sequence>
+				     <xsd:attributeGroup ref="coreopt"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -1939,6 +2147,7 @@
 				        <xsd:element ref="intro" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="citation" minOccurs="1" maxOccurs="unbounded"/>
 			      </xsd:sequence>
+				     <xsd:attributeGroup ref="coreopt"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -1959,24 +2168,42 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>longTitle</name>
-            <comment>the element longTitle is the section of the preface that is called long title</comment>
+            <comment>the element longTitle is the section of the preface or preamble that is called long title</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
 
-	  <xsd:element name="subdivision" type="blocksopt">
+	  <xsd:element name="formula" type="blocksopt">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>subdivision</name>
-            <comment>the element subdivision is a generic section of the preamble</comment>
+            <name>formula</name>
+            <comment>the element formula is a section of the preface or preamble that contains a formulaic expression that is systematically or frequently present in a preface or a preamble and has e precise legal meaning (e.g. an enacting formula). Use the refersTo attribute for the specification of the actual type of formula.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
 		
 
+
+	  <xsd:element name="preambleSubdivision">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>preambleSubdivision</name>
+            <comment>the element subdivision is a generic section of the preamble</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="blocksreq">
+					          <xsd:attributeGroup ref="name"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:complexType name="basicopt">
 		    <xsd:annotation>
@@ -2095,12 +2322,12 @@
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="componentRef" type="referenceType">
+	  <xsd:element name="componentRef" type="srcType">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>componentRef</name>
-            <comment>the element componentRef is a work- or expression-level reference (i.e., a URI) to another document that represents a component of the document not physically placed at the position specified. Actual document can either be external (e.g. in the package or even in a different position) or internal (within the components element)</comment>
+            <comment>the element componentRef is a manifestation-level reference to a separate resource that holds the content of the component of the document not physically placed at the position specified. Actual resources can either be external (e.g. in the package or even in a different position) or internal (within the components element)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -2339,6 +2566,18 @@
 			         <type>Element</type>
             <name>subtitle</name>
             <comment>this element is a hierarchical container called "subtitle" either explicitly or due to the local tradition</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="subdivision" type="hierarchy">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>subdivision</name>
+            <comment>this element is a hierarchical container called "subdivision" either explicitly or due to the local tradition</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -2726,7 +2965,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>question</name>
-            <comment>the element question is a container of a single official question as proposed by an MP to a peson holding an official position</comment>
+            <comment>the element question is a container of a single official question as proposed by an MP to a person holding an official position</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3043,7 +3282,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>tblock</name>
-            <comment>The element $tblock (titled block) is used to specify a container for blocks introduced by heading elements, similarly to a hierarchical structure</comment>
+            <comment>The element tblock (titled block) is used to specify a container for blocks introduced by heading elements, similarly to a hierarchical structure</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3163,6 +3402,18 @@
 			         <type>Element</type>
             <name>session</name>
             <comment>the element session is an inline element within preface to identify the string used by the document for the session of the legislature relative to the document. Use #refersTo to a TLCEvent to refer to the event of the specific session.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="shortTitle" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>shortTitle</name>
+            <comment>the element shortTitle is an inline element within preface to identify the string used by the document for the short title of the document.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3518,7 +3769,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>quantity</name>
-            <comment>The element auantity is an inline element to identify a text fragment introducing or referring to a quantity. This could be a dimensionless number, or a number referring to a length, weight, duration, etc. or even a sum of money. The attribute normalized contains the value normalized in a number, if appropriate.</comment>
+            <comment>The element quantity is an inline element to identify a text fragment introducing or referring to a quantity. This could be a dimensionless number, or a number referring to a length, weight, duration, etc. or even a sum of money. The attribute normalized contains the value normalized in a number, if appropriate.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -3585,7 +3836,7 @@
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inlinereq">
-					          <xsd:attributeGroup ref="link"/>
+					          <xsd:attribute name="from" type="xsd:anyURI" use="required"/>
 					          <xsd:attribute name="upTo" type="xsd:anyURI" use="required"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
@@ -3645,6 +3896,7 @@
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="modType">
+					          <xsd:attribute name="from" type="xsd:anyURI" use="required"/>
 					          <xsd:attribute name="upTo" type="xsd:anyURI" use="required"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
@@ -3668,30 +3920,6 @@
 			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
-
-	  <xsd:element name="extractText" type="inline">
-      <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Element</type>
-            <name>extractText</name>
-            <comment>the element extractText is an inline element containing a string used as an extract from another document</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-   </xsd:element>
-		
-
-
-	  <xsd:element name="extractStructure" type="popupStructure">
-      <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Element</type>
-            <name>extractStructure</name>
-            <comment>the element extractStructure is a popup element containing a full structure used as an extract from another document or position.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-   </xsd:element>
-		
-
 
 	  <xsd:element name="remark">
 		    <xsd:annotation>
@@ -3759,7 +3987,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>omissis</name>
-            <comment>the element omissis is an inline element for the specification of a text that substitues a textual omission (e.g., dots, spaces, the word "omissis", etc.</comment>
+            <comment>the element omissis is an inline element for the specification of a text that substitutes a textual omission (e.g., dots, spaces, the word "omissis", etc.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3771,7 +3999,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>placeholder</name>
-            <comment>the element placeholder is an inline element containing a formula (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value</comment>
+            <comment>the element placeholder is an inline element containing the text of a computable expression (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -3784,12 +4012,12 @@
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="fillin">
+	  <xsd:element name="fillIn">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>fillin</name>
-            <comment>the element fillin is an inline element shown as a dotted line or any other typohtaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process.</comment>
+            <name>fillIn</name>
+            <comment>the element fillIn is an inline element shown as a dotted line or any other typoaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -3877,7 +4105,13 @@
 	  </xsd:annotation>
 
 	  <xsd:complexType name="popupStructure">
-		
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>popupStructure</name>
+            <comment>the type popupStructure specifies the overall content model of the elements that are popups</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
 
 		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
 			      <xsd:group ref="hierElements"/>
@@ -3892,6 +4126,7 @@
 			      <xsd:group ref="ANcontainers"/>
 			      <xsd:element ref="recital"/>
 			      <xsd:element ref="citation"/>
+			      <xsd:element ref="componentRef"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="corereq"/>
 	  </xsd:complexType>
@@ -3913,6 +4148,30 @@
 			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
+
+	  <xsd:element name="extractText" type="inline">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>extractText</name>
+            <comment>the element extractText is an inline element containing a string used as an extract from another document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="extractStructure" type="popupStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>extractStructure</name>
+            <comment>the element extractStructure is a popup element containing a full structure used as an extract from another document or position.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:element name="authorialNote">
 		    <xsd:annotation>
@@ -4101,6 +4360,18 @@
 		
 
 
+	  <xsd:element name="br" type="markeropt">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>br</name>
+            <comment>The element br is an HTML element and is used in Akoma Ntoso as in HTML, for the breaking of a line</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
 	  <xsd:element name="b" type="inline">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -4192,8 +4463,7 @@
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="markeropt">
-					          <xsd:attribute name="src" type="xsd:anyURI" use="required"/>
-					          <xsd:attribute name="alt" type="xsd:string"/>
+					          <xsd:attributeGroup ref="src"/>
 					          <xsd:attribute name="width" type="xsd:integer"/>
 					          <xsd:attribute name="height" type="xsd:integer"/>
 				        </xsd:extension>
@@ -4385,32 +4655,71 @@
 		    </xsd:sequence>
 	  </xsd:complexType>
 
-	  <xsd:group name="langProperties">
+	  <xsd:group name="workProperties">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Group</type>
-            <name>langProperties</name>
-            <comment>The group langProperties lists the language-specific properties that are characteristics of the FRBR Expression level.</comment>
+            <name>workProperties</name>
+            <comment>The group workProperties lists the properties that are characteristics of the FRBR Work level.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:sequence>
-			      <xsd:element ref="FRBRlanguage" minOccurs="0" maxOccurs="unbounded"/>
+			      <xsd:element ref="FRBRcountry"/>
+			      <xsd:element ref="FRBRsubtype" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="FRBRnumber" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="FRBRtitle" minOccurs="0" maxOccurs="1"/>
+		    </xsd:sequence>
+	  </xsd:group>
+
+	  <xsd:group name="exprProperties">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>exprProperties</name>
+            <comment>The group exprProperties lists the properties that are characteristics of the FRBR Expression level.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="FRBRlanguage" minOccurs="1" maxOccurs="unbounded"/>
 			      <xsd:element ref="FRBRtranslation" minOccurs="0" maxOccurs="unbounded"/>
 		    </xsd:sequence>
 	  </xsd:group>
 
-	  <xsd:element name="FRBRWork" type="coreProperties">
-      <xsd:annotation>
+	  <xsd:group name="manifProperties">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Group</type>
+            <name>manifProperties</name>
+            <comment>The group manifProperties lists the properties that are characteristics of the FRBR Expression level.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:sequence>
+			      <xsd:element ref="FRBRformat" minOccurs="0" maxOccurs="1"/>
+		    </xsd:sequence>
+	  </xsd:group>
+
+	  <xsd:element name="FRBRWork">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRWork</name>
             <comment>The element FRBRWork is the metadata container of identifying properties related to the Work level according to the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="coreProperties">
+					          <xsd:sequence>
+						            <xsd:group ref="workProperties"/>
+					          </xsd:sequence>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="FRBRExpression">
 		    <xsd:annotation>
@@ -4425,24 +4734,32 @@
 			      <xsd:complexContent>
 				        <xsd:extension base="coreProperties">
 					          <xsd:sequence>
-						            <xsd:group ref="langProperties"/>
+						            <xsd:group ref="exprProperties"/>
 					          </xsd:sequence>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="FRBRManifestation" type="coreProperties">
-      <xsd:annotation>
+	  <xsd:element name="FRBRManifestation">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRManifestation</name>
             <comment>The element FRBRManifestation is the metadata container of identifying properties related to the Manifestation level according to the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="coreProperties">
+					          <xsd:sequence>
+						            <xsd:group ref="manifProperties"/>
+					          </xsd:sequence>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="FRBRItem" type="coreProperties">
       <xsd:annotation>
@@ -4456,59 +4773,57 @@
 		
 
 
-	  <xsd:element name="FRBRthis">
+	  <xsd:complexType name="valueType">
 		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>valueType</name>
+            <comment>The type valueType specifies a value attribute to FRBR elements.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexContent>
+			      <xsd:extension base="metaopt">
+				        <xsd:attributeGroup ref="value"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
+	  </xsd:complexType>
+
+	  <xsd:element name="FRBRthis" type="valueType">
+      <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRthis</name>
             <comment>The element FRBRthis is the metadata property containing the URI of the specific component of the document in the respective level of the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+   </xsd:element>
+		
 
-		    <xsd:complexType>
-			      <xsd:complexContent>
-				        <xsd:extension base="metaopt">
-					          <xsd:attributeGroup ref="value"/>
-				        </xsd:extension>
-			      </xsd:complexContent>
-		    </xsd:complexType>
-	  </xsd:element>
 
-	  <xsd:element name="FRBRuri">
-		    <xsd:annotation>
+	  <xsd:element name="FRBRuri" type="valueType">
+      <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRuri</name>
             <comment>The element FRBRuri is the metadata property containing the URI of the whole document in the respective level of the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+   </xsd:element>
+		
 
-		    <xsd:complexType>
-			      <xsd:complexContent>
-				        <xsd:extension base="metaopt">
-					          <xsd:attributeGroup ref="value"/>
-				        </xsd:extension>
-			      </xsd:complexContent>
-		    </xsd:complexType>
-	  </xsd:element>
 
-	  <xsd:element name="FRBRalias">
-		    <xsd:annotation>
+	  <xsd:element name="FRBRalias" type="valueType">
+      <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRalias</name>
             <comment>The element FRBRalias is the metadata property containing additional well-known names of the document in the respective level of the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+   </xsd:element>
+		
 
-		    <xsd:complexType>
-			      <xsd:complexContent>
-				        <xsd:extension base="metaopt">
-					          <xsd:attributeGroup ref="value"/>
-				        </xsd:extension>
-			      </xsd:complexContent>
-		    </xsd:complexType>
-	  </xsd:element>
 
 	  <xsd:element name="FRBRdate">
 		    <xsd:annotation>
@@ -4534,7 +4849,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>FRBRauthor</name>
-            <comment>The element FRBRauthor is the metadata property containing a relevant author of the document in the respective level of the FRBR hierarchy. Attribute as specifies the roleof the author.</comment>
+            <comment>The element FRBRauthor is the metadata property containing a relevant author of the document in the respective level of the FRBR hierarchy. Attribute as specifies the role of the author.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -4580,12 +4895,73 @@
 				        <xsd:extension base="metaopt">
 					          <xsd:attributeGroup ref="link"/>
 					          <xsd:attribute name="fromLanguage" type="language" use="required"/>
+					          <xsd:attribute name="authoritative" type="yesNoType"/>
 					          <xsd:attribute name="pivot" type="language"/>
 					          <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
+
+	  <xsd:element name="FRBRsubtype" type="valueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRsubtype</name>
+            <comment>The element FRBRsubtype is the metadata property containing a string for the specific subtype of the document to be used in the work-level URI of this document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRcountry" type="valueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRcountry</name>
+            <comment>The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2 code for the country or jurisdiction to be used in the work-level URI of this document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRnumber" type="valueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRnumber</name>
+            <comment>The element FRBRnumber is the metadata property containing a string or number for the number to be used in the work-level URI of this document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRtitle" type="valueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRtitle</name>
+            <comment>The element FRBRtitle is the metadata property containing a string for the title to be used in the work-level URI of this document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRformat" type="valueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRformat</name>
+            <comment>The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level URI of this document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:element name="componentInfo">
 		    <xsd:complexType>
@@ -4600,6 +4976,7 @@
 			      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
 				        <xsd:element ref="componentData"/>
 			      </xsd:sequence>
+				     <xsd:attributeGroup ref="core"/>
 				     <xsd:attributeGroup ref="idreq"/>
 				     <xsd:attributeGroup ref="name"/>
 				     <xsd:attributeGroup ref="link"/>
@@ -4780,6 +5157,7 @@
 			      <xsd:element ref="duration" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="condition" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="modifiers"/>
@@ -4859,7 +5237,7 @@
 			      <xsd:documentation>
 			         <type>Simple</type>
             <name>EfficacyMods</name>
-            <comment>The simple type Efficacymods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element.</comment>
+            <comment>The simple type EfficacyMods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5082,6 +5460,7 @@
 			      <xsd:element ref="destination" minOccurs="1" maxOccurs="unbounded"/>
 			      <xsd:element ref="condition" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="enactment"/>
 		    <xsd:attributeGroup ref="modifiers"/>
@@ -5291,6 +5670,7 @@
 			      <xsd:element ref="quorum"/>
 			      <xsd:element ref="count"/>
 		    </xsd:choice>
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="outcome"/>
 		    <xsd:attributeGroup ref="refers"/>
@@ -5345,6 +5725,7 @@
 		    <xsd:choice>
 			      <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		    </xsd:choice>
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="value"/>
 		    <xsd:attributeGroup ref="refers"/>
@@ -5414,6 +5795,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idopt"/>
 		    <xsd:attributeGroup ref="link"/>
 		    <xsd:attributeGroup ref="pos"/>
@@ -5429,6 +5811,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
+		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idopt"/>
 		    <xsd:attributeGroup ref="period"/>
 	  </xsd:complexType>
@@ -5510,7 +5893,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>condition</name>
-            <comment>The element condition is a metadata element specifying an open set (unmanaged by Akoma Ntoso) of conditions on the modification</comment>
+            <comment>The element condition is a metadata element specifying an open set (non managed by Akoma Ntoso) of conditions on the modification</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5528,7 +5911,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>old</name>
-            <comment>The element old is a metadata element containing (in some unmanaged form) the old text of the modification.</comment>
+            <comment>The element old is a metadata element containing (in some non-managed form) the old text of the modification.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5540,7 +5923,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>new</name>
-            <comment>The element new is a metadata element containing (in some unmanaged form) the new text of the modification.</comment>
+            <comment>The element new is a metadata element containing (in some non-managed form) the new text of the modification.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5552,7 +5935,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>domain</name>
-            <comment>The element domain is a metadata element containing (in some unmanaged form) the domain to which the modification applies.</comment>
+            <comment>The element domain is a metadata element containing (in some non-managed form) the domain to which the modification applies.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5578,13 +5961,14 @@
 	  <xsd:element name="temporalGroup">
       <xsd:annotation>
 		       <xsd:documentation>
-		 The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values are of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section 
+		 The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section 
 		</xsd:documentation>
 	     </xsd:annotation>
 		    <xsd:complexType>
 			      <xsd:sequence>
 				        <xsd:element ref="timeInterval" minOccurs="1" maxOccurs="unbounded"/>
 			      </xsd:sequence>
+				     <xsd:attributeGroup ref="core"/>
 				     <xsd:attributeGroup ref="idreq"/>
 		    </xsd:complexType>
 	  </xsd:element>
@@ -5648,29 +6032,33 @@
 		    </xsd:choice>
 	  </xsd:group>
 
-	  <xsd:group name="refItems">
+	  <xsd:complexType name="refItems">
 		    <xsd:annotation>
 			      <xsd:documentation>
-			         <type>Group</type>
+			         <type>Complex</type>
             <name>refItems</name>
-            <comment>The group refItems is a list of types of references used in the references section.</comment>
+            <comment>The complex type refItems is a list of types of references used in the references section.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:choice>
+		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
 			      <xsd:group ref="docRefs"/>
 			      <xsd:group ref="TLCs"/>
 		    </xsd:choice>
-	  </xsd:group>
+		    <xsd:attributeGroup ref="source"/>
+	  </xsd:complexType>
 
-	  <xsd:element name="references">
-		    <xsd:complexType>
-			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-				        <xsd:group ref="refItems"/>
-			      </xsd:sequence>
-				     <xsd:attributeGroup ref="source"/>
-		    </xsd:complexType>
-	  </xsd:element>
+	  <xsd:element name="references" type="refItems">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>references</name>
+            <comment>The element references is a metadata container of all the references to entities external to the document mentioned in the document. They include references to legal documents of any form,a s well as references to people, organizations, events, roles, concepts, and anything else is managed by the Akoma Ntoso ontology.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:element name="original" type="referenceType">
       <xsd:annotation>
@@ -5943,8 +6331,8 @@
 
 	  <xsd:element name="components">
 		    <xsd:complexType>
-			      <xsd:sequence>
-				        <xsd:element ref="component" minOccurs="1" maxOccurs="unbounded"/>
+			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="component"/>
 			      </xsd:sequence>
 		    </xsd:complexType>
 	  </xsd:element>
@@ -5963,6 +6351,7 @@
 			      <xsd:sequence>
 				        <xsd:group ref="documentType"/>
 			      </xsd:sequence>
+				     <xsd:attributeGroup ref="core"/>
 				     <xsd:attributeGroup ref="idreq"/>
 		    </xsd:complexType>
 	  </xsd:element>
