@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 07/05/2012 take II - Akoma Ntoso 2.0
+Release 30/05/2012 - Akoma Ntoso 2.0
 Complete version.
 
 
@@ -56,11 +56,11 @@ Main element groups
 
 
 
-<!ENTITY % basicContainers    "preambleSubdivision | formula" >
+<!ENTITY % basicContainers    "formula | container" >
 
-<!ENTITY % preambleContainers    "recitals | citations | formula | preambleSubdivision" >
+<!ENTITY % preambleContainers    "recitals | citations | formula | container" >
 
-<!ENTITY % prefaceContainers    "longTitle | formula | preambleSubdivision" >
+<!ENTITY % prefaceContainers    "longTitle | formula | container" >
 
 
 <!ENTITY % ANblock         "blockList | toc | tblock" >
@@ -150,7 +150,7 @@ Attribute groups
 
 <!ENTITY % date         " date %DATE; #REQUIRED" >
 
-<!ENTITY % time         " time %TIME; #REQUIRED" >
+<!ENTITY % time         " time %DATETIME; #REQUIRED" >
 
 <!ENTITY % link         " href %ANYURI; #REQUIRED" >
 
@@ -186,9 +186,7 @@ Attribute groups
 
 <!ENTITY % actor " actor %ANYURI; #IMPLIED" >
 
-
 <!ENTITY % outcome " outcome %ANYURI; #IMPLIED" >
-
 
 
 
@@ -329,28 +327,7 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 =====================================================================  -->
 
 
-
-<!ENTITY % collectionDocs  "amendmentList | officialGazette | documentCollection" >
-
-
-
-<!ENTITY % legislativeDocs  "act | bill" >
-
-
-
-<!ENTITY % judgementDocs    "judgement" >
-
-
-
-<!ENTITY % amendmentDocs    "amendment" >
-
-
-
-<!ENTITY % debateDocs       "debateReport | debate" >
-
-
-
-<!ENTITY % documentType      "%collectionDocs; | %legislativeDocs; | %debateDocs; | %amendmentDocs; | %judgementDocs; | doc" >
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | amendment | judgement | doc" >
 
 
 
@@ -386,11 +363,15 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ENTITY % collectionStructure "(meta,coverPage?,preface?,collectionBody,conclusions?,attachments?)" >
 
 
+
 <!ELEMENT amendmentList           %collectionStructure; >
 <!ATTLIST amendmentList contains %versionType; 'originalVersion'  >
 
+
+
 <!ELEMENT officialGazette           %collectionStructure; >
 <!ATTLIST officialGazette contains %versionType; 'originalVersion'  >
+
 
 <!ELEMENT documentCollection           %collectionStructure; >
 <!ATTLIST documentCollection contains %versionType; 'originalVersion'  >
@@ -449,11 +430,15 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateBody,conclusions?,attachments?)" >
 
 
+
 <!ELEMENT debateReport        %openStructure; >
 <!ATTLIST debateReport %name;  contains %versionType; 'originalVersion'  >
 
+
+
 <!ELEMENT debate  %debateStructure; >
 <!ATTLIST debate contains %versionType; 'originalVersion'  >
+
 
 
 <!ENTITY % debateBodyType  "(%speechSection;)+" >
@@ -513,11 +498,6 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ELEMENT formula    %blocksopt; >
 <!ATTLIST formula %coreopt;  >
-
-<!ELEMENT preambleSubdivision    %blocksreq; >
-<!ATTLIST preambleSubdivision %corereq;  >
-
-<!ATTLIST preambleSubdivision %name;  >
 
 
 
@@ -889,8 +869,12 @@ legal structure, regardless of their position in the document.
 <!ELEMENT legislature      %inline; >
 <!ATTLIST legislature %coreopt;  >
 
+<!ATTLIST legislature %optvalue;  >
+
 <!ELEMENT session      %inline; >
 <!ATTLIST session %coreopt;  >
+
+<!ATTLIST session %optvalue;  >
 
 <!ELEMENT shortTitle      %inline; >
 <!ATTLIST shortTitle %coreopt;  >
@@ -902,6 +886,9 @@ legal structure, regardless of their position in the document.
 
 <!ELEMENT docCommittee   %inline; >
 <!ATTLIST docCommittee %coreopt;  >
+
+<!ATTLIST docCommittee %optvalue;  >
+
 
 <!ELEMENT docIntroducer   %inline; >
 <!ATTLIST docIntroducer %coreopt;  >
@@ -1191,10 +1178,12 @@ http://www.xmlpatterns.com/RoleAttributeMain.shtml
 <!ATTLIST hcontainer %name;  >
 
 
-<!ELEMENT container  %blocksreq; >
-<!ATTLIST container %corereq;  >
+<!ENTITY % containerType  "(%blockElements; | container)+" >
 
-<!ATTLIST container %name;  >
+
+<!ELEMENT container  %containerType; >
+<!ATTLIST container %corereq;  %name;  >
+
 
 <!ELEMENT block      %inline; >
 <!ATTLIST block %coreopt;  >
@@ -1320,9 +1309,9 @@ Metadata elements for all documents
 <!ATTLIST identification %source;  >
 
 
-<!ENTITY % coreProperties   "(FRBRthis,FRBRuri+,FRBRalias*,FRBRdate,FRBRauthor+,componentInfo?,preservation?)" >
+<!ENTITY % coreProperties   "(FRBRthis,FRBRuri+,FRBRalias*,FRBRdate+,FRBRauthor+,componentInfo?,preservation?)" >
 
-<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber? , FRBRtitle?" >
+<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber? , FRBRname?" >
 
 <!ENTITY % exprProperties   "FRBRlanguage+ , FRBRtranslation*" >
 
@@ -1380,8 +1369,8 @@ Metadata elements for all documents
 <!ELEMENT FRBRnumber            %valueType; >
 <!ATTLIST FRBRnumber %value;  %core;  %idopt;  >
 
-<!ELEMENT FRBRtitle            %valueType; >
-<!ATTLIST FRBRtitle %value;  %core;  %idopt;  >
+<!ELEMENT FRBRname            %valueType; >
+<!ATTLIST FRBRname %value;  %core;  %idopt;  >
 
 <!ELEMENT FRBRformat            %valueType; >
 <!ATTLIST FRBRformat %value;  %core;  %idopt;  >

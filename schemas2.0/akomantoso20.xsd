@@ -15,7 +15,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 07/05/2012 take II - Akoma Ntoso 2.0
+		Release 30/05/2012 - Akoma Ntoso 2.0
 		Complete version.
 		
 		
@@ -121,8 +121,8 @@
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:element ref="preambleSubdivision"/>
 			      <xsd:element ref="formula"/>
+			      <xsd:element ref="container"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -139,7 +139,7 @@
 			      <xsd:element ref="recitals"/>
 			      <xsd:element ref="citations"/>
 			      <xsd:element ref="formula"/>
-			      <xsd:element ref="preambleSubdivision"/>
+			      <xsd:element ref="container"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -155,7 +155,7 @@
 		    <xsd:choice>
 			      <xsd:element ref="longTitle"/>
 			      <xsd:element ref="formula"/>
-			      <xsd:element ref="preambleSubdivision"/>
+			      <xsd:element ref="container"/>
 		    </xsd:choice>
 	  </xsd:group>
 
@@ -651,7 +651,7 @@
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="time" type="xsd:time" use="required"/>
+		    <xsd:attribute name="time" type="xsd:dateTime" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="link">
@@ -1517,80 +1517,6 @@
 		</xsd:documentation>
 	  </xsd:annotation>
 
-	  <xsd:group name="collectionDocs">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>collectionDocs</name>
-            <comment>the group collectionDocs specifies all the document types that are collections of other documents, that may or may not be addressed individually. Many documents are of this type, such as individual issues of the official gazette, amendment lists, and many others</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:choice>
-			      <xsd:element ref="amendmentList"/>
-			      <xsd:element ref="officialGazette"/>
-			      <xsd:element ref="documentCollection"/>
-		    </xsd:choice>
-	  </xsd:group>
-
-	  <xsd:group name="legislativeDocs">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>legislativeDocs</name>
-            <comment>the group legislativeDocs specifies all the document types that are legislative in nature</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:choice>
-			      <xsd:element ref="act"/>
-			      <xsd:element ref="bill"/>
-		    </xsd:choice>
-	  </xsd:group>
-
-	  <xsd:group name="judgementDocs">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>judgementDocs</name>
-            <comment>the group judgementDocs specifies all the document types that are jurisprudential in nature</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:sequence>
-			      <xsd:element ref="judgement"/>
-		    </xsd:sequence>
-	  </xsd:group>
-
-	  <xsd:group name="amendmentDocs">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>amendmentDocs</name>
-            <comment>the group amendmentDocs specifies all the document types that are related to amendments</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:sequence>
-			      <xsd:element ref="amendment"/>
-		    </xsd:sequence>
-	  </xsd:group>
-
-	  <xsd:group name="debateDocs">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Group</type>
-            <name>debateDocs</name>
-            <comment>the group debateDocs specifies all the document types that are related to debates</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:choice>
-			      <xsd:element ref="debateReport"/>
-			      <xsd:element ref="debate"/>
-		    </xsd:choice>
-	  </xsd:group>
-
 	  <xsd:group name="documentType">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -1601,11 +1527,15 @@
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:group ref="collectionDocs"/>
-			      <xsd:group ref="legislativeDocs"/>
-			      <xsd:group ref="debateDocs"/>
-			      <xsd:group ref="amendmentDocs"/>
-			      <xsd:group ref="judgementDocs"/>
+			      <xsd:element ref="amendmentList"/>
+			      <xsd:element ref="officialGazette"/>
+			      <xsd:element ref="documentCollection"/>
+			      <xsd:element ref="act"/>
+			      <xsd:element ref="bill"/>
+			      <xsd:element ref="debateReport"/>
+			      <xsd:element ref="debate"/>
+			      <xsd:element ref="amendment"/>
+			      <xsd:element ref="judgement"/>
 			      <xsd:element ref="doc"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -2186,24 +2116,6 @@
    </xsd:element>
 		
 
-
-	  <xsd:element name="preambleSubdivision">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Element</type>
-            <name>preambleSubdivision</name>
-            <comment>the element subdivision is a generic section of the preamble</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:complexType>
-			      <xsd:complexContent>
-				        <xsd:extension base="blocksreq">
-					          <xsd:attributeGroup ref="name"/>
-				        </xsd:extension>
-			      </xsd:complexContent>
-		    </xsd:complexType>
-	  </xsd:element>
 
 	  <xsd:complexType name="basicopt">
 		    <xsd:annotation>
@@ -3384,29 +3296,41 @@
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="legislature" type="inline">
-      <xsd:annotation>
+	  <xsd:element name="legislature">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>legislature</name>
             <comment>the element legislature is an inline element within preface to identify the string used by the document for the legislature relative to the document. Use #refersTo to a TLCEvent to refer to the event of the specific legislature.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attributeGroup ref="optvalue"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
-	  <xsd:element name="session" type="inline">
-      <xsd:annotation>
+	  <xsd:element name="session">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>session</name>
             <comment>the element session is an inline element within preface to identify the string used by the document for the session of the legislature relative to the document. Use #refersTo to a TLCEvent to refer to the event of the specific session.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attributeGroup ref="optvalue"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="shortTitle" type="inline">
       <xsd:annotation>
@@ -3432,17 +3356,23 @@
 		
 
 
-	  <xsd:element name="docCommittee" type="inline">
-      <xsd:annotation>
+	  <xsd:element name="docCommittee">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>docCommittee</name>
             <comment>the element docCommittee is an inline element within preface to identify the string used by the document detailing the committee within which the document originated</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attributeGroup ref="optvalue"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="docIntroducer" type="inline">
       <xsd:annotation>
@@ -4250,23 +4180,34 @@
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="container">
+	  <xsd:complexType name="containerType">
 		    <xsd:annotation>
 			      <xsd:documentation>
-			         <type>Element</type>
-            <name>container</name>
-            <comment>the element container is a generic element for a container. It can be placed in a container instead of any of the other containers. The attribute name is required and gives a name to the element.</comment>
+			         <type>Complex</type>
+            <name>containerType</name>
+            <comment>the complex type containerType is the content model for the generic element for a container. It can be placed in a container instead of any of the other containers. The attribute name is required and gives a name to the element.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:complexType>
-			      <xsd:complexContent>
-				        <xsd:extension base="blocksreq">
-					          <xsd:attributeGroup ref="name"/>
-				        </xsd:extension>
-			      </xsd:complexContent>
-		    </xsd:complexType>
-	  </xsd:element>
+		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+			      <xsd:group ref="blockElements"/>
+			      <xsd:element ref="container"/>
+		    </xsd:choice>
+		    <xsd:attributeGroup ref="corereq"/>
+		    <xsd:attributeGroup ref="name"/>
+	  </xsd:complexType>
+
+	  <xsd:element name="container" type="containerType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>container</name>
+            <comment>the element container is a generic element for a container.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
 
 	  <xsd:element name="block">
 		    <xsd:annotation>
@@ -4648,7 +4589,7 @@
 			      <xsd:element ref="FRBRthis"/>
 			      <xsd:element ref="FRBRuri" minOccurs="1" maxOccurs="unbounded"/>
 			      <xsd:element ref="FRBRalias" minOccurs="0" maxOccurs="unbounded"/>
-			      <xsd:element ref="FRBRdate"/>
+			      <xsd:element ref="FRBRdate" minOccurs="1" maxOccurs="unbounded"/>
 			      <xsd:element ref="FRBRauthor" minOccurs="1" maxOccurs="unbounded"/>
 			      <xsd:element ref="componentInfo" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="preservation" minOccurs="0" maxOccurs="1"/>
@@ -4668,7 +4609,7 @@
 			      <xsd:element ref="FRBRcountry"/>
 			      <xsd:element ref="FRBRsubtype" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRnumber" minOccurs="0" maxOccurs="1"/>
-			      <xsd:element ref="FRBRtitle" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="FRBRname" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 	  </xsd:group>
 
@@ -4939,12 +4880,12 @@
 		
 
 
-	  <xsd:element name="FRBRtitle" type="valueType">
+	  <xsd:element name="FRBRname" type="valueType">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>FRBRtitle</name>
-            <comment>The element FRBRtitle is the metadata property containing a string for the title to be used in the work-level URI of this document</comment>
+            <name>FRBRname</name>
+            <comment>The element FRBRname is the metadata property containing a string for the title to be used in the work-level URI of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
