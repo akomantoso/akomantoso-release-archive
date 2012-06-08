@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<modular xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="./modular.xsd">
+<modular xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./modular.xsd">
 	<combos>
 		<combo id="acts" name="Acts" desc="All elements for describing acts and existing legislative documents" content="core legislativeDocs act modifications tblock semantic advancedRefs authorialNote specials delimiters table"/>
 		<combo id="bills" name="Bills" desc="All elements for describing bills and legislative documents being drafted and discussed" content="core legislativeDocs bill tblock semantic advancedRefs authorialNote specials delimiters table"/>
 		<combo id="amendments" name="Amendments" desc="All elements for describing amendments and amendment lists" content="core legislativeDocs collectionDocs amendmentDocs amendmentList advancedPreface specials authorialNote"/>
 		<combo id="debates" name="Debates and hansards" desc="All elements for describing hansards and debates" content="core debateDocs debate advancedPreface authorialNote toc delimiters"/>
-		<combo id="judgements" name="Judgements" desc="All elements for describing amendments and proposed modifications to bills" content="core judgementDocs advancedPreface tblock authorialNote"/>
+		<combo id="judgements" name="Judgements" desc="All elements for describing judgements and sentences" content="core judgementDocs advancedPreface tblock authorialNote"/>
 		<combo id="minutes" name="Minutes" desc="All elements for describing minutes in a Parliament setting" content="debateDocs debateReport core tblock toc advancedPreface semantic advancedRefs"/>
 		<combo id="orderOfTheDay" name="Order of the Day" desc="All elements for describing orders of the day in a Parliament setting" content="core tblock toc authorialNote"/>	
 		<combo id="reports" name="Reports" desc="All elements for describing reports in a Parliament setting" content="core tblock toc advancedPreface semantic authorialNote table"/>	
@@ -19,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 30/05/2012 - Akoma Ntoso 2.0"/>
+     <report version="Release 06/06/2012 - Akoma Ntoso 2.0"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -444,7 +443,7 @@
 &lt;!ELEMENT fragment           @fragmentStructure; >
 
 &lt;!--- the type fragmentBodyType specifies a content model of a container of a fragment of another document -->
-&lt;!ENTITY @ fragmentBodyType  "(@@hierElements; | @@containerElements;)" "##coreopt;" >
+&lt;!ENTITY @ fragmentBodyType  "(@@containerElements; <include if="legislativeDocs" v="| @@hierElements; "/> <include if="debateDocs" v="| @@ANcontainers;"/> <include if="prefaceSubstructures" v="| recital | citation"/>)" "##coreopt;" >
 &lt;!--- the element fragmentBody is the container of a fragment of another document -->
 &lt;!ELEMENT fragmentBody       @fragmentBodyType; >
 </include>
@@ -1006,7 +1005,7 @@
      ===================================================================== -->
 
 &lt;!--- the type popupStructure specifies the overall content model of the elements that are popups -->
-&lt;!ENTITY @ popupStructure " (<include if="legislativeDocs" v="@@hierElements; |"/> @@blockElements; | intro | wrap | heading | subheading | content | num | @@containerElements;  <include if="debateDocs" v="| @@ANcontainers;"/> <include if="prefaceSubstructures" v="| recital | citation"/><include if="components" v="| componentRef "/>)+" "##corereq; ">
+&lt;!ENTITY @ popupStructure " (@@blockElements; | @@containerElements; | intro | wrap | heading | subheading | num <include if="legislativeDocs" v="| @@hierElements; | content"/> <include if="debateDocs" v="| @@ANcontainers;"/> <include if="prefaceSubstructures" v="| recital | citation"/><include if="components" v="| componentRef "/>)+" "##corereq; ">
 
 <include if="modifications" dependsOn="legislativeDocs">
 &lt;!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
@@ -1015,7 +1014,7 @@ element. -->
 &lt;!ATTLIST quotedStructure  for #ANYURI #IMPLIED>
 
 </include>
-<include if="extract" desc="inline and popup elements $extractStructure and $extractText for the specification of extracts from other documents.">
+<include if="extract" dependsOn="core" label="Extracts" desc="inline and popup elements $extractStructure and $extractText for the specification of extracts from other documents.">
 
 &lt;!--- the element extractText is an inline element containing a string used as an extract from another document -->
 &lt;!ELEMENT extractText        @inline; >
@@ -1275,6 +1274,7 @@ element. -->
 &lt;!ATTLIST eventRef
     ##date;
     ##source;
+    ##refers;
     type   #eventType; #IMPLIED
     originatingExpression #yesNoType; #IMPLIED
 >
@@ -1288,13 +1288,14 @@ element. -->
     ##date;
     ##actor;
     ##role;
+    ##refers;
     ##outcome;
 >
 </include>
 
 <include if="analysis">
 &lt;!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events, of judgments and of votes in parliamentary documents -->
-&lt;!ELEMENT analysis              (<include if="legislativeDocs" v="activeModifications?, passiveModifications?,"/>
+&lt;!ELEMENT analysis              (<include if="modifications" dependsOn="legislativeDocs" v="activeModifications?, passiveModifications?,"/>
 				 <include if="judgementDocs" v="judicial?,"/> <include if="debateDocs" v="parliamentary?,"/> otherAnalysis*) >
 &lt;!ATTLIST analysis              ##source; >
 
