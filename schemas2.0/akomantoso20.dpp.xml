@@ -18,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 06/06/2012 - Akoma Ntoso 2.0"/>
+     <report version="Release 09/06/2012 - Akoma Ntoso 2.0"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -359,8 +359,8 @@
 							documentCollection |
 						</include> 
 						<include if="legislativeDocs">
-							<include if="acts" v="act | "/>
-							<include if="bills" v="bill | "/>							
+							<include if="act" v="act | "/>
+							<include if="bill" v="bill | "/>							
 						</include>
 						<include if="debateDocs">
 							<include if="debateReport" v="debateReport | "/>
