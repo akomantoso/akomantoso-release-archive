@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 30/05/2012 - Akoma Ntoso 2.0
+Release 29/06/2012 - Akoma Ntoso 2.0
 Complete version.
 
 
@@ -327,7 +327,7 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 =====================================================================  -->
 
 
-<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | amendment | judgement | doc" >
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | amendment | judgement | fragment | doc" >
 
 
 
@@ -398,7 +398,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST fragment includedIn %ANYURI; #REQUIRED >
 
 
-<!ENTITY % fragmentBodyType  "(%hierElements; | %containerElements;)" >
+<!ENTITY % fragmentBodyType  "(%containerElements; | %hierElements; | %ANcontainers; | recital | citation)" >
 
 <!ELEMENT fragmentBody       %fragmentBodyType; >
 <!ATTLIST fragmentBody %coreopt;  >
@@ -1109,7 +1109,7 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % popupStructure "(%hierElements; | %blockElements; | intro | wrap | heading | subheading | content | num | %containerElements; | %ANcontainers; | recital | citation | componentRef)+" >
+<!ENTITY % popupStructure "(%blockElements; | %containerElements; | intro | wrap | heading | subheading | num | %hierElements; | content | %ANcontainers; | recital | citation | componentRef)+" >
 
 
 
@@ -1417,7 +1417,7 @@ Metadata elements for all documents
 <!ELEMENT eventRef %anyOtherType; >
 <!ATTLIST eventRef %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST eventRef %date;  %source;  type %eventType; #IMPLIED originatingExpression %yesNoType; #IMPLIED >
+<!ATTLIST eventRef %date;  %source;  %refers;  type %eventType; #IMPLIED originatingExpression %yesNoType; #IMPLIED >
 
 
 <!ELEMENT workflow   (step+)>
@@ -1427,7 +1427,7 @@ Metadata elements for all documents
 <!ELEMENT step     %anyOtherType; >
 <!ATTLIST step %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST step %date;  %actor;  %role;  %outcome;  >
+<!ATTLIST step %date;  %actor;  %role;  %refers;  %outcome;  >
 
 
 

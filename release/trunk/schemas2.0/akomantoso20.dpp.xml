@@ -18,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 09/06/2012 - Akoma Ntoso 2.0"/>
+     <report version="Release 29/06/2012 - Akoma Ntoso 2.0"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -367,7 +367,8 @@
 							<include if="debate" v="debate | "/>														
 						</include> 
 						<include if="amendmentDocs" v="amendment |" />
-						<include if="judgementDocs" v="judgement |" /> doc)">
+						<include if="judgementDocs" v="judgement |" />
+						<include if="components" v="fragment |" /> doc)">
 
   
 
@@ -439,7 +440,7 @@
                                    fragmentBody)" 
                                   "includedIn #ANYURI #REQUIRED">
 
-&lt;!--- Element fragment is used for describing the structure and content of an issue of an official gazette -->
+&lt;!--- Element fragment is used for describing the structure and content of an independent fragment of a document -->
 &lt;!ELEMENT fragment           @fragmentStructure; >
 
 &lt;!--- the type fragmentBodyType specifies a content model of a container of a fragment of another document -->
