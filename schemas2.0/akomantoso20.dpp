@@ -5,7 +5,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     Release 30/05/2012 - Akoma Ntoso 2.0 
+     Release 29/06/2012 - Akoma Ntoso 2.0 
 				Complete version. 
 			
 
@@ -356,7 +356,8 @@
 							debate | 														
 						 
 						amendment |
-						judgement | doc)">
+						judgement |
+						fragment | doc)">
 
   
 
@@ -428,11 +429,11 @@
                                    fragmentBody)" 
                                   "includedIn #ANYURI #REQUIRED">
 
-<!--- Element fragment is used for describing the structure and content of an issue of an official gazette -->
+<!--- Element fragment is used for describing the structure and content of an independent fragment of a document -->
 <!ELEMENT fragment           @fragmentStructure; >
 
 <!--- the type fragmentBodyType specifies a content model of a container of a fragment of another document -->
-<!ENTITY @ fragmentBodyType  "(@@hierElements; | @@containerElements;)" "##coreopt;" >
+<!ENTITY @ fragmentBodyType  "(@@containerElements; | @@hierElements;  | @@ANcontainers; | recital | citation)" "##coreopt;" >
 <!--- the element fragmentBody is the container of a fragment of another document -->
 <!ELEMENT fragmentBody       @fragmentBodyType; >
 
@@ -994,7 +995,7 @@
      ===================================================================== -->
 
 <!--- the type popupStructure specifies the overall content model of the elements that are popups -->
-<!ENTITY @ popupStructure " (@@hierElements; | @@blockElements; | intro | wrap | heading | subheading | content | num | @@containerElements;  | @@ANcontainers; | recital | citation| componentRef )+" "##corereq; ">
+<!ENTITY @ popupStructure " (@@blockElements; | @@containerElements; | intro | wrap | heading | subheading | num | @@hierElements; | content | @@ANcontainers; | recital | citation| componentRef )+" "##corereq; ">
 
 
 <!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
@@ -1263,6 +1264,7 @@ element. -->
 <!ATTLIST eventRef
     ##date;
     ##source;
+    ##refers;
     type   #eventType; #IMPLIED
     originatingExpression #yesNoType; #IMPLIED
 >
@@ -1276,6 +1278,7 @@ element. -->
     ##date;
     ##actor;
     ##role;
+    ##refers;
     ##outcome;
 >
 

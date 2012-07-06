@@ -15,7 +15,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 30/05/2012 - Akoma Ntoso 2.0
+		Release 29/06/2012 - Akoma Ntoso 2.0
 		Complete version.
 		
 		
@@ -1536,6 +1536,7 @@
 			      <xsd:element ref="debate"/>
 			      <xsd:element ref="amendment"/>
 			      <xsd:element ref="judgement"/>
+			      <xsd:element ref="fragment"/>
 			      <xsd:element ref="doc"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -1752,7 +1753,7 @@
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>fragment</name>
-            <comment>Element fragment is used for describing the structure and content of an issue of an official gazette</comment>
+            <comment>Element fragment is used for describing the structure and content of an independent fragment of a document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -1769,8 +1770,11 @@
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:group ref="hierElements"/>
 			      <xsd:group ref="containerElements"/>
+			      <xsd:group ref="hierElements"/>
+			      <xsd:group ref="ANcontainers"/>
+			      <xsd:element ref="recital"/>
+			      <xsd:element ref="citation"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="coreopt"/>
 	  </xsd:complexType>
@@ -4044,15 +4048,15 @@
 		    </xsd:annotation>
 
 		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
-			      <xsd:group ref="hierElements"/>
 			      <xsd:group ref="blockElements"/>
+			      <xsd:group ref="containerElements"/>
 			      <xsd:element ref="intro"/>
 			      <xsd:element ref="wrap"/>
 			      <xsd:element ref="heading"/>
 			      <xsd:element ref="subheading"/>
-			      <xsd:element ref="content"/>
 			      <xsd:element ref="num"/>
-			      <xsd:group ref="containerElements"/>
+			      <xsd:group ref="hierElements"/>
+			      <xsd:element ref="content"/>
 			      <xsd:group ref="ANcontainers"/>
 			      <xsd:element ref="recital"/>
 			      <xsd:element ref="citation"/>
@@ -5011,6 +5015,7 @@
 				        <xsd:extension base="anyOtherType">
 					          <xsd:attributeGroup ref="date"/>
 					          <xsd:attributeGroup ref="source"/>
+					          <xsd:attributeGroup ref="refers"/>
 					          <xsd:attribute name="type" type="eventType"/>
 					          <xsd:attribute name="originatingExpression" type="yesNoType"/>
 				        </xsd:extension>
@@ -5042,6 +5047,7 @@
 					          <xsd:attributeGroup ref="date"/>
 					          <xsd:attributeGroup ref="actor"/>
 					          <xsd:attributeGroup ref="role"/>
+					          <xsd:attributeGroup ref="refers"/>
 					          <xsd:attributeGroup ref="outcome"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
