@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 29/06/2012 - Akoma Ntoso 2.0
+Release 22/07/2012 - Akoma Ntoso 2.0
 Complete version.
 
 
@@ -860,6 +860,9 @@ legal structure, regardless of their position in the document.
 <!ELEMENT docProponent %inline; >
 <!ATTLIST docProponent %coreopt;  >
 
+<!ATTLIST docProponent as %ANYURI; #IMPLIED >
+
+
 <!ELEMENT docDate      %inline; >
 <!ATTLIST docDate %coreopt;  >
 
@@ -1109,7 +1112,7 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % popupStructure "(%blockElements; | %containerElements; | intro | wrap | heading | subheading | num | %hierElements; | content | %ANcontainers; | recital | citation | componentRef)+" >
+<!ENTITY % popupStructure "(%blockElements; | %containerElements; | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | intro | wrap | heading | subheading | num)+" >
 
 
 

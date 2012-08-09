@@ -18,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 29/06/2012 - Akoma Ntoso 2.0"/>
+     <report version="Release 22/07/2012 - Akoma Ntoso 2.0"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -821,6 +821,8 @@
 &lt;!ELEMENT docNumber    @inline; >
 &lt;!--- the element docProponent is an inline element within preface to identify the string used by the document for its proponent -->
 &lt;!ELEMENT docProponent @inline; >
+&lt;!ATTLIST docProponent as #ANYURI #IMPLIED >
+
 &lt;!--- the element docDate is an inline element within preface to identify the string used by the document for its own date(s). Documents with multiple dates may use multiple docDate elements. -->
 &lt;!ELEMENT docDate      @inline; >
 &lt;!ATTLIST docDate      ##date; >
@@ -1006,7 +1008,14 @@
      ===================================================================== -->
 
 &lt;!--- the type popupStructure specifies the overall content model of the elements that are popups -->
-&lt;!ENTITY @ popupStructure " (@@blockElements; | @@containerElements; | intro | wrap | heading | subheading | num <include if="legislativeDocs" v="| @@hierElements; | content"/> <include if="debateDocs" v="| @@ANcontainers;"/> <include if="prefaceSubstructures" v="| recital | citation"/><include if="components" v="| componentRef "/>)+" "##corereq; ">
+&lt;!ENTITY @ popupStructure " (
+							@@blockElements; | 
+							@@containerElements; 
+							<include if="legislativeDocs" v="| @@hierElements; | content"/>
+							<include if="debateDocs" v="| @@ANcontainers;"/> 
+							<include if="prefaceSubstructures" v="| formula | recitals | citations | longTitle | recital | citation"/>
+							<include if="components" v="| componentRef "/>
+							|	intro | wrap | heading | subheading | num  )+" "##corereq; ">
 
 <include if="modifications" dependsOn="legislativeDocs">
 &lt;!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref

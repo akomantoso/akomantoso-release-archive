@@ -15,7 +15,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 29/06/2012 - Akoma Ntoso 2.0
+		Release 22/07/2012 - Akoma Ntoso 2.0
 		Complete version.
 		
 		
@@ -3270,17 +3270,23 @@
 		
 
 
-	  <xsd:element name="docProponent" type="inline">
-      <xsd:annotation>
+	  <xsd:element name="docProponent">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>docProponent</name>
             <comment>the element docProponent is an inline element within preface to identify the string used by the document for its proponent</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType mixed="true">
+			      <xsd:complexContent>
+				        <xsd:extension base="inline">
+					          <xsd:attribute name="as" type="xsd:anyURI"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="docDate">
 		    <xsd:annotation>
@@ -4050,17 +4056,21 @@
 		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
 			      <xsd:group ref="blockElements"/>
 			      <xsd:group ref="containerElements"/>
+			      <xsd:group ref="hierElements"/>
+			      <xsd:element ref="content"/>
+			      <xsd:group ref="ANcontainers"/>
+			      <xsd:element ref="formula"/>
+			      <xsd:element ref="recitals"/>
+			      <xsd:element ref="citations"/>
+			      <xsd:element ref="longTitle"/>
+			      <xsd:element ref="recital"/>
+			      <xsd:element ref="citation"/>
+			      <xsd:element ref="componentRef"/>
 			      <xsd:element ref="intro"/>
 			      <xsd:element ref="wrap"/>
 			      <xsd:element ref="heading"/>
 			      <xsd:element ref="subheading"/>
 			      <xsd:element ref="num"/>
-			      <xsd:group ref="hierElements"/>
-			      <xsd:element ref="content"/>
-			      <xsd:group ref="ANcontainers"/>
-			      <xsd:element ref="recital"/>
-			      <xsd:element ref="citation"/>
-			      <xsd:element ref="componentRef"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="corereq"/>
 	  </xsd:complexType>
