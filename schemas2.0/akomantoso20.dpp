@@ -5,7 +5,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     Release 22/07/2012 - Akoma Ntoso 2.0 
+     Release 20/1/2013 - Akoma Ntoso 3.0 CSD01 
 				Complete version. 
 			
 
@@ -35,7 +35,7 @@
      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
      ===================================================================== -->
 
-<!TARGETNS          'http://www.akomantoso.org/2.0'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD01'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -49,7 +49,7 @@
 
 	
 <!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
-<!ENTITY @@ ANcontainers    "(speech | question | answer | other | scene | narrative | summary)" >
+<!ENTITY @@ ANcontainers    "(speechGroup | speech | question | answer | other | scene | narrative | summary)" >
 
 	
 <!--- The group basicContainers lists the elements that are containers and are specific to vocabulary of preambles, prefaces, conclusions and coverPages -->
@@ -57,10 +57,10 @@
 <!--- The group preambleContainers lists the elements that are containers and are specific to the Akoma Ntoso preamble vocabulary -->
 <!ENTITY @@ preambleContainers    "(recitals | citations | formula |container)" >
 <!--- The group prefaceContainers lists the elements that are containers and are specific to the Akoma Ntoso preface vocabulary -->
-<!ENTITY @@ prefaceContainers    "(longTitle | formula |container)" >
+<!ENTITY @@ prefaceContainers    "(longTitle | formula | container| toc )" >
 
 <!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
-<!ENTITY @@ ANblock         "(blockList | toc | tblock)" >
+<!ENTITY @@ ANblock         "(blockList | tblock)" >
 <!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
 <!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | extractText | extractStructure | placeholder | fillIn)" >
 <!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
@@ -73,7 +73,7 @@
 
 
 <!--- The group ANsemanticInline lists additional elements that are inline, and are specific to the Akoma Ntoso vocabulary -->
-<!ENTITY @@ ANsemanticInline   "(date| person| organization| concept| object| event| location| process| role| term| quantity| def | entity)" >
+<!ENTITY @@ ANsemanticInline   "(date| time | person| organization| concept| object| event| location| process| role| term| quantity| def | entity)" >
 
 <!--- The group ANmarker lists the elements that are markers and are specific to the Akoma Ntoso vocabulary -->
 <!ENTITY @@ ANmarker        "(noteRef |  eol | eop)" >
@@ -88,16 +88,16 @@
 <!--- The group HTMLblock lists the elements that are blocks and were inherited from the HTML vocabulary -->
 <!ENTITY @@ HTMLblock         "(ul|ol|table| p)" >
 <!--- The group HTMLinline lists the elements that are inline and were inherited from the HTML vocabulary -->
-<!ENTITY @@ HTMLinline        "(b | i | a | u | sub | sup | span)" >
+<!ENTITY @@ HTMLinline        "(b | i | a | u | sub | sup  | abbr | span)" >
 	
 
 <!--- The group HTMLmarker lists the elements that are marker and were inherited from the HTML vocabulary -->
-<!ENTITY @@ HTMLmarker        "(img)" >
+<!ENTITY @@ HTMLmarker        "(img | br)" >
 
 
 	
 <!--- The group judgementBlock lists the structures that should be found in a judgement -->
-<!ENTITY @@ judgementBlock    "(introduction | background | motivation | decision)">
+<!ENTITY @@ judgementBlock    "(introduction | background | arguments | remedies | motivation | decision)">
 
 	
 <!--- The group amendmentBlock lists the structures that should be found in an amendment  -->
@@ -149,6 +149,8 @@
 <!ENTITY ## source       "source       #ANYURI        #REQUIRED" >
 <!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD -->
 <!ENTITY ## date         "date         #DATE          #REQUIRED" >
+<!--- The attribute datetime is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DDThh:mm -->
+<!ENTITY ## datetime         "datetime         #DATETIME          #REQUIRED" >
 <!--- The attribute time is used to give a normalized value for a time according to the XSD syntax HH:MM:SS -->
 <!ENTITY ## time         "time         #DATETIME          #REQUIRED" >
 <!--- The attribute href is used to specify an internal or external destination for a reference, a citation, an access to the ontology or a hypertext link. In elements using this attribute definition the href attribute is required -->
@@ -208,6 +210,9 @@
 ">
 <!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
 <!ENTITY ## outcome "outcome #ANYURI #IMPLIED">
+
+<!--- The attribute quote is used in quotedText, quotedStructure, extractText and extractStructure to specify the quote character delimiting the quoted or extracted part. -->
+<!ENTITY ## quote "quote #STRING #IMPLIED">
 	
 
 <!--- These attributes are used to specify that table cells span more than one row or one column, exactly as in HTML -->
@@ -249,8 +254,6 @@
      ===================================================================== -->
 <!--- This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.  -->
 <!ENTITY # language           "#STRING" >
-<!--- This is the list of allowed values for a yes/no attribute   -->
-<!ENTITY # yesNoType    "#STRING(yes|no)" >
 <!--- This is the list of allowed values for the contains attribute   -->
 <!ENTITY # versionType    "#STRING(originalVersion|singleVersion|multipleVersions)" >
 <!--- This is the list of allowed values for the placement attribute of notes  -->
@@ -260,8 +263,19 @@
 <!--- This is the list of allowed values for the type attribute of the event and action elements  -->
 <!ENTITY # eventType      "#STRING(generation|amendment|repeal)" >
 
-<!--- This is the list of allowed values for the status attribute   -->
-<!ENTITY # statusType     "#STRING(omissis|repealed|suspended|editorial|ignore|translated|edited|verbatim)">
+<!--- This is the list of allowed values for the status attribute. This is the list of possible reasons for a dscrepancy between the manifestation as it should be (e.g., a faithful representation of the content of an expression), and the manifestation as it actually is. Values should be interpreted as follows: 
+- removed: the content of the element is present in the markup (manifestation) but is not present in the real content of the document (expression level) because it has been definitely removed (either ex tunc, as in annullments, or ex nunc, as in abrogations). 
+- temporarily removed: the content of the element is present in the markup (manifestation) but is not present in the real content of the document (expression level) because it has been temporarily removed (e.g., for a temporary suspension or limitation of efficacy). 
+- translated: the content of the element is present in the markup (manifestation) in a different form than in the real content of the document (expression level) because it has been translated into a different language (e.g., to match the rest of the document or because of other editorial decisions). 
+- editorial: the content of the element is present in the markup (manifestation) but is not present in the real content of the document (expression level) because it has been inserted as an editorial process when creating the XML markup.
+- edited: the content of the element is different in the markup (manifestation) than in the real content of the document (expression level) because it has been amended (e.g., to remove scurrilous or offensive remarks). 
+- verbatim: the content of the element is present in the markup (manifestation) is EXACTLY as it was in the real content of the document (expression level) because usual silent fixes and edits were NOT performed (e.g. to punctuation, grammatical errors or other usually non-debatable problems). 
+- incomplete: the content of the element or the value of a required attribute is NOT present in the markup (manifestation), although it should, because the missing data is not known at the moment, but in the future it might become known. This is especially appropriate for documents in drafting phase (e.g., the publication date of the act while drafting the bill)
+- unknown: the content of the element or the value of a required attribute is NOT present in the markup (manifestation), although it should, because the author of the manifestation does not know it.
+- undefined: the content of the element or the value of a required attribute is NOT present in the markup (manifestation), because the information is not defined in the original document, or it doesn't exist in some legal tradition (e.g. an anonymous speech cannot specify the attribute by, or some publications do not record the numbering of the items, etc.)
+- ignored: the content of the element or the value of a required attribute is NOT present in the markup (manifestation) because the information exists but the author of the manifestation is not interested in reporting it (e.g., omitted parts of the document due to editorial reasons, etc.) -->
+<!ENTITY # statusType     "#STRING(removed | temporarilyRemoved | translated | editorial | edited | verbatim | incomplete | unknown | undefined | ignored)">
+
 
 <!--- This is the list of allowed values for the type attribute of the remark element  -->
 <!ENTITY # remarkType     "#STRING(sceneDescription|phenomenon|caption|translation)">
@@ -290,14 +304,14 @@
 <!ENTITY @ basehierarchy     "(num?, heading?, subheading?)" >
 
 <!--- The complex type hierarchy is used by most or all the hierarchical elements of act-like documents. -->
-<!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (componentRef |  @@hierElements;)+, wrap?) | content)"            "##corereq;">
+<!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (componentRef |  @@hierElements;)*, wrap?) | content)"            "##corereq;">
 
 <!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
 <!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | componentRef |  @@ANcontainers; | @@blockElements;)*" "##corereq;">
 <!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the id attribute is required -->
-<!ENTITY @ blocksreq         "(@@blockElements;)+" "##corereq;">
+<!ENTITY @ blocksreq         "(@@blockElements;)*" "##corereq;">
 <!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the id attribute is optional -->
-<!ENTITY @ blocksopt         "(@@blockElements;)+" "##coreopt;">
+<!ENTITY @ blocksopt         "(@@blockElements;)*" "##coreopt;">
 <!--- the complex type inline defines the content model and attributes shared by all blocks and inlines. Here the id attribute is optional -->
 <!ENTITY @ inline            "(#PCDATA | @@inlineCM;)*" "##coreopt;">
 <!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the id attribute is required -->
@@ -326,8 +340,10 @@
 <!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 <!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the references section -->
 <!ENTITY @ referenceType     ""                            "##core; ##idreq; ##link; ##show;" >
-<!--- the complex type srcType defines the empty content model and the list of attributes for manifestation-level references  to external resources -->
+<!--- the complex type srcType defines the empty content model and the list of attributes for manifestation-level references to external resources -->
 <!ENTITY @ srcType     ""                            "##core; ##idopt; ##src; ##show;" >
+<!--- the complex type linkType defines the empty content model and the list of attributes for Work- or Expression-level references to external resources -->
+<!ENTITY @ linkType     ""                            "##core; ##idopt; ##link; ##show;" >
 <!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
 <!ENTITY @ anyOtherType      "ANY{##other}"                "##core; ##idopt; ##linkopt;" >                 
 
@@ -418,7 +434,7 @@
 <!ELEMENT interstitial  @blocksreq; >
 
 <!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
-<!ENTITY @ collectionBodyType  "(@@documentType; | componentRef | interstitial?)+" "##coreopt;" >
+<!ENTITY @ collectionBodyType  "(@@documentType; | documentRef | interstitial?)+" "##coreopt;" >
 <!--- the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 <!ELEMENT collectionBody       @collectionBodyType; >
 
@@ -527,20 +543,27 @@
 
 	
 	
+	
+<!ENTITY @ recitalHierarchy         "@basehierarchy;, (intro?, (componentRef |  recital)+, wrap?)"            "##coreopt;">
+
 <!--- the element recitals is the section of the preface that contains recitals -->
-<!ELEMENT recitals    (intro?, recital+) >
-<!ATTLIST recitals    ##coreopt; >
+<!ELEMENT recitals    @recitalHierarchy; >
 <!--- the element recital is the individual element of the preface that is called recital -->
 <!ELEMENT recital    @itemType; >
+
+<!ENTITY @ citationHierarchy         "@basehierarchy;, (intro?, (componentRef |  citation)+, wrap?)"            "##coreopt;">
+
 <!--- the element citations is the section of the preface that contains citations -->
-<!ELEMENT citations    (intro?,citation+) >
-<!ATTLIST citations    ##coreopt; >
+<!ELEMENT citations    @citationHierarchy; >
+
 <!--- the element citation is the individual element of the preface that is called citation -->
 <!ELEMENT citation    @itemType; >
 <!--- the element longTitle is the section of the preface or preamble that is called long title -->
 <!ELEMENT longTitle    @blocksopt; >
 <!--- the element formula is a section of the preface or preamble that contains a formulaic expression that is systematically or frequently present in a preface or a preamble and has e precise legal meaning (e.g. an enacting formula). Use the refersTo attribute for the specification of the actual type of formula. -->
 <!ELEMENT formula    @blocksopt; >
+<!ATTLIST formula    ##name; >
+
 
 
 
@@ -562,10 +585,12 @@
 <!--- the element header is used as a container of all prefacing material of judgements (e.g. headers, formulas, etc.) -->
 <!ELEMENT header      @blocksopt; >
 <!--- the element attachments is used as a container of individual attachment elements -->
-<!ELEMENT attachments (componentRef+) >
+<!ELEMENT attachments (@@documentType; | documentRef)+ >
 <!ATTLIST attachments ##coreopt; >
-<!--- the element componentRef is a manifestation-level reference to a separate resource that holds the content of the component of the document not physically placed at the position specified. Actual resources can either be external (e.g. in the package or even in a different position) or internal (within the components element) -->
+<!--- the element componentRef is a reference to a separate manifestation-level resource that holds the content of the component of the document not physically placed at the position specified. Actual resources can either be external (e.g. in the package or even in a different position) or internal (within the components element) -->
 <!ELEMENT componentRef  @srcType; >
+<!--- the element documentRef is a reference to a separate work- or expression-level resource that should be placed in this position. Actual resources are external (e.g. in the package or even in a different position) and are (an expression or any expression of) a separate Work. -->
+<!ELEMENT documentRef  @linkType; >
 
 
 
@@ -703,6 +728,9 @@
 
 
 
+<!--- the element speechGroup is a container of speech elements. This element is meant to pooint out, in a complex sequence of individual speech elements, the main contributor, i.e., the individual speech who was introducedand expected and that is causing the complex sequence that follows. Attributes by, as and to are those of the main speech. -->
+<!ELEMENT speechGroup         @althierarchy; >
+<!ATTLIST speechGroup         ##speechAtts; >
 <!--- the element speech is a container of a single speech utterance in a debate. Dialogs between speakers need a speech element each -->
 <!ELEMENT speech              @speechType; >
 <!--- the element question is a container of a single official question as proposed by an MP to a person holding an official position -->
@@ -734,6 +762,10 @@
 <!ELEMENT introduction        @maincontent; >
 <!--- this element is a structural container for the section of a judgement containing the background  -->
 <!ELEMENT background          @maincontent; >
+<!--- this element is a structural container for the section of a judgement containing the arguments  -->
+<!ELEMENT arguments          @maincontent; >
+<!--- this element is a structural container for the section of a judgement containing the remedies  -->
+<!ELEMENT remedies          @maincontent; >
 <!--- this element is a structural container for the section of a judgement containing the motivation  -->
 <!ELEMENT motivation          @maincontent; >
 <!--- this element is a structural container for the section of a judgement containing the decision -->
@@ -784,8 +816,11 @@
 <!ELEMENT tblock              @itemType; >
 
 
+	
+<!ENTITY @ tocHierarchy         "@basehierarchy;, (intro?, (componentRef |  tocItem)+, wrap?)"            "##coreopt;">
+
 <!--- the element toc (Table of Content) is used as a container of many individual toc items -->
-<!ELEMENT toc       (tocItem+) >
+<!ELEMENT toc    @tocHierarchy; >
 <!--- the element tocItem is a component of the table of content and contains header information about sections or parts of the rest of the document -->
 <!ELEMENT tocItem   @inline; >
 <!ATTLIST tocItem   ##link; level #INTEGER #REQUIRED >
@@ -814,7 +849,7 @@
 
 <!--- the element docDate is an inline element within preface to identify the string used by the document for its own date(s). Documents with multiple dates may use multiple docDate elements. -->
 <!ELEMENT docDate      @inline; >
-<!ATTLIST docDate      ##date; >
+<!ATTLIST docDate      ##datetime; >
 
 <!--- the element legislature is an inline element within preface to identify the string used by the document for the legislature relative to the document. Use #refersTo to a TLCEvent to refer to the event of the specific legislature. -->
 <!ELEMENT legislature      @inline; >
@@ -874,11 +909,12 @@
 <!--- the element date is an inline element to identify a date expressed in the text and to propose a normalized representation in the date attribute. -->
 <!ELEMENT date               @inline; >
 <!ATTLIST date               ##date; >
-
+<!--- the element time is an inline element to identify a time expressed in the text and to propose a normalized representation in the time attribute. -->
+<!ELEMENT time               @inline; >
+<!ATTLIST time               ##time; >
 <!--- the element entity is a generic inline element to identify a text fragment introducing or referring to a concept in the ontology -->
 <!ELEMENT entity             @inlinereqreq; >
 <!ATTLIST entity             ##name; >
-
 <!--- the element person is an inline element to identify a text fragment introducing or referring to a person in the ontology. Attribute as allows to specify a TLCrole the person is holding in the context of the document's mention -->
 <!ELEMENT person             @inlinereqreq; >
 <!ATTLIST person					    as  #ANYURI  #IMPLIED >
@@ -932,9 +968,10 @@
 <!ATTLIST rmod  from   #ANYURI        #REQUIRED
                    upTo   #ANYURI        #REQUIRED >
 
-<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Use attribute for when quotedText is used in a mmod or rmod to point to the id of the corresponding ref element. -->
-<!ELEMENT quotedText        @inline; >
-<!ATTLIST quotedText        for #ANYURI #IMPLIED>
+<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
+<!ELEMENT quotedText       @inline; >
+<!ATTLIST quotedText       ##quote; 
+															for #ANYURI #IMPLIED>
 
 
 
@@ -1003,22 +1040,24 @@
 							| @@hierElements; | content
 							| @@ANcontainers; 
 							| formula | recitals | citations | longTitle | recital | citation
-							| componentRef 
+							| componentRef | documentRef
 							|	intro | wrap | heading | subheading | num  )+" "##corereq; ">
 
 
-<!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Use attribute for when quotedStructure is used in a mmod or rmod to point to the id of the corresponding ref
-element. -->
+<!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
 <!ELEMENT quotedStructure   @popupStructure;>
-<!ATTLIST quotedStructure  for #ANYURI #IMPLIED>
+<!ATTLIST quotedStructure  ##quote;
+                              for #ANYURI #IMPLIED>
 
 
 
 
-<!--- the element extractText is an inline element containing a string used as an extract from another document -->
+<!--- the element extractText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
 <!ELEMENT extractText        @inline; >
-<!--- the element extractStructure is a popup element containing a full structure used as an extract from another document or position. -->
+<!ATTLIST extractText        ##quote; >
+<!--- the element extractStructure is a popup element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
 <!ELEMENT extractStructure   @popupStructure;>
+<!ATTLIST extractStructure   ##quote; >
 
 
 
@@ -1032,7 +1071,7 @@ element. -->
 
 
 
-<!--- the element foreign is a generic container for elements not belonging to the Akoma Ntoso (e.g., mathematical formulas). It is an inline element and thus can be placed in a block.  -->
+<!--- the element foreign is a generic container for elements not belonging to the Akoma Ntoso namespace (e.g., mathematical formulas). It is a block element and thus can be placed in a container.  -->
 <!ELEMENT foreign    @anyOtherType; >
 
 	
@@ -1111,6 +1150,8 @@ element. -->
 <!ELEMENT sup    @inline; >
 <!--- The element sub is an HTML element and is used in Akoma Ntoso as in HTML, for the subscript style (an inline) -->
 <!ELEMENT sub    @inline; >
+<!--- The element abbr is an HTML element and is used in Akoma Ntoso as in HTML, for the specification of an abbreviation or an acronym (an inline). As in HTML, use attribute title to specify the full expansion of the abbreviation or acronym. -->
+<!ELEMENT abbr    @inline; >
 <!--- The element a is an HTML element and is used in Akoma Ntoso as in HTML, for the generic link to a web resource (NOT to an Akoma Ntoso document: use ref for that). It is an inline. -->
 <!ELEMENT a    @inline; >
 <!ATTLIST a
@@ -1205,6 +1246,8 @@ element. -->
 <!ELEMENT FRBRuri              @valueType;>
 <!--- The element FRBRalias is the metadata property containing additional well-known names of the document in the respective level of the FRBR hierarchy -->
 <!ELEMENT FRBRalias            @valueType; >
+<!ATTLIST FRBRalias            ##name; ##refers; >
+
 <!--- The element FRBRdate is the metadata property containing a relevant date of the document in the respective level of the FRBR hierarchy. Attribute name specifies which actual date is contained here. -->
 <!ELEMENT FRBRdate             @metaopt;>
 <!ATTLIST FRBRdate             ##date; ##name; >
@@ -1220,7 +1263,7 @@ element. -->
 <!ELEMENT FRBRtranslation      @metaopt;>
 <!ATTLIST FRBRtranslation      ##link;
                                   fromLanguage #language; #REQUIRED
-                                  authoritative #yesNoType; #IMPLIED
+                                  authoritative #BOOLEAN #IMPLIED
                                   pivot        #language; #IMPLIED
                                   by   #ANYURI   #REQUIRED >
 
@@ -1251,15 +1294,16 @@ element. -->
 
 <!--- The element publication is the metadata container specifying a publication event for the FRBR expression of the document. -->
 <!ELEMENT publication      @metaopt; >
-<!ATTLIST publication      ##date; ##show; ##name; ##number; ##refers; >
+<!ATTLIST publication      ##datetime; ##show; ##name; ##number; ##refers; >
 
 <!--- The element classification is the metadata container of a list of keywords associated to the FRBR expression of the document. -->
 <!ELEMENT classification   (keyword+)>
 <!ATTLIST classification   ##source; >
 
-<!--- The element keyword is a metadata element specifying a keyword  associated to the FRBR expression of the document. Attribute dictionary (required) specifies the thesaurus out of which the keyword has been taken. -->
+<!--- The element keyword is a metadata element specifying a keyword  associated to the FRBR expression of the document. Attribute dictionary (required) specifies the thesaurus out of which the keyword has been taken. Attribute href points to the fragment of text this keyword is associated to. Keywords without href attribute refer to the content as a whole. -->
 <!ELEMENT keyword @metaopt;>
 <!ATTLIST keyword 
+						##linkopt; 
             ##value;
             ##show;
             dictionary  #ANYURI  #REQUIRED >
@@ -1271,11 +1315,11 @@ element. -->
 <!--- The element eventInfo is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.  -->
 <!ELEMENT eventRef @anyOtherType;>
 <!ATTLIST eventRef
-    ##date;
+    ##datetime;
     ##source;
     ##refers;
     type   #eventType; #IMPLIED
-    originatingExpression #yesNoType; #IMPLIED
+    originatingExpression #BOOLEAN #IMPLIED
 >
 
 <!--- The element workflow is a metadata container of the steps associated to the workflow of the document. -->
@@ -1284,7 +1328,7 @@ element. -->
 <!--- The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified. -->
 <!ELEMENT step     @anyOtherType;>
 <!ATTLIST step
-    ##date;
+    ##datetime;
     ##actor;
     ##role;
     ##refers;
@@ -1306,7 +1350,7 @@ element. -->
                                "##core; ##idreq; ##enactment; ##modifiers; ##refers;" >
                                  
 <!--- The simple type TextualMods lists all the types of textual modifications as values for the type attribute of the textualMod element. -->
-<!ENTITY # TextualMods         "#STRING(repeal|substitution|insertion|replacement|renumbering)" >
+<!ENTITY # TextualMods         "#STRING(repeal|substitution|insertion|replacement|renumbering|split|join)" >
 <!--- The simple type MeaningMods lists all the types of modifications in meaning as values for the type attribute of the meaningMod element. -->
 <!ENTITY # MeaningMods         "#STRING(variation|termModification|authenticInterpretation)" >
 <!--- The simple type ScopeMods lists all the types of modifications in scope as values for the type attribute of the scopeMod element. -->
@@ -1327,7 +1371,7 @@ element. -->
 <!--- The element passiveModifications is a metadata container of the passive modifications affecting the document. -->
 <!ELEMENT passiveModifications  @Amendments; >
 <!--- The element textualMod is a metadata element specifying an (active or passive) textual modification for the document. -->
-<!ELEMENT textualMod            (@modificationType;, (old?, new?)) > 
+<!ELEMENT textualMod            (@modificationType;, (old*, new*)) > 
 <!ATTLIST textualMod            type #TextualMods; #REQUIRED >
 <!--- The element meaningMod is a metadata element specifying an (active or passive) modification in meaning for the document. -->
 <!ELEMENT meaningMod            (@modificationType;, (domain?)) > 
@@ -1377,7 +1421,7 @@ element. -->
 <!ELEMENT overrules  @judicialArgumentType; >
 <!--- The element dissentsFrom is a metadata element specifying a reference to a source dissented from the argument being described. -->
 <!ELEMENT dissentsFrom  @judicialArgumentType; >
-<!--- The element questions is a metadata element specifying a reference to a source questioned by the argument being described. -->
+<!--- The element putsInQuestions is a metadata element specifying a reference to a source questioned by the argument being described. -->
 <!ELEMENT putsInQuestion  @judicialArgumentType; >
 <!--- The element distinguishes is a metadata element specifying a reference to a source being distinguished by the argument being described. -->
 <!ELEMENT distinguishes  @judicialArgumentType; > 
@@ -1437,10 +1481,12 @@ with respect to the element being identified with the relative id. -->
 <!--- The element condition is a metadata element specifying an open set (non managed by Akoma Ntoso) of conditions on the modification -->
 <!ELEMENT condition        @anyOtherType; >
 <!ATTLIST condition        frozen #BOOLEAN #IMPLIED >
-<!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. -->
+<!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the id of the element new it is being substituted by. -->
 <!ELEMENT old              @anyOtherType; >
-<!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. -->
+
+<!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. Attribute href points to the id of the element old it is substituting. -->
 <!ELEMENT new              @anyOtherType; >
+
 <!--- The element domain is a metadata element containing (in some non-managed form) the domain to which the modification applies. -->
 <!ELEMENT domain           @anyOtherType; >
 
