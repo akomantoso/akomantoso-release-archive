@@ -18,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 20/1/2013 - Akoma Ntoso 3.0 CSD01"/>
+     <report version="Release 6/2/2013 - Akoma Ntoso 3.0 CSD02"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -46,7 +46,7 @@
      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD01'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -160,10 +160,13 @@
 &lt;!ENTITY ## source       "source       #ANYURI        #REQUIRED" >
 &lt;!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD -->
 &lt;!ENTITY ## date         "date         #DATE          #REQUIRED" >
-&lt;!--- The attribute datetime is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DDThh:mm -->
-&lt;!ENTITY ## datetime         "datetime         #DATETIME          #REQUIRED" >
+&lt;!--- These attributes are used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD and an optional normalized value for a time according to the XSD syntax hh:mm:ss -->
+&lt;!ENTITY ## datetime         "
+			date         #DATE          #REQUIRED
+			time         #TIME          #IMPLIED
+" >
 &lt;!--- The attribute time is used to give a normalized value for a time according to the XSD syntax HH:MM:SS -->
-&lt;!ENTITY ## time         "time         #DATETIME          #REQUIRED" >
+&lt;!ENTITY ## time         "time         #TIME          #REQUIRED" >
 &lt;!--- The attribute href is used to specify an internal or external destination for a reference, a citation, an access to the ontology or a hypertext link. In elements using this attribute definition the href attribute is required -->
 &lt;!ENTITY ## link         "href         #ANYURI        #REQUIRED" >
 &lt;!--- The attribute href is used to specify an internal or external destination for a reference, a citation, an access to the ontology or a hypertext link. In elements using this attribute definition the href attribute is optional -->
@@ -222,8 +225,11 @@
 &lt;!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
 &lt;!ENTITY ## outcome "outcome #ANYURI #IMPLIED">
 
-&lt;!--- The attribute quote is used in quotedText, quotedStructure, extractText and extractStructure to specify the quote character delimiting the quoted or extracted part. -->
-&lt;!ENTITY ## quote "quote #STRING #IMPLIED">
+&lt;!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, extractText and extractStructure to specify the start and quote character delimiting the quoted or extracted part. If the characters are the same, one can use only startQuote. -->
+&lt;!ENTITY ## quote "
+	startQuote #STRING #IMPLIED 
+	endQuote #STRING #IMPLIED
+">
 	
 <include if="table">
 &lt;!--- These attributes are used to specify that table cells span more than one row or one column, exactly as in HTML -->
@@ -248,8 +254,11 @@
 &lt;!ENTITY ## refersreq    "refersTo           #ANYURI         #REQUIRED" >
 &lt;!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is optional -->
 &lt;!ENTITY ## refers       "refersTo           #ANYURI         #IMPLIED" >
-&lt;!--- This attribute specifies the human language in which the content of the element is expressed. Values are taken from the RFC 4646. xml:lang is a reserved attribute of XML, and cannot be used for any other purpose than this one.  -->
-&lt;!ENTITY ## xmllang       "xml:lang           #language;         #IMPLIED" >
+&lt;!--- These attribute specify the human language in which the content of the element is expressed as well as the rules for whitespace management in the element. Values for xml:lang are taken from the RFC 4646. Both xml:lang and xml:space are reserved attributes of the XML language, and cannot be used for any other purpose than these ones.  -->
+&lt;!ENTITY ## xmllang       "
+                   xml:lang           #language;         #IMPLIED
+                   xml:space          (default|preserve) #IMPLIED
+                   " >
 
 &lt;!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the id attribute is required -->
 &lt;!ENTITY ## corereq      "##core; ##HTMLattrs; ##enactment; ##idreq; ##refers; ##xmllang; ##alt;" >
@@ -354,7 +363,7 @@
 &lt;!--- the complex type srcType defines the empty content model and the list of attributes for manifestation-level references to external resources -->
 &lt;!ENTITY @ srcType     ""                            "##core; ##idopt; ##src; ##show;" >
 &lt;!--- the complex type linkType defines the empty content model and the list of attributes for Work- or Expression-level references to external resources -->
-&lt;!ENTITY @ linkType     ""                            "##core; ##idopt; ##link; ##show;" >
+&lt;!ENTITY @ linkType     ""                            "##core; ##idreq; ##link; ##show;" >
 &lt;!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
 &lt;!ENTITY @ anyOtherType      "ANY{##other}"                "##core; ##idopt; ##linkopt;" >                 
 
@@ -555,14 +564,14 @@
 	
 <include if="prefaceSubstructures" dependsOn="core" label="Substructures in prefaces and preambles" desc="Substructures such as $recitals, $recital, $citations, $citation and $longTitle">	
 	
-&lt;!ENTITY @ recitalHierarchy         "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> recital)+, wrap?)"            "##coreopt;">
+&lt;!ENTITY @ recitalHierarchy         "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> recital)+, wrap?)"            "##corereq;">
 
 &lt;!--- the element recitals is the section of the preface that contains recitals -->
 &lt;!ELEMENT recitals    @recitalHierarchy; >
 &lt;!--- the element recital is the individual element of the preface that is called recital -->
 &lt;!ELEMENT recital    @itemType; >
 
-&lt;!ENTITY @ citationHierarchy         "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> citation)+, wrap?)"            "##coreopt;">
+&lt;!ENTITY @ citationHierarchy         "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> citation)+, wrap?)"            "##corereq;">
 
 &lt;!--- the element citations is the section of the preface that contains citations -->
 &lt;!ELEMENT citations    @citationHierarchy; >
@@ -570,9 +579,9 @@
 &lt;!--- the element citation is the individual element of the preface that is called citation -->
 &lt;!ELEMENT citation    @itemType; >
 &lt;!--- the element longTitle is the section of the preface or preamble that is called long title -->
-&lt;!ELEMENT longTitle    @blocksopt; >
+&lt;!ELEMENT longTitle    @blocksreq; >
 &lt;!--- the element formula is a section of the preface or preamble that contains a formulaic expression that is systematically or frequently present in a preface or a preamble and has e precise legal meaning (e.g. an enacting formula). Use the refersTo attribute for the specification of the actual type of formula. -->
-&lt;!ELEMENT formula    @blocksopt; >
+&lt;!ELEMENT formula    @blocksreq; >
 &lt;!ATTLIST formula    ##name; >
 
 </include>
@@ -666,7 +675,7 @@
 &lt;!ELEMENT transitional    @hierarchy; >
 </include>	
 &lt;!--- the element content is the final container in a hierarchy, and is where the blocks of text of the content of the structure are finally specified  -->
-&lt;!ELEMENT content       @blocksopt; >
+&lt;!ELEMENT content       @blocksreq; >
 </include>
 
 <include desc="heading for structured and hierarchical elements $num, $heading, $subheading"/>
@@ -674,13 +683,13 @@
 &lt;!--- the element num is a heading element in a hierarchy that contains a number or any other ordered mechanism to identify the structure. -->
 &lt;!ELEMENT num           @inline; >
 &lt;!--- the element heading is a heading element in a hierarchy that contains a title or any other textual content to describe the structure. -->
-&lt;!ELEMENT heading       @inline; >
+&lt;!ELEMENT heading       @inlinereq; >
 &lt;!--- the element subheading is a heading element in a hierarchy that contains a subtitle or any other textual content to further describe the structure. -->
 &lt;!ELEMENT subheading    @inline; >
 &lt;!--- the element intro is a heading element in a hierarchy that contains paragraphs introducing one or more lower hierarchical elements. -->
-&lt;!ELEMENT intro    @blocksopt; >
+&lt;!ELEMENT intro    @blocksreq; >
 &lt;!--- the element wrap is a concluding element in a hierarchy that contains paragraphs wrapping up the preceding lower hierarchical elements. -->
-&lt;!ELEMENT wrap    @blocksopt; >
+&lt;!ELEMENT wrap    @blocksreq; >
 
 	
 <include if="debateDocs" desc="Named structural elements $administrationOfOath, $declarationOfVote, $communication, $petitions, $papers, $noticesOfMotion, $question, $address, $proceduralMotion, $pointOfOrder">
@@ -749,7 +758,7 @@
 &lt;!--- the element answer is a container of a single official answer to a question -->
 &lt;!ELEMENT answer              @speechType; >
 &lt;!--- the element other is a container of parts of a debate that are not speeches, nor scene comments (e.g., lists of papers, etc.) -->
-&lt;!ELEMENT other               @blocksopt; >
+&lt;!ELEMENT other               @blocksreq; >
 &lt;!--- the element scene is a container of descriptions of the scene elements happening in a given moment during a debate (e.g., applauses) -->
 &lt;!ELEMENT scene               @inline; >
 &lt;!--- the element narrative is a block element in a debate to mark description in the third person of events taking place in the meeting, e.g. "Mr X. takes the Chair" -->

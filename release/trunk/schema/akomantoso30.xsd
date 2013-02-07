@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD01"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD01"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02"
             elementFormDefault="qualified">
 
 
@@ -16,7 +16,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 20/1/2013 - Akoma Ntoso 3.0 CSD01
+		Release 6/2/2013 - Akoma Ntoso 3.0 CSD02
 		Complete version.
 		
 		
@@ -687,11 +687,12 @@ The attribute date is used to give a normalized value for a date according to th
 			         <type>Attlist</type>
             <name>datetime</name>
             <comment>
-The attribute datetime is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DDThh:mm</comment>
+These attributes are used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD and an optional normalized value for a time according to the XSD syntax hh:mm:ss</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="datetime" type="xsd:dateTime" use="required"/>
+		    <xsd:attribute name="date" type="xsd:date" use="required"/>
+		    <xsd:attribute name="time" type="xsd:time"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="time">
@@ -704,7 +705,7 @@ The attribute time is used to give a normalized value for a time according to th
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="time" type="xsd:dateTime" use="required"/>
+		    <xsd:attribute name="time" type="xsd:time" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="link">
@@ -920,11 +921,12 @@ The attribute outcome is used to identify the outcome of a step in a workflow. I
 			         <type>Attlist</type>
             <name>quote</name>
             <comment>
-The attribute quote is used in quotedText, quotedStructure, extractText and extractStructure to specify the quote character delimiting the quoted or extracted part.</comment>
+The attributes startQuote and endQuote are used in quotedText, quotedStructure, extractText and extractStructure to specify the start and quote character delimiting the quoted or extracted part. If the characters are the same, one can use only startQuote.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="quote" type="xsd:string"/>
+		    <xsd:attribute name="startQuote" type="xsd:string"/>
+		    <xsd:attribute name="endQuote" type="xsd:string"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="cellattrs">
@@ -1029,11 +1031,12 @@ This attribute creates a connection between the element and an element of the Ak
 			         <type>Attlist</type>
             <name>xmllang</name>
             <comment>
-This attribute specifies the human language in which the content of the element is expressed. Values are taken from the RFC 4646. xml:lang is a reserved attribute of XML, and cannot be used for any other purpose than this one.</comment>
+These attribute specify the human language in which the content of the element is expressed as well as the rules for whitespace management in the element. Values for xml:lang are taken from the RFC 4646. Both xml:lang and xml:space are reserved attributes of the XML language, and cannot be used for any other purpose than these ones.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:attribute ref="xml:lang"/>
+		    <xsd:attribute ref="xml:space"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="corereq">
@@ -1614,7 +1617,7 @@ the complex type linkType defines the empty content model and the list of attrib
 		    </xsd:annotation>
 
 		    <xsd:attributeGroup ref="core"/>
-		    <xsd:attributeGroup ref="idopt"/>
+		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="link"/>
 		    <xsd:attributeGroup ref="show"/>
 	  </xsd:complexType>
@@ -2236,7 +2239,7 @@ the element amendmentBody is the container of the main hierarchy of a amendment 
 					          </xsd:choice>
 					          <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
 				        </xsd:sequence>
-				        <xsd:attributeGroup ref="coreopt"/>
+				        <xsd:attributeGroup ref="corereq"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
 	  </xsd:complexType>
@@ -2280,7 +2283,7 @@ the element recital is the individual element of the preface that is called reci
 					          </xsd:choice>
 					          <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
 				        </xsd:sequence>
-				        <xsd:attributeGroup ref="coreopt"/>
+				        <xsd:attributeGroup ref="corereq"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
 	  </xsd:complexType>
@@ -2311,7 +2314,7 @@ the element citation is the individual element of the preface that is called cit
 		
 
 
-	  <xsd:element name="longTitle" type="blocksopt">
+	  <xsd:element name="longTitle" type="blocksreq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -2336,7 +2339,7 @@ the element formula is a section of the preface or preamble that contains a form
 
 		    <xsd:complexType>
 			      <xsd:complexContent>
-				        <xsd:extension base="blocksopt">
+				        <xsd:extension base="blocksreq">
 					          <xsd:attributeGroup ref="name"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
@@ -2804,7 +2807,7 @@ this element is a hierarchical container called "transitional" either explicitly
 		
 
 
-	  <xsd:element name="content" type="blocksopt">
+	  <xsd:element name="content" type="blocksreq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -2830,7 +2833,7 @@ the element num is a heading element in a hierarchy that contains a number or an
 		
 
 
-	  <xsd:element name="heading" type="inline">
+	  <xsd:element name="heading" type="inlinereq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -2856,7 +2859,7 @@ the element subheading is a heading element in a hierarchy that contains a subti
 		
 
 
-	  <xsd:element name="intro" type="blocksopt">
+	  <xsd:element name="intro" type="blocksreq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -2869,7 +2872,7 @@ the element intro is a heading element in a hierarchy that contains paragraphs i
 		
 
 
-	  <xsd:element name="wrap" type="blocksopt">
+	  <xsd:element name="wrap" type="blocksreq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -3216,7 +3219,7 @@ the element answer is a container of a single official answer to a question</com
 		
 
 
-	  <xsd:element name="other" type="blocksopt">
+	  <xsd:element name="other" type="blocksreq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>

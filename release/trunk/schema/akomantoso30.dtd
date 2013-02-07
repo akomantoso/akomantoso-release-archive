@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 20/1/2013 - Akoma Ntoso 3.0 CSD01
+Release 6/2/2013 - Akoma Ntoso 3.0 CSD02
 Complete version.
 
 
@@ -150,9 +150,9 @@ Attribute groups
 
 <!ENTITY % date         " date %DATE; #REQUIRED" >
 
-<!ENTITY % datetime         " datetime %DATETIME; #REQUIRED" >
+<!ENTITY % datetime         " date %DATE; #REQUIRED time %TIME; #IMPLIED" >
 
-<!ENTITY % time         " time %DATETIME; #REQUIRED" >
+<!ENTITY % time         " time %TIME; #REQUIRED" >
 
 <!ENTITY % link         " href %ANYURI; #REQUIRED" >
 
@@ -191,7 +191,7 @@ Attribute groups
 <!ENTITY % outcome " outcome %ANYURI; #IMPLIED" >
 
 
-<!ENTITY % quote " quote %STRING; #IMPLIED" >
+<!ENTITY % quote " startQuote %STRING; #IMPLIED endQuote %STRING; #IMPLIED" >
 
 
 
@@ -213,7 +213,7 @@ Attribute groups
 <!ENTITY % refers       " refersTo %ANYURI; #IMPLIED" >
 
 <!ENTITY % language           "%STRING;" >
-<!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % xmllang       " xml:lang %language; #IMPLIED" >
+<!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % xmllang       " xml:lang %language; #IMPLIED xml:space (default|preserve) #IMPLIED" >
 
 
 <!ENTITY % corereq      " %core;  %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang;  %alt; " >
@@ -348,7 +348,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD01"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -488,7 +488,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT recitals    %recitalHierarchy; >
-<!ATTLIST recitals %coreopt;  >
+<!ATTLIST recitals %corereq;  >
 
 <!ELEMENT recital    %itemType; >
 <!ATTLIST recital %corereq;  >
@@ -497,17 +497,17 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT citations    %citationHierarchy; >
-<!ATTLIST citations %coreopt;  >
+<!ATTLIST citations %corereq;  >
 
 
 <!ELEMENT citation    %itemType; >
 <!ATTLIST citation %corereq;  >
 
-<!ELEMENT longTitle    %blocksopt; >
-<!ATTLIST longTitle %coreopt;  >
+<!ELEMENT longTitle    %blocksreq; >
+<!ATTLIST longTitle %corereq;  >
 
-<!ELEMENT formula    %blocksopt; >
-<!ATTLIST formula %coreopt;  >
+<!ELEMENT formula    %blocksreq; >
+<!ATTLIST formula %corereq;  >
 
 <!ATTLIST formula %name;  >
 
@@ -545,7 +545,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST componentRef %core;  %idopt;  %src;  %show;  >
 
 <!ELEMENT documentRef  %linkType; >
-<!ATTLIST documentRef %core;  %idopt;  %link;  %show;  >
+<!ATTLIST documentRef %core;  %idreq;  %link;  %show;  >
 
 
 
@@ -633,8 +633,8 @@ Elements for hierarchical documents
 <!ATTLIST transitional %corereq;  >
 
 
-<!ELEMENT content       %blocksopt; >
-<!ATTLIST content %coreopt;  >
+<!ELEMENT content       %blocksreq; >
+<!ATTLIST content %corereq;  >
 
 
 
@@ -643,17 +643,17 @@ Elements for hierarchical documents
 <!ELEMENT num           %inline; >
 <!ATTLIST num %coreopt;  >
 
-<!ELEMENT heading       %inline; >
-<!ATTLIST heading %coreopt;  >
+<!ELEMENT heading       %inlinereq; >
+<!ATTLIST heading %corereq;  >
 
 <!ELEMENT subheading    %inline; >
 <!ATTLIST subheading %coreopt;  >
 
-<!ELEMENT intro    %blocksopt; >
-<!ATTLIST intro %coreopt;  >
+<!ELEMENT intro    %blocksreq; >
+<!ATTLIST intro %corereq;  >
 
-<!ELEMENT wrap    %blocksopt; >
-<!ATTLIST wrap %coreopt;  >
+<!ELEMENT wrap    %blocksreq; >
+<!ATTLIST wrap %corereq;  >
 
 
 
@@ -748,8 +748,8 @@ Elements for debates documents
 <!ELEMENT answer              %speechType; >
 <!ATTLIST answer %coreopt;  %speechAtts;  >
 
-<!ELEMENT other               %blocksopt; >
-<!ATTLIST other %coreopt;  >
+<!ELEMENT other               %blocksreq; >
+<!ATTLIST other %corereq;  >
 
 <!ELEMENT scene               %inline; >
 <!ATTLIST scene %coreopt;  >
