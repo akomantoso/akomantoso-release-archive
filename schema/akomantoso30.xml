@@ -18,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 6/2/2013 - Akoma Ntoso 3.0 CSD02"/>
+     <report version="Release 19/2/2013 - Akoma Ntoso 3.0 CSD03"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -175,6 +175,8 @@
 &lt;!ENTITY ## value        "value        #STRING        #REQUIRED" >
 &lt;!--- The attribute value is used to specify a value for metadata elements. In elements using this attribute definition the value attribute is optional -->
 &lt;!ENTITY ## optvalue     "value        #STRING        #IMPLIED" >
+&lt;!--- The attribute value is used here to specify a boolean value for metadata elements. In elements using this attribute definition the value attribute is required -->
+&lt;!ENTITY ## booleanvalue     "value        #BOOLEAN        #REQUIRED" >
 <include if="debateDocs">
 &lt;!--- The attributes in speechAtts are used in speeches to identify actors and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section -->
 &lt;!ENTITY ## speechAtts "by           #ANYURI        #REQUIRED 
@@ -391,6 +393,7 @@
 							<include if="debateReport" v="debateReport | "/>
 							<include if="debate" v="debate | "/>														
 						</include> 
+						<include if="statementDocs" v="statement |" />
 						<include if="amendmentDocs" v="amendment |" />
 						<include if="judgementDocs" v="judgement |" />
 						<include if="components" v="fragment |" /> doc)">
@@ -426,6 +429,10 @@
 &lt;!ELEMENT doc           @openStructure; >
 &lt;!--- the element mainBody is the container of the main part of all other document types -->
 &lt;!ELEMENT mainBody     @maincontent; >
+<include if="statementDocs" label="Statement" desc="Document type $statement">
+&lt;!--- Element statement is used for describing the structure and content of a official documents of a legislative assembly that are not normative in structure (e.g., statements, non-normative resolutions, etc.). -->
+&lt;!ELEMENT statement  @openStructure; >
+</include>
 
 	
 <include if="collectionDocs" label="Collections of smaller documents" desc="Document types $amendmentList, $officialGazette and $documentCollection">		
@@ -436,7 +443,7 @@
                                    collectionBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 <include if="amendmentList" dependsOn="collectionDocs" label="Amendment list" desc="A document containing lists of amendments" >
 &lt;!--- Element amendmentList is used for describing the structure and content of a collection of amendments -->
@@ -448,7 +455,6 @@
 </include>
 &lt;!--- Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever -->
 &lt;!ELEMENT documentCollection           @collectionStructure; >
-&lt;!ATTLIST documentCollection           ##name; >
 
 &lt;!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
 &lt;!ELEMENT interstitial  @blocksreq; >
@@ -483,7 +489,7 @@
                                      body, 
                                      conclusions?, 
                                      attachments?)" 
-                                   " contains #versionType; 'originalVersion'">
+                                   "##name; contains #versionType; 'originalVersion'">
 <include if="act" dependsOn="legislativeDocs" label="Acts" desc="legislative document $act">
 &lt;!--- Element act is used for describing the structure and content of an act -->
 &lt;!ELEMENT act           @hierarchicalStructure; >
@@ -507,7 +513,7 @@
                                    debateBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 <include if="debateReport" dependsOn="debateDocs" label="Debate reports" desc="Document type $debateReport">
 &lt;!--- Element debateReport is used for describing the structure and content of a report -->
@@ -532,7 +538,7 @@
                                    judgementBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 &lt;!--- Element judgement is used for describing the structure and content of a judgement -->
 &lt;!ELEMENT judgement     @judgementStructure; >
@@ -551,7 +557,7 @@
                                    amendmentBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 &lt;!--- Element amendment is used for describing the structure and content of an amendment -->
 &lt;!ELEMENT amendment     @amendmentStructure; >
@@ -1243,9 +1249,9 @@
 &lt;!--- The complexType coreProperties lists the identifying properties available at any of the FRBR hierarchy levels. -->
 &lt;!ENTITY @ coreProperties   "(FRBRthis, FRBRuri+, FRBRalias*, FRBRdate+, FRBRauthor+ <include if="advancedMetadata" v=", componentInfo?, preservation?"/>)" >
 &lt;!--- The group workProperties lists the properties that are characteristics of the FRBR Work level. -->
-&lt;!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber?, FRBRname?)" >
+&lt;!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber?, FRBRname?, FRBRprescriptive?, FRBRauthoritative?)" >
 &lt;!--- The group exprProperties lists the properties that are characteristics of the FRBR Expression level. -->
-&lt;!ENTITY @@ exprProperties   "(FRBRlanguage+, FRBRtranslation*)" >
+&lt;!ENTITY @@ exprProperties   "(FRBRauthoritative?, FRBRlanguage+, FRBRtranslation*)" >
 &lt;!--- The group manifProperties lists the properties that are characteristics of the FRBR Expression level. -->
 &lt;!ENTITY @@ manifProperties   "(FRBRformat?)" >
 
@@ -1260,6 +1266,8 @@
 
 &lt;!--- The type valueType specifies a value attribute to FRBR elements. -->
 &lt;!ENTITY @ valueType   "@metaopt;" "##value;" >
+&lt;!--- The type booleanValueType specifies a boolean value attribute to FRBR elements. -->
+&lt;!ENTITY @ booleanValueType   "@metaopt;" "##booleanvalue;" >
 &lt;!--- The element FRBRthis is the metadata property containing the URI of the specific component of the document in the respective level of the FRBR hierarchy -->
 &lt;!ELEMENT FRBRthis             @valueType;>
 &lt;!--- The element FRBRuri is the metadata property containing the URI of the whole document in the respective level of the FRBR hierarchy -->
@@ -1297,7 +1305,10 @@
 &lt;!ELEMENT FRBRname            @valueType;>
 &lt;!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level URI of this document -->
 &lt;!ELEMENT FRBRformat            @valueType;>
-
+&lt;!--- The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly. -->
+&lt;!ELEMENT FRBRprescriptive      @booleanValueType;>
+&lt;!--- The element FRBRauthoritative is the metadata property containing a boolean value to determine whether the document contains authoritative text (i.e., content that is the official, authoritative product of an official workflow from an entity that is entrusted with generating an official, authoriative version of the document. -->
+&lt;!ELEMENT FRBRauthoritative      @booleanValueType;>
 
 <include if="advancedMetadata" dependsOn="core" label="Advanced metadata" desc="Advanced metadata specifications for specific needs: $componentInfo and $preservation">
 &lt;!--- The element components is the metadata property containing a list of component elements in the respective level of the FRBR hierarchy. -->

@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 6/2/2013 - Akoma Ntoso 3.0 CSD02
+Release 19/2/2013 - Akoma Ntoso 3.0 CSD03
 Complete version.
 
 
@@ -161,6 +161,8 @@ Attribute groups
 <!ENTITY % value        " value %STRING; #REQUIRED" >
 
 <!ENTITY % optvalue     " value %STRING; #IMPLIED" >
+
+<!ENTITY % booleanvalue     " value %BOOLEAN; #REQUIRED" >
 
 
 <!ENTITY % speechAtts " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED startTime %DATETIME; #IMPLIED endTime %DATETIME; #IMPLIED to %ANYURI; #IMPLIED" >
@@ -332,7 +334,7 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 =====================================================================  -->
 
 
-<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | amendment | judgement | fragment | doc" >
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgement | fragment | doc" >
 
 
 
@@ -348,7 +350,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD03"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -363,6 +365,11 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST mainBody %coreopt;  >
 
 
+<!ELEMENT statement  %openStructure; >
+<!ATTLIST statement %name;  contains %versionType; 'originalVersion'  >
+
+
+
 
 
 <!ENTITY % collectionStructure "(meta,coverPage?,preface?,collectionBody,conclusions?,attachments?)" >
@@ -370,18 +377,16 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT amendmentList           %collectionStructure; >
-<!ATTLIST amendmentList contains %versionType; 'originalVersion'  >
+<!ATTLIST amendmentList %name;  contains %versionType; 'originalVersion'  >
 
 
 
 <!ELEMENT officialGazette           %collectionStructure; >
-<!ATTLIST officialGazette contains %versionType; 'originalVersion'  >
+<!ATTLIST officialGazette %name;  contains %versionType; 'originalVersion'  >
 
 
 <!ELEMENT documentCollection           %collectionStructure; >
-<!ATTLIST documentCollection contains %versionType; 'originalVersion'  >
-
-<!ATTLIST documentCollection %name;  >
+<!ATTLIST documentCollection %name;  contains %versionType; 'originalVersion'  >
 
 
 <!ELEMENT interstitial  %blocksreq; >
@@ -415,12 +420,12 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT act           %hierarchicalStructure; >
-<!ATTLIST act contains %versionType; 'originalVersion'  >
+<!ATTLIST act %name;  contains %versionType; 'originalVersion'  >
 
 
 
 <!ELEMENT bill          %hierarchicalStructure; >
-<!ATTLIST bill contains %versionType; 'originalVersion'  >
+<!ATTLIST bill %name;  contains %versionType; 'originalVersion'  >
 
 
 
@@ -442,7 +447,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT debate  %debateStructure; >
-<!ATTLIST debate contains %versionType; 'originalVersion'  >
+<!ATTLIST debate %name;  contains %versionType; 'originalVersion'  >
 
 
 
@@ -458,7 +463,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT judgement     %judgementStructure; >
-<!ATTLIST judgement contains %versionType; 'originalVersion'  >
+<!ATTLIST judgement %name;  contains %versionType; 'originalVersion'  >
 
 
 <!ENTITY % judgementBodyType  "(%judgementBlock;)+" >
@@ -473,7 +478,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT amendment     %amendmentStructure; >
-<!ATTLIST amendment contains %versionType; 'originalVersion'  >
+<!ATTLIST amendment %name;  contains %versionType; 'originalVersion'  >
 
 
 <!ENTITY % amendmentBodyType  "(%amendmentBlock;)+" >
@@ -1355,9 +1360,9 @@ Metadata elements for all documents
 
 <!ENTITY % coreProperties   "(FRBRthis,FRBRuri+,FRBRalias*,FRBRdate+,FRBRauthor+,componentInfo?,preservation?)" >
 
-<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber? , FRBRname?" >
+<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber? , FRBRname? , FRBRprescriptive? , FRBRauthoritative?" >
 
-<!ENTITY % exprProperties   "FRBRlanguage+ , FRBRtranslation*" >
+<!ENTITY % exprProperties   "FRBRauthoritative? , FRBRlanguage+ , FRBRtranslation*" >
 
 <!ENTITY % manifProperties   "FRBRformat?" >
 
@@ -1372,6 +1377,8 @@ Metadata elements for all documents
 
 
 <!ENTITY % valueType   "%metaopt;" >
+
+<!ENTITY % booleanValueType   "%metaopt;" >
 
 <!ELEMENT FRBRthis             %valueType; >
 <!ATTLIST FRBRthis %value;  %core;  %idopt;  >
@@ -1422,6 +1429,11 @@ Metadata elements for all documents
 <!ELEMENT FRBRformat            %valueType; >
 <!ATTLIST FRBRformat %value;  %core;  %idopt;  >
 
+<!ELEMENT FRBRprescriptive      %booleanValueType; >
+<!ATTLIST FRBRprescriptive %booleanvalue;  %core;  %idopt;  >
+
+<!ELEMENT FRBRauthoritative      %booleanValueType; >
+<!ATTLIST FRBRauthoritative %booleanvalue;  %core;  %idopt;  >
 
 
 
