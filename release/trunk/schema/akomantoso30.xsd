@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD03"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD03"
             elementFormDefault="qualified">
 
 
@@ -16,7 +16,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 6/2/2013 - Akoma Ntoso 3.0 CSD02
+		Release 19/2/2013 - Akoma Ntoso 3.0 CSD03
 		Complete version.
 		
 		
@@ -758,6 +758,19 @@ The attribute value is used to specify a value for metadata elements. In element
 		    </xsd:annotation>
 
 		    <xsd:attribute name="value" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="booleanvalue">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>booleanvalue</name>
+            <comment>
+The attribute value is used here to specify a boolean value for metadata elements. In elements using this attribute definition the value attribute is required</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="value" type="xsd:boolean" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="speechAtts">
@@ -1671,6 +1684,7 @@ the type documentType lists all the document types that are managed by Akoma Nto
 			      <xsd:element ref="bill"/>
 			      <xsd:element ref="debateReport"/>
 			      <xsd:element ref="debate"/>
+			      <xsd:element ref="statement"/>
 			      <xsd:element ref="amendment"/>
 			      <xsd:element ref="judgement"/>
 			      <xsd:element ref="fragment"/>
@@ -1773,6 +1787,19 @@ the element mainBody is the container of the main part of all other document typ
 		
 
 
+	  <xsd:element name="statement" type="openStructure">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>statement</name>
+            <comment>
+Element statement is used for describing the structure and content of a official documents of a legislative assembly that are not normative in structure (e.g., statements, non-normative resolutions, etc.).</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
 	  <xsd:complexType name="collectionStructure">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -1791,6 +1818,7 @@ the type collectionStructure specifies the overall content model of the document
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="name"/>
 		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
 	  </xsd:complexType>
 
@@ -1820,8 +1848,8 @@ Element officialGazette is used for describing the structure and content of an i
 		
 
 
-	  <xsd:element name="documentCollection">
-		    <xsd:annotation>
+	  <xsd:element name="documentCollection" type="collectionStructure">
+      <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>documentCollection</name>
@@ -1829,15 +1857,9 @@ Element officialGazette is used for describing the structure and content of an i
 Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+   </xsd:element>
+		
 
-		    <xsd:complexType>
-			      <xsd:complexContent>
-				        <xsd:extension base="collectionStructure">
-					          <xsd:attributeGroup ref="name"/>
-				        </xsd:extension>
-			      </xsd:complexContent>
-		    </xsd:complexType>
-	  </xsd:element>
 
 	  <xsd:element name="interstitial" type="blocksreq">
       <xsd:annotation>
@@ -1965,6 +1987,7 @@ the type hierarchicalStructure specifies the overall content model of the docume
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="name"/>
 		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
 	  </xsd:complexType>
 
@@ -2042,6 +2065,7 @@ the type debateStructure specifies the overall content model of the document typ
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="name"/>
 		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
 	  </xsd:complexType>
 
@@ -2118,6 +2142,7 @@ the type judgementStructure specifies the overall content model of the document 
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="name"/>
 		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
 	  </xsd:complexType>
 
@@ -2181,6 +2206,7 @@ the type amendmentStructure specifies the overall content model of the document 
 			      <xsd:element ref="conclusions" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="attachments" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="name"/>
 		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
 	  </xsd:complexType>
 
@@ -5151,6 +5177,8 @@ The group workProperties lists the properties that are characteristics of the FR
 			      <xsd:element ref="FRBRsubtype" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRnumber" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRname" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="FRBRprescriptive" minOccurs="0" maxOccurs="1"/>
+			      <xsd:element ref="FRBRauthoritative" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 	  </xsd:group>
 
@@ -5165,6 +5193,7 @@ The group exprProperties lists the properties that are characteristics of the FR
 		    </xsd:annotation>
 
 		    <xsd:sequence>
+			      <xsd:element ref="FRBRauthoritative" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRlanguage" minOccurs="1" maxOccurs="unbounded"/>
 			      <xsd:element ref="FRBRtranslation" minOccurs="0" maxOccurs="unbounded"/>
 		    </xsd:sequence>
@@ -5274,6 +5303,23 @@ The type valueType specifies a value attribute to FRBR elements.</comment>
 		    <xsd:complexContent>
 			      <xsd:extension base="metaopt">
 				        <xsd:attributeGroup ref="value"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
+	  </xsd:complexType>
+
+	  <xsd:complexType name="booleanValueType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Complex</type>
+            <name>booleanValueType</name>
+            <comment>
+The type booleanValueType specifies a boolean value attribute to FRBR elements.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexContent>
+			      <xsd:extension base="metaopt">
+				        <xsd:attributeGroup ref="booleanvalue"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
 	  </xsd:complexType>
@@ -5465,6 +5511,32 @@ The element FRBRname is the metadata property containing a string for the title 
             <name>FRBRformat</name>
             <comment>
 The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level URI of this document</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRprescriptive" type="booleanValueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRprescriptive</name>
+            <comment>
+The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRauthoritative" type="booleanValueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRauthoritative</name>
+            <comment>
+The element FRBRauthoritative is the metadata property containing a boolean value to determine whether the document contains authoritative text (i.e., content that is the official, authoritative product of an official workflow from an entity that is entrusted with generating an official, authoriative version of the document.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>

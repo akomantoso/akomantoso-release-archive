@@ -5,7 +5,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     Release 6/2/2013 - Akoma Ntoso 3.0 CSD02 
+     Release 19/2/2013 - Akoma Ntoso 3.0 CSD03 
 				Complete version. 
 			
 
@@ -164,6 +164,8 @@
 <!ENTITY ## value        "value        #STRING        #REQUIRED" >
 <!--- The attribute value is used to specify a value for metadata elements. In elements using this attribute definition the value attribute is optional -->
 <!ENTITY ## optvalue     "value        #STRING        #IMPLIED" >
+<!--- The attribute value is used here to specify a boolean value for metadata elements. In elements using this attribute definition the value attribute is required -->
+<!ENTITY ## booleanvalue     "value        #BOOLEAN        #REQUIRED" >
 
 <!--- The attributes in speechAtts are used in speeches to identify actors and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section -->
 <!ENTITY ## speechAtts "by           #ANYURI        #REQUIRED 
@@ -380,6 +382,7 @@
 							debateReport | 
 							debate | 														
 						 
+						statement |
 						amendment |
 						judgement |
 						fragment | doc)">
@@ -416,6 +419,10 @@
 <!--- the element mainBody is the container of the main part of all other document types -->
 <!ELEMENT mainBody     @maincontent; >
 
+<!--- Element statement is used for describing the structure and content of a official documents of a legislative assembly that are not normative in structure (e.g., statements, non-normative resolutions, etc.). -->
+<!ELEMENT statement  @openStructure; >
+
+
 	
 		
 <!--- the type collectionStructure specifies the overall content model of the document types that are collections of other documents -->
@@ -425,7 +432,7 @@
                                    collectionBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 
 <!--- Element amendmentList is used for describing the structure and content of a collection of amendments -->
@@ -437,7 +444,6 @@
 
 <!--- Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever -->
 <!ELEMENT documentCollection           @collectionStructure; >
-<!ATTLIST documentCollection           ##name; >
 
 <!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
 <!ELEMENT interstitial  @blocksreq; >
@@ -472,7 +478,7 @@
                                      body, 
                                      conclusions?, 
                                      attachments?)" 
-                                   " contains #versionType; 'originalVersion'">
+                                   "##name; contains #versionType; 'originalVersion'">
 
 <!--- Element act is used for describing the structure and content of an act -->
 <!ELEMENT act           @hierarchicalStructure; >
@@ -496,7 +502,7 @@
                                    debateBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 
 <!--- Element debateReport is used for describing the structure and content of a report -->
@@ -521,7 +527,7 @@
                                    judgementBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 <!--- Element judgement is used for describing the structure and content of a judgement -->
 <!ELEMENT judgement     @judgementStructure; >
@@ -540,7 +546,7 @@
                                    amendmentBody, 
                                    conclusions?, 
                                    attachments?)" 
-                                 " contains #versionType; 'originalVersion'">
+                                 "##name; contains #versionType; 'originalVersion'">
 
 <!--- Element amendment is used for describing the structure and content of an amendment -->
 <!ELEMENT amendment     @amendmentStructure; >
@@ -1232,9 +1238,9 @@
 <!--- The complexType coreProperties lists the identifying properties available at any of the FRBR hierarchy levels. -->
 <!ENTITY @ coreProperties   "(FRBRthis, FRBRuri+, FRBRalias*, FRBRdate+, FRBRauthor+ , componentInfo?, preservation?)" >
 <!--- The group workProperties lists the properties that are characteristics of the FRBR Work level. -->
-<!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber?, FRBRname?)" >
+<!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber?, FRBRname?, FRBRprescriptive?, FRBRauthoritative?)" >
 <!--- The group exprProperties lists the properties that are characteristics of the FRBR Expression level. -->
-<!ENTITY @@ exprProperties   "(FRBRlanguage+, FRBRtranslation*)" >
+<!ENTITY @@ exprProperties   "(FRBRauthoritative?, FRBRlanguage+, FRBRtranslation*)" >
 <!--- The group manifProperties lists the properties that are characteristics of the FRBR Expression level. -->
 <!ENTITY @@ manifProperties   "(FRBRformat?)" >
 
@@ -1249,6 +1255,8 @@
 
 <!--- The type valueType specifies a value attribute to FRBR elements. -->
 <!ENTITY @ valueType   "@metaopt;" "##value;" >
+<!--- The type booleanValueType specifies a boolean value attribute to FRBR elements. -->
+<!ENTITY @ booleanValueType   "@metaopt;" "##booleanvalue;" >
 <!--- The element FRBRthis is the metadata property containing the URI of the specific component of the document in the respective level of the FRBR hierarchy -->
 <!ELEMENT FRBRthis             @valueType;>
 <!--- The element FRBRuri is the metadata property containing the URI of the whole document in the respective level of the FRBR hierarchy -->
@@ -1286,7 +1294,10 @@
 <!ELEMENT FRBRname            @valueType;>
 <!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level URI of this document -->
 <!ELEMENT FRBRformat            @valueType;>
-
+<!--- The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly. -->
+<!ELEMENT FRBRprescriptive      @booleanValueType;>
+<!--- The element FRBRauthoritative is the metadata property containing a boolean value to determine whether the document contains authoritative text (i.e., content that is the official, authoritative product of an official workflow from an entity that is entrusted with generating an official, authoriative version of the document. -->
+<!ELEMENT FRBRauthoritative      @booleanValueType;>
 
 
 <!--- The element components is the metadata property containing a list of component elements in the respective level of the FRBR hierarchy. -->
