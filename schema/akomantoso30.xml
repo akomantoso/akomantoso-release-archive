@@ -5,7 +5,7 @@
 		<combo id="bills" name="Bills" desc="All elements for describing bills and legislative documents being drafted and discussed" content="core legislativeDocs bill tblock semantic advancedRefs authorialNote specials delimiters table"/>
 		<combo id="amendments" name="Amendments" desc="All elements for describing amendments and amendment lists" content="core legislativeDocs collectionDocs amendmentDocs amendmentList advancedPreface specials authorialNote"/>
 		<combo id="debates" name="Debates and hansards" desc="All elements for describing hansards and debates" content="core debateDocs debate advancedPreface authorialNote toc delimiters"/>
-		<combo id="judgements" name="Judgements" desc="All elements for describing judgements and sentences" content="core judgementDocs advancedPreface tblock authorialNote"/>
+		<combo id="judgments" name="judgments" desc="All elements for describing judgments and sentences" content="core judgmentDocs advancedPreface tblock authorialNote"/>
 		<combo id="minutes" name="Minutes" desc="All elements for describing minutes in a Parliament setting" content="debateDocs debateReport core tblock toc advancedPreface semantic advancedRefs"/>
 		<combo id="orderOfTheDay" name="Order of the Day" desc="All elements for describing orders of the day in a Parliament setting" content="core tblock toc authorialNote"/>	
 		<combo id="reports" name="Reports" desc="All elements for describing reports in a Parliament setting" content="core tblock toc advancedPreface semantic authorialNote table"/>	
@@ -18,7 +18,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 19/2/2013 - Akoma Ntoso 3.0 CSD03"/>
+     <report version="Release 23/7/2013 - Akoma Ntoso 3.0 CSD05"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -46,7 +46,7 @@
      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD02'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD05'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -56,7 +56,7 @@
      ===================================================================== -->
 <include if="legislativeDocs">
 &lt;!--- The group ANhier lists the elements that belong to the Akoma Ntoso legislative hierarchy -->
-&lt;!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title<include if="optHierarchy" v="|article|book|tome|division|list"/> <include if="smallHierarchy" v="|point|indent|alinea"/><include if="additionalHierarchy" v="|subsection|subpart|subparagraph|subchapter|subtitle|subclause|sublist"/>)" >
+&lt;!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title<include if="optHierarchy" v="|article|book|tome|division|list"/> <include if="smallHierarchy" v="|point|indent|alinea|rule|subrule|proviso"/><include if="additionalHierarchy" v="|subsection|subpart|subparagraph|subchapter|subtitle|subdivision|subclause|sublist"/><include if="transitionalSection" v="|transitional"/>)" >
 </include>
 <include if="debateDocs">	
 &lt;!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
@@ -64,22 +64,22 @@
 </include>
 <include if="prefaceSubstructures">	
 &lt;!--- The group basicContainers lists the elements that are containers and are specific to vocabulary of preambles, prefaces, conclusions and coverPages -->
-&lt;!ENTITY @@ basicContainers    "(formula <include if="generic" v="|container"/>)" >
+&lt;!ENTITY @@ basicContainers    "(longTitle | formula <include if="generic" v="|container"/>)" >
 &lt;!--- The group preambleContainers lists the elements that are containers and are specific to the Akoma Ntoso preamble vocabulary -->
 &lt;!ENTITY @@ preambleContainers    "(recitals | citations | formula <include if="generic" v="|container"/>)" >
 &lt;!--- The group prefaceContainers lists the elements that are containers and are specific to the Akoma Ntoso preface vocabulary -->
-&lt;!ENTITY @@ prefaceContainers    "(longTitle | formula <include if="generic" v="| container"/><include if="toc" v="| toc"/> )" >
+&lt;!ENTITY @@ prefaceContainers    "(longTitle | formula <include if="generic" v="| container"/> )" >
 </include>
 &lt;!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
-&lt;!ENTITY @@ ANblock         "(blockList <include if="tblock" v="| tblock"/>)" >
+&lt;!ENTITY @@ ANblock         "(blockList | blockContainer <include if="tblock" v="| tblock"/><include if="toc" v="| toc"/>)" >
 &lt;!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
-&lt;!ENTITY @@ ANinline        "(ref <include if="advancedRefs" v="| mref | rref"/> <include if="modifications" v="| mod | mmod | rmod"/><include if="debateDocs" v="| remark | recordedTime | vote | outcome"/> <include if="publishing" v=" | ins | del | omissis"/> <include if="extracts" v="| extractText | extractStructure"/> <include if="specials" v="| placeholder | fillIn"/>)" >
+&lt;!ENTITY @@ ANinline        "(ref <include if="advancedRefs" v="| mref | rref"/> <include if="modifications" v="| mod | mmod | rmod"/><include if="debateDocs" v="| remark | recordedTime | vote | outcome"/> <include if="publishing" v=" | ins | del | omissis"/> <include if="extracts" v="| extractText | extractStructure"/> <include if="specials" v="| placeholder | fillIn | decoration"/>)" >
 &lt;!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
 &lt;!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate <include if="legislativePreface" v="| legislature | session | shortTitle"/><include if="advancedPreface" v="| docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber"/>)" >
 
-<include if="judgementDocs">
+<include if="judgmentDocs">
 &lt;!--- The group ANheaderInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the header element -->
-&lt;!ENTITY @@ ANheaderInline  "(courtType | neutralCitation | party | judge | lawyer | signature | opinion)" >
+&lt;!ENTITY @@ ANheaderInline  "(courtType | neutralCitation | party | judge | lawyer | signature | opinion | argument)" >
 </include>
 
 <include if="semantic">
@@ -90,8 +90,8 @@
 &lt;!ENTITY @@ ANmarker        "(noteRef <include if="delimiters" v="|  eol | eop"/>)" >
 
 <include if="authorialNote">
-&lt;!--- The group ANpopup lists the elements that are popups and are specific to the Akoma Ntoso vocabulary -->
-&lt;!ENTITY @@ ANpopup          "(authorialNote )" >
+&lt;!--- The group ANsubFlow lists the elements that are subFlows and are specific to the Akoma Ntoso vocabulary -->
+&lt;!ENTITY @@ ANsubFlow          "(authorialNote )" >
 </include>
 	
 &lt;!--- The group HTMLcontainers lists the elements that are containers and were inherited from the HTML vocabulary -->
@@ -106,9 +106,9 @@
 &lt;!ENTITY @@ HTMLmarker        "(img | br)" >
 </include>
 
-<include if="judgementDocs">	
-&lt;!--- The group judgementBlock lists the structures that should be found in a judgement -->
-&lt;!ENTITY @@ judgementBlock    "(introduction | background | arguments | remedies | motivation | decision)">
+<include if="judgmentDocs">	
+&lt;!--- The group judgmentBlock lists the structures that should be found in a judgment -->
+&lt;!ENTITY @@ judgmentBlock    "(introduction | background | arguments | remedies | motivation | decision)">
 </include>
 <include if="amendmentDocs">	
 &lt;!--- The group amendmentBlock lists the structures that should be found in an amendment  -->
@@ -133,16 +133,16 @@
 &lt;!--- The group blockElements lists all the elements that are blocks -->
 &lt;!ENTITY @@ blockElements     "(@@ANblock;      | @@HTMLblock;      <include if="additionalGeneric" v="| foreign"/> <include if="generic" v="|block"/>)">
 &lt;!--- The group inlineElements lists all the elements that are inline -->
-&lt;!ENTITY @@ inlineElements    "(@@ANinline;     | @@HTMLinline;   | @@ANtitleInline;  <include if="semantic" v="| @@ANsemanticInline;"/> <include if="judgementDocs" v="|@@ANheaderInline;"/> <include if="amendmentDocs" v="|@@amendmentInline;"/> <include if="generic" v="|inline"/>     )">
+&lt;!ENTITY @@ inlineElements    "(@@ANinline;     | @@HTMLinline;   | @@ANtitleInline;  <include if="semantic" v="| @@ANsemanticInline;"/> <include if="judgmentDocs" v="|@@ANheaderInline;"/> <include if="amendmentDocs" v="|@@amendmentInline;"/> <include if="generic" v="|inline"/>     )">
 <include if="authorialNote">
-&lt;!--- The group popupElements lists all the elements that are popups -->
-&lt;!ENTITY @@ popupElements    "(@@ANpopup;  <include if="generic" v="|popup"/>)">
+&lt;!--- The group subFlowElements lists all the elements that are subFlows -->
+&lt;!ENTITY @@ subFlowElements    "(@@ANsubFlow;  <include if="generic" v="|subFlow"/>)">
 </include>
 &lt;!--- The group markerElements lists all the elements that are markers -->
 &lt;!ENTITY @@ markerElements    "(@@ANmarker;   <include if="html" v="|@@HTMLmarker; "/>  <include if="generic" v="|marker"/>  )">
 
 &lt;!--- The group inlineCM is the content model of blocks and inlines, and is composed of all the inlines and all the markers -->
-&lt;!ENTITY @@ inlineCM          "(@@inlineElements; | @@markerElements; <include if="authorialNote" v="| @@popupElements;"/>)">
+&lt;!ENTITY @@ inlineCM          "(@@inlineElements; | @@markerElements; <include if="authorialNote" v="| @@subFlowElements;"/>)">
 
 &lt;!-- =====================================================================
 
@@ -158,13 +158,8 @@
 &lt;!ENTITY ## number       "number       #STRING        #IMPLIED" >
 &lt;!--- The attribute source links to the agent (person, organization) providing the specific annotation or markup -->
 &lt;!ENTITY ## source       "source       #ANYURI        #REQUIRED" >
-&lt;!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD -->
-&lt;!ENTITY ## date         "date         #DATE          #REQUIRED" >
-&lt;!--- These attributes are used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD and an optional normalized value for a time according to the XSD syntax hh:mm:ss -->
-&lt;!ENTITY ## datetime         "
-			date         #DATE          #REQUIRED
-			time         #TIME          #IMPLIED
-" >
+&lt;!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD or a normalized value for a dateTime according to the XSD syntax YYYY-MM-DDThh:mm:ss(zzzz)  -->
+&lt;!ENTITY ## date         "date         #DATE | #DATETIME         #REQUIRED" >
 &lt;!--- The attribute time is used to give a normalized value for a time according to the XSD syntax HH:MM:SS -->
 &lt;!ENTITY ## time         "time         #TIME          #REQUIRED" >
 &lt;!--- The attribute href is used to specify an internal or external destination for a reference, a citation, an access to the ontology or a hypertext link. In elements using this attribute definition the href attribute is required -->
@@ -191,6 +186,8 @@
 </include>
 &lt;!--- These attributes are used in metadata to propose visible representations of the metadata itself. Both a full visualization (attribute showAs) and an abbreviated one (attribute shortForm) can be specified -->
 &lt;!ENTITY ## show         "showAs       #STRING        #REQUIRED  
+                          shortForm    #STRING        #IMPLIED">
+&lt;!ENTITY ## showopt    "showAs       #STRING        #IMPLIED  
                           shortForm    #STRING        #IMPLIED">
 &lt;!--- These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level URI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason. -->
 &lt;!ENTITY ## src         "src       #ANYURI        #REQUIRED  
@@ -305,7 +302,7 @@
 &lt;!ENTITY # timeType       "#STRING(startEvent|endEvent)">
 </include>
 
-<include if="judgementDocs">
+<include if="judgmentDocs">
 &lt;!--- This is the list of allowed values for the type attribute of the opinion element  -->
 &lt;!ENTITY # opinionType  "#STRING(dissenting|agreeing|null)">
 &lt;!--- This is the list of allowed values for the type attribute of the result element  -->
@@ -395,7 +392,7 @@
 						</include> 
 						<include if="statementDocs" v="statement |" />
 						<include if="amendmentDocs" v="amendment |" />
-						<include if="judgementDocs" v="judgement |" />
+						<include if="judgmentDocs" v="judgment |" />
 						<include if="components" v="fragment |" /> doc)">
 
   
@@ -422,7 +419,8 @@
                                  preamble?, 
                                  mainBody, 
                                  conclusions?, 
-                                 attachments?)" 
+                                 attachments?
+                                 <include if="components" v=", components?"/>)" 
                                  "##name; contains #versionType; 'originalVersion'">
 
 &lt;!--- Element doc is used for describing the structure and content of any other document that is not included in the list of document explicitly managed by Akoma Ntoso -->
@@ -440,9 +438,11 @@
 &lt;!ENTITY @ collectionStructure "(meta, 
                                    coverPage?,
                                    preface?,
+                                   preamble?, 
                                    collectionBody, 
                                    conclusions?, 
-                                   attachments?)" 
+                                   attachments?
+                                   <include if="components" v=", components?"/>)" 
                                  "##name; contains #versionType; 'originalVersion'">
 
 <include if="amendmentList" dependsOn="collectionDocs" label="Amendment list" desc="A document containing lists of amendments" >
@@ -488,7 +488,8 @@
                                      preamble?, 
                                      body, 
                                      conclusions?, 
-                                     attachments?)" 
+                                     attachments?
+                                     <include if="components" v=", components?"/>)" 
                                    "##name; contains #versionType; 'originalVersion'">
 <include if="act" dependsOn="legislativeDocs" label="Acts" desc="legislative document $act">
 &lt;!--- Element act is used for describing the structure and content of an act -->
@@ -512,7 +513,8 @@
                                    preface?,
                                    debateBody, 
                                    conclusions?, 
-                                   attachments?)" 
+                                   attachments?
+                                   <include if="components" v=", components?"/>)" 
                                  "##name; contains #versionType; 'originalVersion'">
 
 <include if="debateReport" dependsOn="debateDocs" label="Debate reports" desc="Document type $debateReport">
@@ -530,23 +532,24 @@
 &lt;!ELEMENT debateBody        @debateBodyType;   >
 </include>
 
-<include if="judgementDocs" label="Judgements" desc="Document type $judgement">
-&lt;!--- the type judgementStructure specifies the overall content model of the document types that describe judgements -->
-&lt;!ENTITY @ judgementStructure  "(meta, 
+<include if="judgmentDocs" label="judgments" desc="Document type $judgment">
+&lt;!--- the type judgmentStructure specifies the overall content model of the document types that describe judgments -->
+&lt;!ENTITY @ judgmentStructure  "(meta, 
                                    coverPage?,
                                    header,
-                                   judgementBody, 
+                                   judgmentBody, 
                                    conclusions?, 
-                                   attachments?)" 
+                                   attachments?
+                                   <include if="components" v=", components?"/>)" 
                                  "##name; contains #versionType; 'originalVersion'">
 
-&lt;!--- Element judgement is used for describing the structure and content of a judgement -->
-&lt;!ELEMENT judgement     @judgementStructure; >
+&lt;!--- Element judgment is used for describing the structure and content of a judgment -->
+&lt;!ELEMENT judgment     @judgmentStructure; >
 
-&lt;!--- the type judgementBodyType specifies a content model of the main hierarchy of a judgement document -->
-&lt;!ENTITY @ judgementBodyType  "(@@judgementBlock;)+" "##coreopt;" >	
-&lt;!--- the element judgementBody is the container of the main hierarchy of a judgement document -->
-&lt;!ELEMENT judgementBody   @judgementBodyType; >
+&lt;!--- the type judgmentBodyType specifies a content model of the main hierarchy of a judgment document -->
+&lt;!ENTITY @ judgmentBodyType  "(@@judgmentBlock;)+" "##coreopt;" >	
+&lt;!--- the element judgmentBody is the container of the main hierarchy of a judgment document -->
+&lt;!ELEMENT judgmentBody   @judgmentBodyType; >
 </include>
 	
 <include if="amendmentDocs" label="Amendments" desc="Document type $amendment">
@@ -556,7 +559,8 @@
                                    preface?,
                                    amendmentBody, 
                                    conclusions?, 
-                                   attachments?)" 
+                                   attachments?
+                                   <include if="components" v=", components?"/>)" 
                                  "##name; contains #versionType; 'originalVersion'">
 
 &lt;!--- Element amendment is used for describing the structure and content of an amendment -->
@@ -608,7 +612,7 @@
 &lt;!ELEMENT preface     @prefaceopt; >
 &lt;!--- the element conclusion is used as a container of all concluding material (e.g. dates, signatures, formulas, etc.) -->
 &lt;!ELEMENT conclusions @basicopt; >
-&lt;!--- the element header is used as a container of all prefacing material of judgements (e.g. headers, formulas, etc.) -->
+&lt;!--- the element header is used as a container of all prefacing material of judgments (e.g. headers, formulas, etc.) -->
 &lt;!ELEMENT header      @blocksopt; >
 &lt;!--- the element attachments is used as a container of individual attachment elements -->
 &lt;!ELEMENT attachments (@@documentType; <include if="components" v="| documentRef"/>)+ >
@@ -650,15 +654,21 @@
 &lt;!--- this element is a hierarchical container called "list" either explicitly or due to the local tradition -->
 &lt;!ELEMENT list          @hierarchy; >
 </include>
-<include if="smallHierarchy" dependsOn="legislativeDocs" label="Small hierarchical elements" desc="hierarchical elements of smaller fragments of a hierarchy, such as $point, $indent, $alinea">
+<include if="smallHierarchy" dependsOn="legislativeDocs" label="Small hierarchical elements" desc="hierarchical elements of smaller fragments of a hierarchy, such as $point, $indent, $alinea, $rule, $subrule, $proviso.">
 &lt;!--- this element is a hierarchical container called "point" either explicitly or due to the local tradition -->
 &lt;!ELEMENT point    @hierarchy; >
 &lt;!--- this element is a hierarchical container called "indent" either explicitly or due to the local tradition -->
 &lt;!ELEMENT indent    @hierarchy; >
 &lt;!--- this element is a hierarchical container called "alinea" either explicitly or due to the local tradition -->
 &lt;!ELEMENT alinea    @hierarchy; >
+&lt;!--- this element is a hierarchical container called "rule" either explicitly or due to the local tradition -->
+&lt;!ELEMENT rule      @hierarchy; >
+&lt;!--- this element is a hierarchical container called "subrule" either explicitly or due to the local tradition -->
+&lt;!ELEMENT subrule   @hierarchy; >
+&lt;!--- this element is a hierarchical container called "proviso" either explicitly or due to the local tradition -->
+&lt;!ELEMENT proviso   @hierarchy; >
 </include>
-<include if="additionalHierarchy" dependsOn="legislativeDocs" label="Additional hierarchy" desc="infrequent hierarchical elements $subsection, $subpart, $subparagraph, $subchapter, $subtitle, $subclause and $sublist">
+<include if="additionalHierarchy" dependsOn="legislativeDocs" label="Additional hierarchy" desc="infrequent hierarchical elements $subsection, $subpart, $subparagraph, $subchapter, $subtitle, $subdivision, $subclause and $sublist">
 &lt;!--- this element is a hierarchical container called "subsection" either explicitly or due to the local tradition -->
 &lt;!ELEMENT subsection    @hierarchy; >
 &lt;!--- this element is a hierarchical container called "subpart" either explicitly or due to the local tradition -->
@@ -782,19 +792,19 @@
 
 
 </include>
-<include if="judgementDocs" desc="Structural elements $introduction, $background, $argument, $remedies, $motivation and $decision">
+<include if="judgmentDocs" desc="Structural elements $introduction, $background, $arguments, $remedies, $motivation and $decision">
 
-&lt;!--- this element is a structural container for the section of a judgement containing introductory material -->
+&lt;!--- this element is a structural container for the section of a judgment containing introductory material -->
 &lt;!ELEMENT introduction        @maincontent; >
-&lt;!--- this element is a structural container for the section of a judgement containing the background  -->
+&lt;!--- this element is a structural container for the section of a judgment containing the background  -->
 &lt;!ELEMENT background          @maincontent; >
-&lt;!--- this element is a structural container for the section of a judgement containing the arguments  -->
+&lt;!--- this element is a structural container for the section of a judgment containing the arguments  -->
 &lt;!ELEMENT arguments          @maincontent; >
-&lt;!--- this element is a structural container for the section of a judgement containing the remedies  -->
+&lt;!--- this element is a structural container for the section of a judgment containing the remedies  -->
 &lt;!ELEMENT remedies          @maincontent; >
-&lt;!--- this element is a structural container for the section of a judgement containing the motivation  -->
+&lt;!--- this element is a structural container for the section of a judgment containing the motivation  -->
 &lt;!ELEMENT motivation          @maincontent; >
-&lt;!--- this element is a structural container for the section of a judgement containing the decision -->
+&lt;!--- this element is a structural container for the section of a judgment containing the decision -->
 &lt;!ELEMENT decision            @maincontent; >
 </include>
 <include if="amendmentDocs" desc="Structural elements $amendmentHeading, $amendmentContent, $amendmentReference and $amendmentJustification">
@@ -826,8 +836,12 @@
     main document, the list item and the titled block
     
     ===================================================================== -->
-<include desc="Elements for lists: $list, $listIntroduction, $item, and $listConclusion"/>
-&lt;!--- the element list is used as a container of many individual item elements put in a list -->
+<include desc="Block-context peculiar elements: $blockContainer, $blockList, $listIntroduction, $item, and $listConclusion"/>
+&lt;!--- the element blockContainer is used as a container of many individual block elements in a block context -->
+&lt;!ENTITY @ blockContainerType      "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> @@blockElements;)+, wrap?)"            "##corereq;" >
+&lt;!ELEMENT blockContainer           @blockContainerType; >
+
+&lt;!--- the element blocklist is used as a container of many individual item elements put in a list -->
 &lt;!ELEMENT blockList                (listIntroduction?, item+, listConclusion?) >
 &lt;!ATTLIST blockList                ##corereq; >
 &lt;!-- The element item is a container belonging to a list -->
@@ -843,10 +857,10 @@
 </include>
 <include if="toc" dependsOn="core" label="Table of content" desc="the element $toc (Table of Content) is used as a container of many individual  items of the toc (element $tocItem)">
 	
-&lt;!ENTITY @ tocHierarchy         "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> tocItem)+, wrap?)"            "##coreopt;">
-
 &lt;!--- the element toc (Table of Content) is used as a container of many individual toc items -->
-&lt;!ELEMENT toc    @tocHierarchy; >
+&lt;!ELEMENT toc       (tocItem)+ >
+&lt;!ATTLIST toc       ##corereq; >
+
 &lt;!--- the element tocItem is a component of the table of content and contains header information about sections or parts of the rest of the document -->
 &lt;!ELEMENT tocItem   @inline; >
 &lt;!ATTLIST tocItem   ##link; level #INTEGER #REQUIRED >
@@ -875,7 +889,7 @@
 
 &lt;!--- the element docDate is an inline element within preface to identify the string used by the document for its own date(s). Documents with multiple dates may use multiple docDate elements. -->
 &lt;!ELEMENT docDate      @inline; >
-&lt;!ATTLIST docDate      ##datetime; >
+&lt;!ATTLIST docDate      ##date; >
 <include if="legislativePreface" dependsOn="core" label="Legislative preface elements " desc="Additional Preface elements for legislative documents such as $legislature, $session, $shortTitle.">
 &lt;!--- the element legislature is an inline element within preface to identify the string used by the document for the legislature relative to the document. Use #refersTo to a TLCEvent to refer to the event of the specific legislature. -->
 &lt;!ELEMENT legislature      @inline; >
@@ -905,25 +919,28 @@
 &lt;!ELEMENT docketNumber    @inline; >
 </include>
 	
-<include if="judgementDocs" desc="Preface elements $courtType, $neutralCitation, $party and $judge">
-&lt;!--- the element courtType is an inline element within judgements to identify the string used by the document for the type of the court doing the judgement -->
+<include if="judgmentDocs" desc="Preface elements $courtType, $neutralCitation, $party and $judge">
+&lt;!--- the element courtType is an inline element within judgments to identify the string used by the document for the type of the court doing the judgment -->
 &lt;!ELEMENT courtType          @inline; >
-&lt;!--- the element neutralCitation is an inline element within judgements to identify the string declared by the document as being the neutral citation for the judgement -->
+&lt;!--- the element neutralCitation is an inline element within judgments to identify the string declared by the document as being the neutral citation for the judgment -->
 &lt;!ELEMENT neutralCitation    @inline; >
-&lt;!--- the element party is an inline element within judgements to identify where the document defines one of the parties -->
+&lt;!--- the element party is an inline element within judgments to identify where the document defines one of the parties -->
 &lt;!ELEMENT party              @inlinereqreq; >
 &lt;!ATTLIST party              ##role; >
-&lt;!--- the element judge is an inline element within judgements to identify where the document defines one of the judges, and his/her role -->
+&lt;!--- the element judge is an inline element within judgments to identify where the document defines one of the judges, and his/her role -->
 &lt;!ELEMENT judge              @inlinereqreq; >
 &lt;!ATTLIST judge              ##role; >
-&lt;!--- the element lawyer is an inline element within judgements to identify where the document defines one of the lawyers, his/her role, which party it represents, and the other lawyer, if any, this lawyer received the power delegation of power in some role -->
+&lt;!--- the element lawyer is an inline element within judgments to identify where the document defines one of the lawyers, his/her role, which party it represents, and the other lawyer, if any, this lawyer received the power delegation of power in some role -->
 &lt;!ELEMENT lawyer             @inlinereqreq; >
 &lt;!ATTLIST lawyer             ##role; 
                              for         #ANYURI    #IMPLIED 
                              empoweredBy #ANYURI    #IMPLIED >
-&lt;!--- the element opinion is an inline element within judgements to identify where the document defines the opinion of one of the judges -->
+&lt;!--- the element opinion is an inline element within judgments to identify where the document defines the opinion of one of the judges -->
 &lt;!ELEMENT opinion            @inline; >
 &lt;!ATTLIST opinion            type  #opinionType; #IMPLIED>
+
+&lt;!--- the element argument is an inline element within judgments for classifying the arguments in the motivation part of the judgment -->
+&lt;!ELEMENT argument            @inline; >
 </include>
 
 <include desc="Element for document signature $signature"/>
@@ -1018,13 +1035,15 @@
 &lt;!--- the element omissis is an inline element for the specification of a text that substitutes a textual omission (e.g., dots, spaces, the word "omissis", etc.  -->
 &lt;!ELEMENT omissis      @inline; >
 </include>
-<include if="specials" dependsOn="core" label="Special elements" desc="Special elements are two elements used in specific circumnstances, such as $placeholder, an inline element containing the text of a computable expression (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value and $fillIn, an inline element to represent (e.g., as a dotted line) the space where a eprson can fill in a value for a printed form">
+<include if="specials" dependsOn="core" label="Special elements" desc="Special elements are two elements used in specific circumnstances, such as $placeholder, an inline element containing the text of a computable expression (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value and $fillIn, an inline element to represent (e.g., as a dotted line) the space where a person can fill in a value for a printed form, and decoration, a part of the numbering of a fragment that is carrying additional functions rather than just the numberi (e.g., in Switzerland, the annotation 'new' aside of a modified fragment)">
 &lt;!--- the element placeholder is an inline element containing the text of a computable expression (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value -->
 &lt;!ELEMENT placeholder  @inline; >
 &lt;!ATTLIST placeholder originalText #STRING #IMPLIED >
 &lt;!--- the element fillIn is an inline element shown as a dotted line or any other typoaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process. -->
 &lt;!ELEMENT fillIn  @inline; >
 &lt;!ATTLIST fillIn  width #STRING #IMPLIED >
+&lt;!--- the element decoration is an inline element to represent a decorative aspect that is present in the orignal text and that is meant as additional information to the text (e.g., the annotation 'new' on the side of a freshly inserted structure. -->
+&lt;!ELEMENT decoration  @inline; >
 </include>
 	
 &lt;!-- =====================================================================
@@ -1052,17 +1071,19 @@
 	
 &lt;!-- =====================================================================
 
-        AN popup elements
-        Comment: AN-specific popup elements are connected to the 
+        AN subFlow elements
+        Comment: AN-specific subFlow elements are connected to the 
         identification of structural elements that contain full structures 
         within a text content, but are not of textual nature.
 
      ===================================================================== -->
 
-&lt;!--- the type popupStructure specifies the overall content model of the elements that are popups -->
-&lt;!ENTITY @ popupStructure " (
+&lt;!--- the type subFlowStructure specifies the overall content model of the elements that are subFlows -->
+&lt;!ENTITY @ subFlowStructure " (
+              @@documentType; |
 							@@blockElements; | 
 							@@containerElements; 
+	            <include if="table" v="| tr | th | td"/>
 							<include if="legislativeDocs" v="| @@hierElements; | content"/>
 							<include if="debateDocs" v="| @@ANcontainers;"/> 
 							<include if="prefaceSubstructures" v="| formula | recitals | citations | longTitle | recital | citation"/>
@@ -1070,29 +1091,29 @@
 							|	intro | wrap | heading | subheading | num  )+" "##corereq; ">
 
 <include if="modifications" dependsOn="legislativeDocs">
-&lt;!--- the element quotedStructure is a popup element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
-&lt;!ELEMENT quotedStructure   @popupStructure;>
+&lt;!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
+&lt;!ELEMENT quotedStructure   @subFlowStructure;>
 &lt;!ATTLIST quotedStructure  ##quote;
                               for #ANYURI #IMPLIED>
 
 </include>
-<include if="extract" dependsOn="core" label="Extracts" desc="inline and popup elements $extractStructure and $extractText for the specification of extracts from other documents.">
+<include if="extract" dependsOn="core" label="Extracts" desc="inline and subFlow elements $extractStructure and $extractText for the specification of extracts from other documents.">
 
 &lt;!--- the element extractText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
 &lt;!ELEMENT extractText        @inline; >
 &lt;!ATTLIST extractText        ##quote; >
-&lt;!--- the element extractStructure is a popup element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
-&lt;!ELEMENT extractStructure   @popupStructure;>
+&lt;!--- the element extractStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
+&lt;!ELEMENT extractStructure   @subFlowStructure;>
 &lt;!ATTLIST extractStructure   ##quote; >
 
 </include>
 
 <include if="authorialNote" dependsOn="core" label="Authorial Note" desc="Element $authorialNote for the specification of authoritative (non-editorial) notes that are out of the main flow of the text, yet are part of the official authoritative text." >
-&lt;!--- the element authorialNote is a popup element containing an authorial (non-editorial) note in the main flow of the text. -->
-&lt;!ELEMENT authorialNote   @popupStructure;>
+&lt;!--- the element authorialNote is a subFlow element containing an authorial (non-editorial) note in the main flow of the text. -->
+&lt;!ELEMENT authorialNote   @subFlowStructure;>
 &lt;!ATTLIST authorialNote   ##notes;>
 <include if="generic">
-&lt;!ELEMENT popup    @popupStructure;>
+&lt;!ELEMENT subFlow    @subFlowStructure;>
 </include>
 </include>
 
@@ -1249,7 +1270,7 @@
 &lt;!--- The complexType coreProperties lists the identifying properties available at any of the FRBR hierarchy levels. -->
 &lt;!ENTITY @ coreProperties   "(FRBRthis, FRBRuri+, FRBRalias*, FRBRdate+, FRBRauthor+ <include if="advancedMetadata" v=", componentInfo?, preservation?"/>)" >
 &lt;!--- The group workProperties lists the properties that are characteristics of the FRBR Work level. -->
-&lt;!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber?, FRBRname?, FRBRprescriptive?, FRBRauthoritative?)" >
+&lt;!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber*, FRBRname*, FRBRprescriptive?, FRBRauthoritative?)" >
 &lt;!--- The group exprProperties lists the properties that are characteristics of the FRBR Expression level. -->
 &lt;!ENTITY @@ exprProperties   "(FRBRauthoritative?, FRBRlanguage+, FRBRtranslation*)" >
 &lt;!--- The group manifProperties lists the properties that are characteristics of the FRBR Expression level. -->
@@ -1265,7 +1286,7 @@
 &lt;!ELEMENT FRBRItem             @coreProperties; >
 
 &lt;!--- The type valueType specifies a value attribute to FRBR elements. -->
-&lt;!ENTITY @ valueType   "@metaopt;" "##value;" >
+&lt;!ENTITY @ valueType   "@metaopt;" "##value; ##refers; ##showopt;" >
 &lt;!--- The type booleanValueType specifies a boolean value attribute to FRBR elements. -->
 &lt;!ENTITY @ booleanValueType   "@metaopt;" "##booleanvalue;" >
 &lt;!--- The element FRBRthis is the metadata property containing the URI of the specific component of the document in the respective level of the FRBR hierarchy -->
@@ -1274,7 +1295,7 @@
 &lt;!ELEMENT FRBRuri              @valueType;>
 &lt;!--- The element FRBRalias is the metadata property containing additional well-known names of the document in the respective level of the FRBR hierarchy -->
 &lt;!ELEMENT FRBRalias            @valueType; >
-&lt;!ATTLIST FRBRalias            ##name; ##refers; >
+&lt;!ATTLIST FRBRalias            ##name; >
 
 &lt;!--- The element FRBRdate is the metadata property containing a relevant date of the document in the respective level of the FRBR hierarchy. Attribute name specifies which actual date is contained here. -->
 &lt;!ELEMENT FRBRdate             @metaopt;>
@@ -1325,7 +1346,7 @@
 
 &lt;!--- The element publication is the metadata container specifying a publication event for the FRBR expression of the document. -->
 &lt;!ELEMENT publication      @metaopt; >
-&lt;!ATTLIST publication      ##datetime; ##show; ##name; ##number; ##refers; >
+&lt;!ATTLIST publication      ##date; ##show; ##name; ##number; ##refers; >
 
 &lt;!--- The element classification is the metadata container of a list of keywords associated to the FRBR expression of the document. -->
 &lt;!ELEMENT classification   (keyword+)>
@@ -1346,7 +1367,7 @@
 &lt;!--- The element eventInfo is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.  -->
 &lt;!ELEMENT eventRef @anyOtherType;>
 &lt;!ATTLIST eventRef
-    ##datetime;
+    ##date;
     ##source;
     ##refers;
     type   #eventType; #IMPLIED
@@ -1359,7 +1380,7 @@
 &lt;!--- The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified. -->
 &lt;!ELEMENT step     @anyOtherType;>
 &lt;!ATTLIST step
-    ##datetime;
+    ##date;
     ##actor;
     ##role;
     ##refers;
@@ -1370,7 +1391,7 @@
 <include if="analysis">
 &lt;!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events, of judgments and of votes in parliamentary documents -->
 &lt;!ELEMENT analysis              (<include if="modifications" dependsOn="legislativeDocs" v="activeModifications?, passiveModifications?,"/>
-				 <include if="judgementDocs" v="judicial?,"/> <include if="debateDocs" v="parliamentary?,"/> otherAnalysis*) >
+				 <include if="judgmentDocs" v="judicial?,"/> <include if="debateDocs" v="parliamentary?,"/> otherAnalysis*) >
 &lt;!ATTLIST analysis              ##source; >
 
 <include if="modifications"  dependsOn="legislativeDocs" desc="Metadata for the analysis of modification acts: amendments and relative metadata">
@@ -1421,16 +1442,16 @@
 &lt;!ATTLIST legalSystemMod        type #LegalSystemMods; #REQUIRED >
 </include>
 
-<include if="judgementDocs" desc="Metadata for the analysis of judgements: judicial arguments">
-&lt;!--- The complex type judicialArguments is a list of all the judicial analysis elements that can be used on the analysis of a judgement -->
+<include if="judgmentDocs" desc="Metadata for the analysis of judgments: judicial arguments">
+&lt;!--- The complex type judicialArguments is a list of all the judicial analysis elements that can be used on the analysis of a judgment -->
 &lt;!ENTITY @ judicialArguments          "(result, (supports | isAnalogTo | applies | extends | restricts | derogates | contrasts | overrules | dissentsFrom | putsInQuestion | distinguishes)+)" >
 &lt;!--- The complex type judicialArgumentType lists all the properties associated to judicial elements. -->
 &lt;!ENTITY @ judicialArgumentType       "(source+, destination+, condition?)" 
                                "##core; ##idreq; ##enactment; ##modifiers; ##refers;" >
 
-&lt;!--- The element judicial is a metadata container of the analysis of the judicial arguments of a judgement. -->
+&lt;!--- The element judicial is a metadata container of the analysis of the judicial arguments of a judgment. -->
 &lt;!ELEMENT judicial   @judicialArguments; >
-&lt;!--- The element result is a metadata element specifying the overall result of the judgement. -->
+&lt;!--- The element result is a metadata element specifying the overall result of the judgment. -->
 &lt;!ELEMENT result   @anyOtherType; >
 &lt;!ATTLIST result   type  #resultType; #REQUIRED >
 
@@ -1493,7 +1514,7 @@
 with respect to the element being identified with the relative id. -->
 &lt;!ENTITY ## pos "pos #posType; #IMPLIED">
 &lt;!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
-&lt;!ENTITY @ argumentType      ""                            "##core; ##idopt; ##link; ##pos; upTo   #ANYURI #IMPLIED" >
+&lt;!ENTITY @ argumentType      ""                            "##core; ##idopt; ##link; ##pos; ##modifiers; upTo   #ANYURI #IMPLIED" >
 &lt;!--- the complex type periodType defines the empty content model and the list of attributes for metadata elements in the analysis section using periods -->
 &lt;!ENTITY @ periodType        ""                            "##core; ##idopt; ##period;" >                 
 
@@ -1525,7 +1546,7 @@ with respect to the element being identified with the relative id. -->
 <include desc="Basic metadata elements for ontological specification: $temporalData containing $timeIntervals, $references, all TLC elements, $notes"/>
 
 &lt;!--- The element temporalData is a metadata container of all the temporal groups that cntain temporal information about any aspect of the document. In particular, versioned fragments of the text are assigned to temporal groups via the period attribute for the specification of in force or efficacy intervals, or any other type of temporal specification. -->
-&lt;!ELEMENT temporalData  (temporalGroup)+ >
+&lt;!ELEMENT temporalData  (temporalGroup+, renumberingInfo*) >
 &lt;!ATTLIST temporalData     ##source; >
 
 &lt;!-- The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept. --> 
@@ -1539,6 +1560,16 @@ with respect to the element being identified with the relative id. -->
     end             #ANYURI        #IMPLIED
     duration      #DURATION   #IMPLIED
 >
+
+&lt;!-- The element renumberingInfo contains a reference to the originalId (attribute id) and the evolvingId of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills). --> 
+&lt;!ELEMENT renumberingInfo  @metareq; >
+&lt;!ATTLIST renumberingInfo  
+    originalId      #ANYURI        #IMPLIED
+    evolvedId       #ANYURI        #IMPLIED
+    start           #ANYURI        #IMPLIED
+    end             #ANYURI        #IMPLIED
+>
+
 
 &lt;!--- The group docrefs is a list of types of legal references to documents. -->
 &lt;!ENTITY @@ docRefs        "(original|passiveRef|activeRef|jurisprudence|hasAttachment|attachmentOf)" >

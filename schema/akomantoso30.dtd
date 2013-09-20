@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 19/2/2013 - Akoma Ntoso 3.0 CSD03
+Release 23/7/2013 - Akoma Ntoso 3.0 CSD05
 Complete version.
 
 
@@ -48,7 +48,7 @@ Main element groups
 =====================================================================  -->
 
 
-<!ENTITY % ANhier          "clause | section | part | paragraph | chapter | title | article | book | tome | division | list | point | indent | alinea | subsection | subpart | subparagraph | subchapter | subtitle | subclause | sublist" >
+<!ENTITY % ANhier          "clause | section | part | paragraph | chapter | title | article | book | tome | division | list | point | indent | alinea | rule | subrule | proviso | subsection | subpart | subparagraph | subchapter | subtitle | subdivision | subclause | sublist | transitional" >
 
 
 
@@ -56,22 +56,22 @@ Main element groups
 
 
 
-<!ENTITY % basicContainers    "formula | container" >
+<!ENTITY % basicContainers    "longTitle | formula | container" >
 
 <!ENTITY % preambleContainers    "recitals | citations | formula | container" >
 
-<!ENTITY % prefaceContainers    "longTitle | formula | container | toc" >
+<!ENTITY % prefaceContainers    "longTitle | formula | container" >
 
 
-<!ENTITY % ANblock         "blockList | tblock" >
+<!ENTITY % ANblock         "blockList | blockContainer | tblock | toc" >
 
-<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | extractText | extractStructure | placeholder | fillIn" >
+<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | extractText | extractStructure | placeholder | fillIn | decoration" >
 
 <!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
 
 
 
-<!ENTITY % ANheaderInline  "courtType | neutralCitation | party | judge | lawyer | signature | opinion" >
+<!ENTITY % ANheaderInline  "courtType | neutralCitation | party | judge | lawyer | signature | opinion | argument" >
 
 
 
@@ -83,7 +83,7 @@ Main element groups
 
 
 
-<!ENTITY % ANpopup          "authorialNote" >
+<!ENTITY % ANsubFlow          "authorialNote" >
 
 
 
@@ -100,7 +100,7 @@ Main element groups
 
 
 
-<!ENTITY % judgementBlock    "introduction | background | arguments | remedies | motivation | decision" >
+<!ENTITY % judgmentBlock    "introduction | background | arguments | remedies | motivation | decision" >
 
 
 
@@ -125,13 +125,13 @@ Main element groups
 <!ENTITY % inlineElements    "%ANinline; | %HTMLinline; | %ANtitleInline; | %ANsemanticInline; | %ANheaderInline; | %amendmentInline; | inline" >
 
 
-<!ENTITY % popupElements    "%ANpopup; | popup" >
+<!ENTITY % subFlowElements    "%ANsubFlow; | subFlow" >
 
 
 <!ENTITY % markerElements    "%ANmarker; | %HTMLmarker; | marker" >
 
 
-<!ENTITY % inlineCM          "%inlineElements; | %markerElements; | %popupElements;" >
+<!ENTITY % inlineCM          "%inlineElements; | %markerElements; | %subFlowElements;" >
 
 <!--  =====================================================================
 
@@ -148,9 +148,7 @@ Attribute groups
 
 <!ENTITY % source       " source %ANYURI; #REQUIRED" >
 
-<!ENTITY % date         " date %DATE; #REQUIRED" >
-
-<!ENTITY % datetime         " date %DATE; #REQUIRED time %TIME; #IMPLIED" >
+<!ENTITY % date         " date CDATA #REQUIRED" >
 
 <!ENTITY % time         " time %TIME; #REQUIRED" >
 
@@ -171,6 +169,7 @@ Attribute groups
 
 
 <!ENTITY % show         " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
+<!ENTITY % showopt    " showAs %STRING; #IMPLIED shortForm %STRING; #IMPLIED" >
 
 <!ENTITY % src         " src %ANYURI; #REQUIRED alt %STRING; #IMPLIED" >
 
@@ -334,7 +333,7 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 =====================================================================  -->
 
 
-<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgement | fragment | doc" >
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | fragment | doc" >
 
 
 
@@ -350,12 +349,12 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD03"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD05"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
 
-<!ENTITY % openStructure     "(meta,coverPage?,preface?,preamble?,mainBody,conclusions?,attachments?)" >
+<!ENTITY % openStructure     "(meta,coverPage?,preface?,preamble?,mainBody,conclusions?,attachments?,components?)" >
 
 
 <!ELEMENT doc           %openStructure; >
@@ -372,7 +371,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % collectionStructure "(meta,coverPage?,preface?,collectionBody,conclusions?,attachments?)" >
+<!ENTITY % collectionStructure "(meta,coverPage?,preface?,preamble?,collectionBody,conclusions?,attachments?,components?)" >
 
 
 
@@ -416,7 +415,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % hierarchicalStructure "(meta,coverPage?,preface?,preamble?,body,conclusions?,attachments?)" >
+<!ENTITY % hierarchicalStructure "(meta,coverPage?,preface?,preamble?,body,conclusions?,attachments?,components?)" >
 
 
 <!ELEMENT act           %hierarchicalStructure; >
@@ -437,7 +436,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateBody,conclusions?,attachments?)" >
+<!ENTITY % debateStructure     "(meta,coverPage?,preface?,debateBody,conclusions?,attachments?,components?)" >
 
 
 
@@ -459,22 +458,22 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % judgementStructure  "(meta,coverPage?,header,judgementBody,conclusions?,attachments?)" >
+<!ENTITY % judgmentStructure  "(meta,coverPage?,header,judgmentBody,conclusions?,attachments?,components?)" >
 
 
-<!ELEMENT judgement     %judgementStructure; >
-<!ATTLIST judgement %name;  contains %versionType; 'originalVersion'  >
+<!ELEMENT judgment     %judgmentStructure; >
+<!ATTLIST judgment %name;  contains %versionType; 'originalVersion'  >
 
 
-<!ENTITY % judgementBodyType  "(%judgementBlock;)+" >
+<!ENTITY % judgmentBodyType  "(%judgmentBlock;)+" >
 
-<!ELEMENT judgementBody   %judgementBodyType; >
-<!ATTLIST judgementBody %coreopt;  >
-
-
+<!ELEMENT judgmentBody   %judgmentBodyType; >
+<!ATTLIST judgmentBody %coreopt;  >
 
 
-<!ENTITY % amendmentStructure  "(meta,coverPage?,preface?,amendmentBody,conclusions?,attachments?)" >
+
+
+<!ENTITY % amendmentStructure  "(meta,coverPage?,preface?,amendmentBody,conclusions?,attachments?,components?)" >
 
 
 <!ELEMENT amendment     %amendmentStructure; >
@@ -605,6 +604,15 @@ Elements for hierarchical documents
 
 <!ELEMENT alinea    %hierarchy; >
 <!ATTLIST alinea %corereq;  >
+
+<!ELEMENT rule      %hierarchy; >
+<!ATTLIST rule %corereq;  >
+
+<!ELEMENT subrule   %hierarchy; >
+<!ATTLIST subrule %corereq;  >
+
+<!ELEMENT proviso   %hierarchy; >
+<!ATTLIST proviso %corereq;  >
 
 
 
@@ -840,6 +848,11 @@ main document, the list item and the titled block
 =====================================================================  -->
 
 
+<!ENTITY % blockContainerType      "(%basehierarchy;,(intro?,(componentRef | %blockElements;)+,wrap?))" >
+<!ELEMENT blockContainer           %blockContainerType; >
+<!ATTLIST blockContainer %corereq;  >
+
+
 <!ELEMENT blockList                (listIntroduction?,item+,listConclusion?)>
 
 <!ATTLIST blockList %corereq;  >
@@ -860,11 +873,8 @@ main document, the list item and the titled block
 
 
 
-<!ENTITY % tocHierarchy         "(%basehierarchy;,(intro?,(componentRef | tocItem)+,wrap?))" >
 
-
-<!ELEMENT toc    %tocHierarchy; >
-<!ATTLIST toc %coreopt;  >
+<!ELEMENT toc    (tocItem)+>
 
 <!ELEMENT tocItem   %inline; >
 <!ATTLIST tocItem %coreopt;  >
@@ -902,7 +912,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT docDate      %inline; >
 <!ATTLIST docDate %coreopt;  >
 
-<!ATTLIST docDate %datetime;  >
+<!ATTLIST docDate %date;  >
 
 
 <!ELEMENT legislature      %inline; >
@@ -972,6 +982,10 @@ legal structure, regardless of their position in the document.
 <!ATTLIST opinion %coreopt;  >
 
 <!ATTLIST opinion type %opinionType; #IMPLIED >
+
+
+<!ELEMENT argument            %inline; >
+<!ATTLIST argument %coreopt;  >
 
 
 
@@ -1113,6 +1127,9 @@ legal structure, regardless of their position in the document.
 
 <!ATTLIST fillIn width %STRING; #IMPLIED >
 
+<!ELEMENT decoration  %inline; >
+<!ATTLIST decoration %coreopt;  >
+
 
 <!--  =====================================================================
 
@@ -1143,19 +1160,19 @@ there is text.
 
 <!--  =====================================================================
 
-AN popup elements
-Comment: AN-specific popup elements are connected to the
+AN subFlow elements
+Comment: AN-specific subFlow elements are connected to the
 identification of structural elements that contain full structures
 within a text content, but are not of textual nature.
 
 =====================================================================  -->
 
 
-<!ENTITY % popupStructure "(%blockElements; | %containerElements; | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | documentRef | intro | wrap | heading | subheading | num)+" >
+<!ENTITY % subFlowStructure "(%documentType; | %blockElements; | %containerElements; | tr | th | td | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | documentRef | intro | wrap | heading | subheading | num)+" >
 
 
 
-<!ELEMENT quotedStructure   %popupStructure; >
+<!ELEMENT quotedStructure   %subFlowStructure; >
 <!ATTLIST quotedStructure %corereq;  >
 
 <!ATTLIST quotedStructure %quote;  for %ANYURI; #IMPLIED >
@@ -1169,7 +1186,7 @@ within a text content, but are not of textual nature.
 
 <!ATTLIST extractText %quote;  >
 
-<!ELEMENT extractStructure   %popupStructure; >
+<!ELEMENT extractStructure   %subFlowStructure; >
 <!ATTLIST extractStructure %corereq;  >
 
 <!ATTLIST extractStructure %quote;  >
@@ -1178,13 +1195,13 @@ within a text content, but are not of textual nature.
 
 
 
-<!ELEMENT authorialNote   %popupStructure; >
+<!ELEMENT authorialNote   %subFlowStructure; >
 <!ATTLIST authorialNote %corereq;  >
 
 <!ATTLIST authorialNote %notes;  >
 
-<!ELEMENT popup    %popupStructure; >
-<!ATTLIST popup %corereq;  >
+<!ELEMENT subFlow    %subFlowStructure; >
+<!ATTLIST subFlow %corereq;  >
 
 
 
@@ -1360,7 +1377,7 @@ Metadata elements for all documents
 
 <!ENTITY % coreProperties   "(FRBRthis,FRBRuri+,FRBRalias*,FRBRdate+,FRBRauthor+,componentInfo?,preservation?)" >
 
-<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber? , FRBRname? , FRBRprescriptive? , FRBRauthoritative?" >
+<!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber* , FRBRname* , FRBRprescriptive? , FRBRauthoritative?" >
 
 <!ENTITY % exprProperties   "FRBRauthoritative? , FRBRlanguage+ , FRBRtranslation*" >
 
@@ -1381,15 +1398,15 @@ Metadata elements for all documents
 <!ENTITY % booleanValueType   "%metaopt;" >
 
 <!ELEMENT FRBRthis             %valueType; >
-<!ATTLIST FRBRthis %value;  %core;  %idopt;  >
+<!ATTLIST FRBRthis %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRuri              %valueType; >
-<!ATTLIST FRBRuri %value;  %core;  %idopt;  >
+<!ATTLIST FRBRuri %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRalias            %valueType; >
-<!ATTLIST FRBRalias %value;  %core;  %idopt;  >
+<!ATTLIST FRBRalias %value;  %refers;  %showopt;  %core;  %idopt;  >
 
-<!ATTLIST FRBRalias %name;  %refers;  >
+<!ATTLIST FRBRalias %name;  >
 
 
 <!ELEMENT FRBRdate             %metaopt; >
@@ -1415,19 +1432,19 @@ Metadata elements for all documents
 
 
 <!ELEMENT FRBRsubtype            %valueType; >
-<!ATTLIST FRBRsubtype %value;  %core;  %idopt;  >
+<!ATTLIST FRBRsubtype %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRcountry            %valueType; >
-<!ATTLIST FRBRcountry %value;  %core;  %idopt;  >
+<!ATTLIST FRBRcountry %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRnumber            %valueType; >
-<!ATTLIST FRBRnumber %value;  %core;  %idopt;  >
+<!ATTLIST FRBRnumber %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRname            %valueType; >
-<!ATTLIST FRBRname %value;  %core;  %idopt;  >
+<!ATTLIST FRBRname %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRformat            %valueType; >
-<!ATTLIST FRBRformat %value;  %core;  %idopt;  >
+<!ATTLIST FRBRformat %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRprescriptive      %booleanValueType; >
 <!ATTLIST FRBRprescriptive %booleanvalue;  %core;  %idopt;  >
@@ -1454,7 +1471,7 @@ Metadata elements for all documents
 <!ELEMENT publication      %metaopt; >
 <!ATTLIST publication %core;  %idopt;  >
 
-<!ATTLIST publication %datetime;  %show;  %name;  %number;  %refers;  >
+<!ATTLIST publication %date;  %show;  %name;  %number;  %refers;  >
 
 
 <!ELEMENT classification   (keyword+)>
@@ -1476,7 +1493,7 @@ Metadata elements for all documents
 <!ELEMENT eventRef %anyOtherType; >
 <!ATTLIST eventRef %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST eventRef %datetime;  %source;  %refers;  type %eventType; #IMPLIED originatingExpression %BOOLEAN; #IMPLIED >
+<!ATTLIST eventRef %date;  %source;  %refers;  type %eventType; #IMPLIED originatingExpression %BOOLEAN; #IMPLIED >
 
 
 <!ELEMENT workflow   (step+)>
@@ -1486,7 +1503,7 @@ Metadata elements for all documents
 <!ELEMENT step     %anyOtherType; >
 <!ATTLIST step %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST step %datetime;  %actor;  %role;  %refers;  %outcome;  >
+<!ATTLIST step %date;  %actor;  %role;  %refers;  %outcome;  >
 
 
 
@@ -1650,10 +1667,10 @@ Metadata elements for all documents
 
 
 <!ELEMENT source           %argumentType; >
-<!ATTLIST source %core;  %idopt;  %link;  %pos;  upTo %ANYURI; #IMPLIED >
+<!ATTLIST source %core;  %idopt;  %link;  %pos;  %modifiers;  upTo %ANYURI; #IMPLIED >
 
 <!ELEMENT destination      %argumentType; >
-<!ATTLIST destination %core;  %idopt;  %link;  %pos;  upTo %ANYURI; #IMPLIED >
+<!ATTLIST destination %core;  %idopt;  %link;  %pos;  %modifiers;  upTo %ANYURI; #IMPLIED >
 
 <!ELEMENT force            %periodType; >
 <!ATTLIST force %core;  %idopt;  %period;  >
@@ -1687,7 +1704,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT temporalData  (temporalGroup)+>
+<!ELEMENT temporalData  (temporalGroup+,renumberingInfo*)>
 
 <!ATTLIST temporalData %source;  >
 
@@ -1701,6 +1718,13 @@ Metadata elements for all documents
 <!ATTLIST timeInterval %core;  %idopt;  >
 
 <!ATTLIST timeInterval %refersreq;  start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED duration %DURATION; #IMPLIED >
+
+<!--  The element renumberingInfo contains a reference to the originalId (attribute id) and the evolvingId of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills).  -->
+<!ELEMENT renumberingInfo  %metareq; >
+<!ATTLIST renumberingInfo %core;  %idreq;  >
+
+<!ATTLIST renumberingInfo originalId %ANYURI; #IMPLIED evolvedId %ANYURI; #IMPLIED start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED >
+
 
 
 <!ENTITY % docRefs        "original | passiveRef | activeRef | jurisprudence | hasAttachment | attachmentOf" >
