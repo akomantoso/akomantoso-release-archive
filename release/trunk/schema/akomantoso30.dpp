@@ -5,7 +5,7 @@
 	   Copyright (C) Africa i-Parliaments
 
 
-     Release 23/7/2013 - Akoma Ntoso 3.0 CSD05 
+     Release 25/9/2013 - Akoma Ntoso 3.0 CSD06 
 				Complete version. 
 			
 
@@ -35,7 +35,7 @@
      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD05'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD06'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -64,7 +64,7 @@
 <!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
 <!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | extractText | extractStructure | placeholder | fillIn | decoration)" >
 <!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
-<!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle| docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber)" >
+<!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle|docAuthority|docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber)" >
 
 
 <!--- The group ANheaderInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the header element -->
@@ -139,7 +139,7 @@
 
      ===================================================================== -->
      
-<!--- The attribute alt is used to specify, when the element contains an alternative version of some content, the id of the main element which this element is an alternative copy of -->
+<!--- The attribute alternativeTo is used to specify, when the element contains an alternative version of some content, the currentId of the main element which this element is an alternative copy of -->
 <!ENTITY ## alt         "alternativeTo         #ANYURI        #IMPLIED" >
 <!--- The attribute name is used to give a name to all generic elements -->
 <!ENTITY ## name         "name         #STRING        #REQUIRED" >
@@ -231,28 +231,30 @@
                           title        #STRING      #IMPLIED">
 <!--- This attribute list are used to specify the fact that any attribute can be specified for this element if it belongs to a different namespace. -->
 <!ENTITY ## core    "xxxdirtyTrick        #STRING      #IMPLIED">
-<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is required. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id. -->
-<!ENTITY ## idreq        "id           #ID           #REQUIRED
-                             evolvingId   #NMTOKEN           #IMPLIED ">
-<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the id attribute is optional. The evolvingId is used to mark the identifier that the structure would have in a static situation, and is usually identical to id. -->
-<!ENTITY ## idopt        "id           #ID           #IMPLIED
-                             evolvingId   #NMTOKEN           #IMPLIED  ">
+<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the currentId attribute is required. The originalId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
+<!ENTITY ## idreq        "currentId    #NMTOKEN           #REQUIRED
+                             originalId   #NMTOKEN           #IMPLIED 
+                             GUID         #NMTOKEN           #IMPLIED">
+<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the currentId attribute is optional. The originalId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
+<!ENTITY ## idopt        "currentId    #NMTOKEN           #IMPLIED
+                             originalId   #NMTOKEN           #IMPLIED 
+                             GUID         #NMTOKEN           #IMPLIED">
 
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
-<!ENTITY ## refersreq    "refersTo           #ANYURI         #REQUIRED" >
+<!ENTITY ## refersreq    "refersTo           (#ANYURI+)         #REQUIRED" >
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is optional -->
-<!ENTITY ## refers       "refersTo           #ANYURI         #IMPLIED" >
+<!ENTITY ## refers       "refersTo           (#ANYURI+)         #IMPLIED" >
 <!--- These attribute specify the human language in which the content of the element is expressed as well as the rules for whitespace management in the element. Values for xml:lang are taken from the RFC 4646. Both xml:lang and xml:space are reserved attributes of the XML language, and cannot be used for any other purpose than these ones.  -->
 <!ENTITY ## xmllang       "
                    xml:lang           #language;         #IMPLIED
                    xml:space          (default|preserve) #IMPLIED
                    " >
 
-<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the id attribute is required -->
+<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the currentId attribute is required -->
 <!ENTITY ## corereq      "##core; ##HTMLattrs; ##enactment; ##idreq; ##refers; ##xmllang; ##alt;" >
-<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the id attribute are required -->
+<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the currentId attribute are required -->
 <!ENTITY ## corereqreq   "##core; ##HTMLattrs; ##enactment; ##idreq; ##refersreq; ##xmllang; ##alt;" >
-<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the id attribute are optional -->
+<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the currentId attribute are optional -->
 <!ENTITY ## coreopt      "##core; ##HTMLattrs; ##enactment; ##idopt; ##refers; ##xmllang; ##alt;" >
 
 <!-- =====================================================================
@@ -316,31 +318,31 @@
 
 <!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
 <!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | componentRef |  @@ANcontainers; | @@blockElements;)*" "##corereq;">
-<!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the id attribute is required -->
+<!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the currentId attribute is required -->
 <!ENTITY @ blocksreq         "(@@blockElements;)*" "##corereq;">
-<!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the id attribute is optional -->
+<!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the currentId attribute is optional -->
 <!ENTITY @ blocksopt         "(@@blockElements;)*" "##coreopt;">
-<!--- the complex type inline defines the content model and attributes shared by all blocks and inlines. Here the id attribute is optional -->
+<!--- the complex type inline defines the content model and attributes shared by all blocks and inlines. Here the currentId attribute is optional -->
 <!ENTITY @ inline            "(#PCDATA | @@inlineCM;)*" "##coreopt;">
-<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the id attribute is required -->
+<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the currentId attribute is required -->
 <!ENTITY @ inlinereq         "(#PCDATA | @@inlineCM;)*" "##corereq;">
-<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the id attribute is required and also the refersTo is required -->
+<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the currentId attribute is required and also the refersTo is required -->
 <!ENTITY @ inlinereqreq      "(#PCDATA | @@inlineCM;)*" "##corereqreq;">
 
-<!--- the complex type markerreq defines the content model and attributes shared by all marker elements. Here the id attribute is required -->
+<!--- the complex type markerreq defines the content model and attributes shared by all marker elements. Here the currentId attribute is required -->
 <!ENTITY @ markerreq         "" "##corereq;">
-<!--- the complex type markeropt defines the content model and attributes shared by all marker elements. Here the id attribute is optional -->
+<!--- the complex type markeropt defines the content model and attributes shared by all marker elements. Here the currentId attribute is optional -->
 <!ENTITY @ markeropt         "" "##coreopt;">
-<!--- the complex type metareq defines the content model and attributes shared by all metadata elements. Here the id attribute is required -->
+<!--- the complex type metareq defines the content model and attributes shared by all metadata elements. Here the currentId attribute is required -->
 <!ENTITY @ metareq           "" "##core; ##idreq;">
-<!--- the complex type metaopt defines the content model and attributes shared by all metadata elements. Here the id attribute is optional -->
+<!--- the complex type metaopt defines the content model and attributes shared by all metadata elements. Here the currentId attribute is optional -->
 <!ENTITY @ metaopt           "" "##core; ##idopt;">
 
 <!--- the complex type maincontent is used by container elements that can contain basically any other Akoma Ntoso structure -->
 <!ENTITY @ maincontent       "(componentRef |  @@hierElements; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
 
 	
-<!--- the complex type speechType defines the content model and attributes shared by all speech elements. Here the id attribute is optional -->
+<!--- the complex type speechType defines the content model and attributes shared by all speech elements. Here the currentId attribute is optional -->
 <!ENTITY @ speechType        "@basehierarchy;, (from?, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 
 
@@ -414,11 +416,14 @@
 
 <!--- Element doc is used for describing the structure and content of any other document that is not included in the list of document explicitly managed by Akoma Ntoso -->
 <!ELEMENT doc           @openStructure; >
+<!ATTLIST doc           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
+
 <!--- the element mainBody is the container of the main part of all other document types -->
 <!ELEMENT mainBody     @maincontent; >
 
 <!--- Element statement is used for describing the structure and content of a official documents of a legislative assembly that are not normative in structure (e.g., statements, non-normative resolutions, etc.). -->
 <!ELEMENT statement  @openStructure; >
+<!ATTLIST statement  xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 
 	
@@ -445,9 +450,6 @@
 <!--- Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever -->
 <!ELEMENT documentCollection           @collectionStructure; >
 
-<!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
-<!ELEMENT interstitial  @blocksreq; >
-
 <!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 <!ENTITY @ collectionBodyType  "(@@documentType; | documentRef | interstitial?)+" "##coreopt;" >
 <!--- the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
@@ -462,6 +464,7 @@
 
 <!--- Element fragment is used for describing the structure and content of an independent fragment of a document -->
 <!ELEMENT fragment           @fragmentStructure; >
+<!ATTLIST fragment           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 <!--- the type fragmentBodyType specifies a content model of a container of a fragment of another document -->
 <!ENTITY @ fragmentBodyType  "(@@containerElements; | @@hierElements;  | @@ANcontainers; | recital | citation)" "##coreopt;" >
@@ -483,10 +486,12 @@
 
 <!--- Element act is used for describing the structure and content of an act -->
 <!ELEMENT act           @hierarchicalStructure; >
+<!ATTLIST act					 xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 
 <!--- Element bill is used for describing the structure and content of a bill -->
 <!ELEMENT bill          @hierarchicalStructure; >
+<!ATTLIST bill					 xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 	
 	
 <!--- the type bodyType specifies a content model of the main hierarchy of a hierarchical document (e.g, an act or a bill) -->
@@ -509,10 +514,12 @@
 
 <!--- Element debateReport is used for describing the structure and content of a report -->
 <!ELEMENT debateReport        @openStructure; >
+<!ATTLIST debateReport        xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 
 <!--- Element debate is used for describing the structure and content of a debate record -->
 <!ELEMENT debate  @debateStructure; >
+<!ATTLIST debate  xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 
 <!--- the type debateBodyType specifies a content model of the main hierarchy of a debate -->
@@ -534,6 +541,7 @@
 
 <!--- Element judgment is used for describing the structure and content of a judgment -->
 <!ELEMENT judgment     @judgmentStructure; >
+<!ATTLIST judgment     xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 <!--- the type judgmentBodyType specifies a content model of the main hierarchy of a judgment document -->
 <!ENTITY @ judgmentBodyType  "(@@judgmentBlock;)+" "##coreopt;" >	
@@ -554,6 +562,7 @@
 
 <!--- Element amendment is used for describing the structure and content of an amendment -->
 <!ELEMENT amendment     @amendmentStructure; >
+<!ATTLIST amendment     xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 <!--- the type amendmentBodyType specifies a content model of the main hierarchy of a amendment document -->
 <!ENTITY @ amendmentBodyType  "(@@amendmentBlock;)+" "##coreopt;" >	
@@ -587,15 +596,15 @@
 
 
 		
-<!--- the complex type basicopt defines the content model and attributes used by basic containers such as coverPage and conclusions. Here the id attribute is optional -->
+<!--- the complex type basicopt defines the content model and attributes used by basic containers such as coverPage and conclusions. Here the currentId attribute is optional -->
 <!ENTITY @ basicopt         "(@@blockElements; | @@basicContainers; )+" "##coreopt;">
 <!--- the element coverPage is used as a container of the text that acts as a cover page -->
 <!ELEMENT coverPage    @basicopt; >
-<!--- the complex type preambleopt defines the content model and attributes used by preambles. Here the id attribute is optional -->
+<!--- the complex type preambleopt defines the content model and attributes used by preambles. Here the currentId attribute is optional -->
 <!ENTITY @ preambleopt         "(@@blockElements; | @@preambleContainers; )+" "##coreopt;">
 <!--- the element preamble is used as a container of the text that opens the main body of the document as a preamble -->
 <!ELEMENT preamble    @preambleopt; >
-<!--- the complex type prefaceopt defines the content model and attributes used by preface. Here the id attribute is optional -->
+<!--- the complex type prefaceopt defines the content model and attributes used by preface. Here the currentId attribute is optional -->
 <!ENTITY @ prefaceopt         "(@@blockElements; | @@prefaceContainers; )+" "##coreopt;">
 <!--- the element preface is used as a container of all prefacing material (e.g. headers, formulas, etc.) -->
 <!ELEMENT preface     @prefaceopt; >
@@ -604,8 +613,11 @@
 <!--- the element header is used as a container of all prefacing material of judgments (e.g. headers, formulas, etc.) -->
 <!ELEMENT header      @blocksopt; >
 <!--- the element attachments is used as a container of individual attachment elements -->
-<!ELEMENT attachments (@@documentType; | documentRef)+ >
+<!ELEMENT attachments (@@documentType; | interstitial | toc | documentRef)+ >
 <!ATTLIST attachments ##coreopt; >
+<!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
+<!ELEMENT interstitial  @blocksreq; >
+
 <!--- the element componentRef is a reference to a separate manifestation-level resource that holds the content of the component of the document not physically placed at the position specified. Actual resources can either be external (e.g. in the package or even in a different position) or internal (within the components element) -->
 <!ELEMENT componentRef  @srcType; >
 <!--- the element documentRef is a reference to a separate work- or expression-level resource that should be placed in this position. Actual resources are external (e.g. in the package or even in a different position) and are (an expression or any expression of) a separate Work. -->
@@ -890,6 +902,8 @@
 <!ELEMENT shortTitle      @inline; >
 
 
+<!--- the element docAuthority is an inline element within preface to identify the string used by the document detailing the Auhtority to which the document was submitted -->
+<!ELEMENT docAuthority   @inline; >
 <!--- the element docPurpose is an inline element within preface to identify the string used by the document detailing its own purpose -->
 <!ELEMENT docPurpose   @inline; >
 <!--- the element docCommittee is an inline element within preface to identify the string used by the document detailing the committee within which the document originated -->
@@ -1000,7 +1014,7 @@
 <!ATTLIST rmod  from   #ANYURI        #REQUIRED
                    upTo   #ANYURI        #REQUIRED >
 
-<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
+<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
 <!ELEMENT quotedText       @inline; >
 <!ATTLIST quotedText       ##quote; 
 															for #ANYURI #IMPLIED>
@@ -1080,7 +1094,7 @@
 							|	intro | wrap | heading | subheading | num  )+" "##corereq; ">
 
 
-<!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
+<!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
 <!ELEMENT quotedStructure   @subFlowStructure;>
 <!ATTLIST quotedStructure  ##quote;
                               for #ANYURI #IMPLIED>
@@ -1091,7 +1105,7 @@
 <!--- the element extractText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
 <!ELEMENT extractText        @inline; >
 <!ATTLIST extractText        ##quote; >
-<!--- the element extractStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the id of the corresponding ref element. -->
+<!--- the element extractStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
 <!ELEMENT extractStructure   @subFlowStructure;>
 <!ATTLIST extractStructure   ##quote; >
 
@@ -1500,7 +1514,7 @@
 
 
 <!--- The attribute pos is used to identify the specific position of the reference (e.g., in source or destination) 
-with respect to the element being identified with the relative id. -->
+with respect to the element being identified with the relative currentId. -->
 <!ENTITY ## pos "pos #posType; #IMPLIED">
 <!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
 <!ENTITY @ argumentType      ""                            "##core; ##idopt; ##link; ##pos; ##modifiers; upTo   #ANYURI #IMPLIED" >
@@ -1522,10 +1536,10 @@ with respect to the element being identified with the relative id. -->
 <!--- The element condition is a metadata element specifying an open set (non managed by Akoma Ntoso) of conditions on the modification -->
 <!ELEMENT condition        @anyOtherType; >
 <!ATTLIST condition        frozen #BOOLEAN #IMPLIED >
-<!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the id of the element new it is being substituted by. -->
+<!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the currentId of the element new it is being substituted by. -->
 <!ELEMENT old              @anyOtherType; >
 
-<!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. Attribute href points to the id of the element old it is substituting. -->
+<!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. Attribute href points to the currentId of the element old it is substituting. -->
 <!ELEMENT new              @anyOtherType; >
 
 <!--- The element domain is a metadata element containing (in some non-managed form) the domain to which the modification applies. -->
@@ -1550,11 +1564,11 @@ with respect to the element being identified with the relative id. -->
     duration      #DURATION   #IMPLIED
 >
 
-<!-- The element renumberingInfo contains a reference to the originalId (attribute id) and the evolvingId of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills). --> 
+<!-- The element renumberingInfo contains a reference to the originalId (attribute original) and to thecurrentId (attribute current) of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills). --> 
 <!ELEMENT renumberingInfo  @metareq; >
 <!ATTLIST renumberingInfo  
-    originalId      #ANYURI        #IMPLIED
-    evolvedId       #ANYURI        #IMPLIED
+    original        #ANYURI        #IMPLIED
+    current         #ANYURI        #IMPLIED
     start           #ANYURI        #IMPLIED
     end             #ANYURI        #IMPLIED
 >

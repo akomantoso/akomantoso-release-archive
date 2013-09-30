@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 23/7/2013 - Akoma Ntoso 3.0 CSD05
+Release 25/9/2013 - Akoma Ntoso 3.0 CSD06
 Complete version.
 
 
@@ -67,7 +67,7 @@ Main element groups
 
 <!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | extractText | extractStructure | placeholder | fillIn | decoration" >
 
-<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
+<!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle | docAuthority | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
 
 
 
@@ -204,14 +204,14 @@ Attribute groups
 
 <!ENTITY % core    " xxxdirtyTrick %STRING; #IMPLIED" >
 
-<!ENTITY % idreq        " id ID #REQUIRED evolvingId NMTOKEN #IMPLIED" >
+<!ENTITY % idreq        " currentId NMTOKEN #REQUIRED originalId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
 
-<!ENTITY % idopt        " id ID #IMPLIED evolvingId NMTOKEN #IMPLIED" >
+<!ENTITY % idopt        " currentId NMTOKEN #IMPLIED originalId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
 
 
-<!ENTITY % refersreq    " refersTo %ANYURI; #REQUIRED" >
+<!ENTITY % refersreq    " refersTo CDATA #REQUIRED" >
 
-<!ENTITY % refers       " refersTo %ANYURI; #IMPLIED" >
+<!ENTITY % refers       " refersTo CDATA #IMPLIED" >
 
 <!ENTITY % language           "%STRING;" >
 <!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % xmllang       " xml:lang %language; #IMPLIED xml:space (default|preserve) #IMPLIED" >
@@ -349,7 +349,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD05"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD06"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -360,12 +360,17 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT doc           %openStructure; >
 <!ATTLIST doc %name;  contains %versionType; 'originalVersion'  >
 
+<!ATTLIST doc xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+
+
 <!ELEMENT mainBody     %maincontent; >
 <!ATTLIST mainBody %coreopt;  >
 
 
 <!ELEMENT statement  %openStructure; >
 <!ATTLIST statement %name;  contains %versionType; 'originalVersion'  >
+
+<!ATTLIST statement xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 
@@ -388,10 +393,6 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST documentCollection %name;  contains %versionType; 'originalVersion'  >
 
 
-<!ELEMENT interstitial  %blocksreq; >
-<!ATTLIST interstitial %corereq;  >
-
-
 <!ENTITY % collectionBodyType  "(%documentType; | documentRef | interstitial?)+" >
 
 <!ELEMENT collectionBody       %collectionBodyType; >
@@ -405,6 +406,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ELEMENT fragment           %fragmentStructure; >
 <!ATTLIST fragment includedIn %ANYURI; #REQUIRED >
+
+<!ATTLIST fragment xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 <!ENTITY % fragmentBodyType  "(%containerElements; | %hierElements; | %ANcontainers; | recital | citation)" >
@@ -421,10 +424,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT act           %hierarchicalStructure; >
 <!ATTLIST act %name;  contains %versionType; 'originalVersion'  >
 
+<!ATTLIST act xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+
 
 
 <!ELEMENT bill          %hierarchicalStructure; >
 <!ATTLIST bill %name;  contains %versionType; 'originalVersion'  >
+
+<!ATTLIST bill xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 
@@ -443,10 +450,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT debateReport        %openStructure; >
 <!ATTLIST debateReport %name;  contains %versionType; 'originalVersion'  >
 
+<!ATTLIST debateReport xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+
 
 
 <!ELEMENT debate  %debateStructure; >
 <!ATTLIST debate %name;  contains %versionType; 'originalVersion'  >
+
+<!ATTLIST debate xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 
@@ -464,6 +475,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT judgment     %judgmentStructure; >
 <!ATTLIST judgment %name;  contains %versionType; 'originalVersion'  >
 
+<!ATTLIST judgment xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+
 
 <!ENTITY % judgmentBodyType  "(%judgmentBlock;)+" >
 
@@ -478,6 +491,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ELEMENT amendment     %amendmentStructure; >
 <!ATTLIST amendment %name;  contains %versionType; 'originalVersion'  >
+
+<!ATTLIST amendment xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 <!ENTITY % amendmentBodyType  "(%amendmentBlock;)+" >
@@ -541,9 +556,13 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT header      %blocksopt; >
 <!ATTLIST header %coreopt;  >
 
-<!ELEMENT attachments (%documentType; | documentRef)+>
+<!ELEMENT attachments (%documentType; | interstitial | toc | documentRef)+>
 
 <!ATTLIST attachments %coreopt;  >
+
+<!ELEMENT interstitial  %blocksreq; >
+<!ATTLIST interstitial %corereq;  >
+
 
 <!ELEMENT componentRef  %srcType; >
 <!ATTLIST componentRef %core;  %idopt;  %src;  %show;  >
@@ -874,7 +893,10 @@ main document, the list item and the titled block
 
 
 
-<!ELEMENT toc    (tocItem)+>
+<!ELEMENT toc       (tocItem)+>
+
+<!ATTLIST toc %corereq;  >
+
 
 <!ELEMENT tocItem   %inline; >
 <!ATTLIST tocItem %coreopt;  >
@@ -929,6 +951,9 @@ legal structure, regardless of their position in the document.
 <!ATTLIST shortTitle %coreopt;  >
 
 
+
+<!ELEMENT docAuthority   %inline; >
+<!ATTLIST docAuthority %coreopt;  >
 
 <!ELEMENT docPurpose   %inline; >
 <!ATTLIST docPurpose %coreopt;  >
@@ -1719,11 +1744,11 @@ Metadata elements for all documents
 
 <!ATTLIST timeInterval %refersreq;  start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED duration %DURATION; #IMPLIED >
 
-<!--  The element renumberingInfo contains a reference to the originalId (attribute id) and the evolvingId of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills).  -->
+<!--  The element renumberingInfo contains a reference to the originalId (attribute original) and to thecurrentId (attribute current) of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills).  -->
 <!ELEMENT renumberingInfo  %metareq; >
 <!ATTLIST renumberingInfo %core;  %idreq;  >
 
-<!ATTLIST renumberingInfo originalId %ANYURI; #IMPLIED evolvedId %ANYURI; #IMPLIED start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED >
+<!ATTLIST renumberingInfo original %ANYURI; #IMPLIED current %ANYURI; #IMPLIED start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED >
 
 
 
