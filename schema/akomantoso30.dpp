@@ -1,8 +1,8 @@
-<!-- ===================================================================== 
- 	   Akoma Ntoso main schema
-	   supported by Africa i-Parliaments, a project sponsored by United
-	   Nations Department of Economic and Social Affairs
-	   Copyright (C) Africa i-Parliaments
+<!-- =====================================================================
+     Akoma Ntoso main schema                                              
+     supported by Africa i-Parliaments, a project sponsored by United
+     Nations Department of Economic and Social Affairs
+     Copyright (C) Africa i-Parliaments
 
 
      Release 25/9/2013 - Akoma Ntoso 3.0 CSD06 
@@ -178,7 +178,7 @@
                           shortForm    #STRING        #IMPLIED">
 <!ENTITY ## showopt    "showAs       #STRING        #IMPLIED  
                           shortForm    #STRING        #IMPLIED">
-<!--- These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level URI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason. -->
+<!--- These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level IRI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason. -->
 <!ENTITY ## src         "src       #ANYURI        #REQUIRED  
                             alt       #STRING        #IMPLIED">
 <!--- The period attribute is used in versioned content and metadata elements to indicate a time interval in which they were in force, in efficacy, or in any other type of interval as specified in the corresponding temporalGroup.  -->
@@ -989,14 +989,14 @@
 
 
 
-<!--- the element ref is an inline element containing a legal references (i.e. a reference to a document with legal status and for which an Akoma Ntoso URI exists)  -->
+<!--- the element ref is an inline element containing a legal references (i.e. a reference to a document with legal status and for which an Akoma Ntoso IRI exists)  -->
 <!ELEMENT ref          @inlinereq; >
 <!ATTLIST ref          ##link; >
 
 
 <!--- the element mref is an inline element containing multiple references (each in turn represented by a ref element) -->
 <!ELEMENT mref         @inline; >
-<!--- the element rref is an inline element containing a range of references between the URI specified in the href attribute and the one specified in the upTo attribute. -->
+<!--- the element rref is an inline element containing a range of references between the IRI specified in the href attribute and the one specified in the upTo attribute. -->
 <!ELEMENT rref         @inlinereq; >
 <!ATTLIST rref      from   #ANYURI        #REQUIRED  
                        upTo   #ANYURI        #REQUIRED >
@@ -1292,9 +1292,9 @@
 <!ENTITY @ valueType   "@metaopt;" "##value; ##refers; ##showopt;" >
 <!--- The type booleanValueType specifies a boolean value attribute to FRBR elements. -->
 <!ENTITY @ booleanValueType   "@metaopt;" "##booleanvalue;" >
-<!--- The element FRBRthis is the metadata property containing the URI of the specific component of the document in the respective level of the FRBR hierarchy -->
+<!--- The element FRBRthis is the metadata property containing the IRI of the specific component of the document in the respective level of the FRBR hierarchy -->
 <!ELEMENT FRBRthis             @valueType;>
-<!--- The element FRBRuri is the metadata property containing the URI of the whole document in the respective level of the FRBR hierarchy -->
+<!--- The element FRBRuri is the metadata property containing the IRI of the whole document in the respective level of the FRBR hierarchy -->
 <!ELEMENT FRBRuri              @valueType;>
 <!--- The element FRBRalias is the metadata property containing additional well-known names of the document in the respective level of the FRBR hierarchy -->
 <!ELEMENT FRBRalias            @valueType; >
@@ -1319,15 +1319,15 @@
                                   pivot        #language; #IMPLIED
                                   by   #ANYURI   #REQUIRED >
 
-<!--- The element FRBRsubtype is the metadata property containing a string for the specific subtype of the document to be used in the work-level URI of this document -->
+<!--- The element FRBRsubtype is the metadata property containing a string for the specific subtype of the document to be used in the work-level IRI of this document -->
 <!ELEMENT FRBRsubtype            @valueType;>
-<!--- The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2 code for the country or jurisdiction to be used in the work-level URI of this document-->
+<!--- The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2 code for the country or jurisdiction to be used in the work-level IRI of this document-->
 <!ELEMENT FRBRcountry            @valueType;>
-<!--- The element FRBRnumber is the metadata property containing a string or number for the number to be used in the work-level URI of this document -->
+<!--- The element FRBRnumber is the metadata property containing a string or number for the number to be used in the work-level IRI of this document -->
 <!ELEMENT FRBRnumber            @valueType;>
-<!--- The element FRBRname is the metadata property containing a string for the title to be used in the work-level URI of this document -->
+<!--- The element FRBRname is the metadata property containing a string for the title to be used in the work-level IRI of this document -->
 <!ELEMENT FRBRname            @valueType;>
-<!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level URI of this document -->
+<!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document -->
 <!ELEMENT FRBRformat            @valueType;>
 <!--- The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly. -->
 <!ELEMENT FRBRprescriptive      @booleanValueType;>
@@ -1521,9 +1521,9 @@ with respect to the element being identified with the relative currentId. -->
 <!--- the complex type periodType defines the empty content model and the list of attributes for metadata elements in the analysis section using periods -->
 <!ENTITY @ periodType        ""                            "##core; ##idopt; ##period;" >                 
 
-<!--- The element source is a metadata element specifying the URI of the source of the modification. -->
+<!--- The element source is a metadata element specifying the IRI of the source of the modification. -->
 <!ELEMENT source           @argumentType;>
-<!--- The element destination is a metadata element specifying the URI of the destination of the modification. -->
+<!--- The element destination is a metadata element specifying the IRI of the destination of the modification. -->
 <!ELEMENT destination      @argumentType;>
 <!--- The element force is a metadata element specifying the period of the force modification. -->
 <!ELEMENT force            @periodType; >
@@ -1584,40 +1584,40 @@ with respect to the element being identified with the relative currentId. -->
 <!--- The element references is a metadata container of all the references to entities external to the document mentioned in the document. They include references to legal documents of any form,a s well as references to people, organizations, events, roles, concepts, and anything else is managed by the Akoma Ntoso ontology. -->
 <!ELEMENT references     @refItems;>
 
-<!--- The element original is a metadata reference to the Akoma Ntoso URI of the original version of this document (i.e., the first expression) -->
+<!--- The element original is a metadata reference to the Akoma Ntoso IRI of the original version of this document (i.e., the first expression) -->
 <!ELEMENT original         @referenceType; >
-<!--- The element passiveRef is a metadata reference to the Akoma Ntoso URI of a document providing modifications on this document (i.e., a passive references) -->
+<!--- The element passiveRef is a metadata reference to the Akoma Ntoso IRI of a document providing modifications on this document (i.e., a passive references) -->
 <!ELEMENT passiveRef       @referenceType; >
-<!--- The element activeRef is a metadata reference to the Akoma Ntoso URI of a document that is modified by this document (i.e., an active references) -->
+<!--- The element activeRef is a metadata reference to the Akoma Ntoso IRI of a document that is modified by this document (i.e., an active references) -->
 <!ELEMENT activeRef        @referenceType; >
-<!--- The element jurisprudence is a metadata reference to the Akoma Ntoso URI of a document providing jurisprudence on this document -->
+<!--- The element jurisprudence is a metadata reference to the Akoma Ntoso IRI of a document providing jurisprudence on this document -->
 <!ELEMENT jurisprudence    @referenceType; >
-<!--- The element hasAttachment is a metadata reference to the Akoma Ntoso URI of an attachment of this document -->
+<!--- The element hasAttachment is a metadata reference to the Akoma Ntoso IRI of an attachment of this document -->
 <!ELEMENT hasAttachment    @referenceType; >
 <!ATTLIST hasAttachment    type CDATA  #IMPLIED >
-<!--- The element attachmentOf is a metadata reference to the Akoma Ntoso URI of a document of which this document is an attachment -->
+<!--- The element attachmentOf is a metadata reference to the Akoma Ntoso IRI of a document of which this document is an attachment -->
 <!ELEMENT attachmentOf     @referenceType; >
 <!ATTLIST attachmentOf     type CDATA  #IMPLIED >
 
-<!--- The element TLCPerson is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Person -->
+<!--- The element TLCPerson is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Person -->
 <!ELEMENT TLCPerson        @referenceType; >
-<!--- The element TLCOrganization is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Organization -->
+<!--- The element TLCOrganization is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Organization -->
 <!ELEMENT TLCOrganization  @referenceType; >
-<!--- The element TLCConcept is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Concept -->
+<!--- The element TLCConcept is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Concept -->
 <!ELEMENT TLCConcept       @referenceType; >
-<!--- The element TLCObject is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Object -->
+<!--- The element TLCObject is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Object -->
 <!ELEMENT TLCObject        @referenceType; >
-<!--- The element TLCEvent is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Event -->
+<!--- The element TLCEvent is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Event -->
 <!ELEMENT TLCEvent         @referenceType; >
-<!--- The element TLCLocation is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Location -->
+<!--- The element TLCLocation is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Location -->
 <!ELEMENT TLCLocation         @referenceType; >
-<!--- The element TLCProcess is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Process -->
+<!--- The element TLCProcess is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Process -->
 <!ELEMENT TLCProcess       @referenceType; >
-<!--- The element TLCRole is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Role -->
+<!--- The element TLCRole is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Role -->
 <!ELEMENT TLCRole          @referenceType; >
-<!--- The element TLCTerm is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Term -->
+<!--- The element TLCTerm is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Term -->
 <!ELEMENT TLCTerm          @referenceType; >
-<!--- The element TLCreference is a generic metadata reference to the Akoma Ntoso URI of an ontology instance of a class specified through the name attribute -->
+<!--- The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI of an ontology instance of a class specified through the name attribute -->
 <!ELEMENT TLCReference     @referenceType; >
 <!ATTLIST TLCReference     ##name; >
 

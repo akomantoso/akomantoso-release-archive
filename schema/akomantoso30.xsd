@@ -839,7 +839,7 @@ These attributes are used in metadata to propose visible representations of the 
 			         <type>Attlist</type>
             <name>src</name>
             <comment>
-These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level URI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason.</comment>
+These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level IRI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -4377,7 +4377,7 @@ the element def is an inline element used for the definition of a term used in t
 			         <type>Element</type>
             <name>ref</name>
             <comment>
-the element ref is an inline element containing a legal references (i.e. a reference to a document with legal status and for which an Akoma Ntoso URI exists)</comment>
+the element ref is an inline element containing a legal references (i.e. a reference to a document with legal status and for which an Akoma Ntoso IRI exists)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -4409,7 +4409,7 @@ the element mref is an inline element containing multiple references (each in tu
 			         <type>Element</type>
             <name>rref</name>
             <comment>
-the element rref is an inline element containing a range of references between the URI specified in the href attribute and the one specified in the upTo attribute.</comment>
+the element rref is an inline element containing a range of references between the IRI specified in the href attribute and the one specified in the upTo attribute.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5527,7 +5527,7 @@ The type booleanValueType specifies a boolean value attribute to FRBR elements.<
 			         <type>Element</type>
             <name>FRBRthis</name>
             <comment>
-The element FRBRthis is the metadata property containing the URI of the specific component of the document in the respective level of the FRBR hierarchy</comment>
+The element FRBRthis is the metadata property containing the IRI of the specific component of the document in the respective level of the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5540,7 +5540,7 @@ The element FRBRthis is the metadata property containing the URI of the specific
 			         <type>Element</type>
             <name>FRBRuri</name>
             <comment>
-The element FRBRuri is the metadata property containing the URI of the whole document in the respective level of the FRBR hierarchy</comment>
+The element FRBRuri is the metadata property containing the IRI of the whole document in the respective level of the FRBR hierarchy</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5654,7 +5654,7 @@ The element FRBRtranslation is the metadata property specifying the source of wh
 			         <type>Element</type>
             <name>FRBRsubtype</name>
             <comment>
-The element FRBRsubtype is the metadata property containing a string for the specific subtype of the document to be used in the work-level URI of this document</comment>
+The element FRBRsubtype is the metadata property containing a string for the specific subtype of the document to be used in the work-level IRI of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5667,7 +5667,7 @@ The element FRBRsubtype is the metadata property containing a string for the spe
 			         <type>Element</type>
             <name>FRBRcountry</name>
             <comment>
-The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2 code for the country or jurisdiction to be used in the work-level URI of this document</comment>
+The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2 code for the country or jurisdiction to be used in the work-level IRI of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5680,7 +5680,7 @@ The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2
 			         <type>Element</type>
             <name>FRBRnumber</name>
             <comment>
-The element FRBRnumber is the metadata property containing a string or number for the number to be used in the work-level URI of this document</comment>
+The element FRBRnumber is the metadata property containing a string or number for the number to be used in the work-level IRI of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5693,7 +5693,7 @@ The element FRBRnumber is the metadata property containing a string or number fo
 			         <type>Element</type>
             <name>FRBRname</name>
             <comment>
-The element FRBRname is the metadata property containing a string for the title to be used in the work-level URI of this document</comment>
+The element FRBRname is the metadata property containing a string for the title to be used in the work-level IRI of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5706,7 +5706,7 @@ The element FRBRname is the metadata property containing a string for the title 
 			         <type>Element</type>
             <name>FRBRformat</name>
             <comment>
-The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level URI of this document</comment>
+The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6654,7 +6654,7 @@ the complex type periodType defines the empty content model and the list of attr
 			         <type>Element</type>
             <name>source</name>
             <comment>
-The element source is a metadata element specifying the URI of the source of the modification.</comment>
+The element source is a metadata element specifying the IRI of the source of the modification.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6667,7 +6667,7 @@ The element source is a metadata element specifying the URI of the source of the
 			         <type>Element</type>
             <name>destination</name>
             <comment>
-The element destination is a metadata element specifying the URI of the destination of the modification.</comment>
+The element destination is a metadata element specifying the IRI of the destination of the modification.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6930,7 +6930,7 @@ The element references is a metadata container of all the references to entities
 			         <type>Element</type>
             <name>original</name>
             <comment>
-The element original is a metadata reference to the Akoma Ntoso URI of the original version of this document (i.e., the first expression)</comment>
+The element original is a metadata reference to the Akoma Ntoso IRI of the original version of this document (i.e., the first expression)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6943,7 +6943,7 @@ The element original is a metadata reference to the Akoma Ntoso URI of the origi
 			         <type>Element</type>
             <name>passiveRef</name>
             <comment>
-The element passiveRef is a metadata reference to the Akoma Ntoso URI of a document providing modifications on this document (i.e., a passive references)</comment>
+The element passiveRef is a metadata reference to the Akoma Ntoso IRI of a document providing modifications on this document (i.e., a passive references)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6956,7 +6956,7 @@ The element passiveRef is a metadata reference to the Akoma Ntoso URI of a docum
 			         <type>Element</type>
             <name>activeRef</name>
             <comment>
-The element activeRef is a metadata reference to the Akoma Ntoso URI of a document that is modified by this document (i.e., an active references)</comment>
+The element activeRef is a metadata reference to the Akoma Ntoso IRI of a document that is modified by this document (i.e., an active references)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6969,7 +6969,7 @@ The element activeRef is a metadata reference to the Akoma Ntoso URI of a docume
 			         <type>Element</type>
             <name>jurisprudence</name>
             <comment>
-The element jurisprudence is a metadata reference to the Akoma Ntoso URI of a document providing jurisprudence on this document</comment>
+The element jurisprudence is a metadata reference to the Akoma Ntoso IRI of a document providing jurisprudence on this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6982,7 +6982,7 @@ The element jurisprudence is a metadata reference to the Akoma Ntoso URI of a do
 			         <type>Element</type>
             <name>hasAttachment</name>
             <comment>
-The element hasAttachment is a metadata reference to the Akoma Ntoso URI of an attachment of this document</comment>
+The element hasAttachment is a metadata reference to the Akoma Ntoso IRI of an attachment of this document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -7001,7 +7001,7 @@ The element hasAttachment is a metadata reference to the Akoma Ntoso URI of an a
 			         <type>Element</type>
             <name>attachmentOf</name>
             <comment>
-The element attachmentOf is a metadata reference to the Akoma Ntoso URI of a document of which this document is an attachment</comment>
+The element attachmentOf is a metadata reference to the Akoma Ntoso IRI of a document of which this document is an attachment</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -7020,7 +7020,7 @@ The element attachmentOf is a metadata reference to the Akoma Ntoso URI of a doc
 			         <type>Element</type>
             <name>TLCPerson</name>
             <comment>
-The element TLCPerson is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Person</comment>
+The element TLCPerson is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Person</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7033,7 +7033,7 @@ The element TLCPerson is a metadata reference to the Akoma Ntoso URI of an ontol
 			         <type>Element</type>
             <name>TLCOrganization</name>
             <comment>
-The element TLCOrganization is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Organization</comment>
+The element TLCOrganization is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Organization</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7046,7 +7046,7 @@ The element TLCOrganization is a metadata reference to the Akoma Ntoso URI of an
 			         <type>Element</type>
             <name>TLCConcept</name>
             <comment>
-The element TLCConcept is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Concept</comment>
+The element TLCConcept is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Concept</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7059,7 +7059,7 @@ The element TLCConcept is a metadata reference to the Akoma Ntoso URI of an onto
 			         <type>Element</type>
             <name>TLCObject</name>
             <comment>
-The element TLCObject is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Object</comment>
+The element TLCObject is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Object</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7072,7 +7072,7 @@ The element TLCObject is a metadata reference to the Akoma Ntoso URI of an ontol
 			         <type>Element</type>
             <name>TLCEvent</name>
             <comment>
-The element TLCEvent is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Event</comment>
+The element TLCEvent is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Event</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7085,7 +7085,7 @@ The element TLCEvent is a metadata reference to the Akoma Ntoso URI of an ontolo
 			         <type>Element</type>
             <name>TLCLocation</name>
             <comment>
-The element TLCLocation is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Location</comment>
+The element TLCLocation is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Location</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7098,7 +7098,7 @@ The element TLCLocation is a metadata reference to the Akoma Ntoso URI of an ont
 			         <type>Element</type>
             <name>TLCProcess</name>
             <comment>
-The element TLCProcess is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Process</comment>
+The element TLCProcess is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Process</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7111,7 +7111,7 @@ The element TLCProcess is a metadata reference to the Akoma Ntoso URI of an onto
 			         <type>Element</type>
             <name>TLCRole</name>
             <comment>
-The element TLCRole is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Role</comment>
+The element TLCRole is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Role</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7124,7 +7124,7 @@ The element TLCRole is a metadata reference to the Akoma Ntoso URI of an ontolog
 			         <type>Element</type>
             <name>TLCTerm</name>
             <comment>
-The element TLCTerm is a metadata reference to the Akoma Ntoso URI of an ontology instance of the class Term</comment>
+The element TLCTerm is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Term</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7137,7 +7137,7 @@ The element TLCTerm is a metadata reference to the Akoma Ntoso URI of an ontolog
 			         <type>Element</type>
             <name>TLCReference</name>
             <comment>
-The element TLCreference is a generic metadata reference to the Akoma Ntoso URI of an ontology instance of a class specified through the name attribute</comment>
+The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI of an ontology instance of a class specified through the name attribute</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
