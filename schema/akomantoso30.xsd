@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD06"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD07"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD06"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD07"
             elementFormDefault="qualified">
 
 
