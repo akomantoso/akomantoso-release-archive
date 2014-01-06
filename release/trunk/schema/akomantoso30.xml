@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?xml-stylesheet type="text/xsl" href="../styles/main.xsl"?>
 <modular xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./modular.xsd">
 	<combos>
 		<combo id="acts" name="Acts" desc="All elements for describing acts and existing legislative documents" content="core legislativeDocs act modifications tblock semantic advancedRefs authorialNote specials delimiters table"/>
@@ -20,7 +18,7 @@
      Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 25/9/2013 - Akoma Ntoso 3.0 CSD06"/>
+     <report version="Release 20/12/2013 - Akoma Ntoso 3.0 CSD07"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -32,20 +30,10 @@
      mentions.
 
      TERMS AND CONDITIONS
-     
-     This program is free software; you can redistribute it and/or
-     modify it under the terms of the GNU General Public License
-     as published by the Free Software Foundation; either version 2
-     of the License, or (at your option) any later version.
-     
-     This program is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     GNU General Public License for more details.
-     
-     You should have received a copy of the GNU General Public License
-     along with this program; if not, write to the Free Software
-     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+		 
+		 This schema is provided by OASIS, the Copyright Holder, under the licence 
+		 specified in the file licence.txt that can also be found at the URL xxxx
+		 
      ===================================================================== -->
 
 &lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD06'>
@@ -315,6 +303,10 @@
 <include if="analysis">
 &lt;!--- This is the list of possible positions of the text being analyzed by the element in the analysis section -->
 &lt;!ENTITY # posType  "#STRING(start|before|inside|after|end|unspecified)">
+	<include if="restrictions">
+&lt;!--- This is the list of allowed values for the restriction type attribute   -->
+&lt;!ENTITY # restrictionType    "#STRING(jurisdiction)" >
+	</include>
 </include>
 	
 &lt;!-- =====================================================================
@@ -626,8 +618,10 @@
 &lt;!--- the element header is used as a container of all prefacing material of judgments (e.g. headers, formulas, etc.) -->
 &lt;!ELEMENT header      @blocksopt; >
 &lt;!--- the element attachments is used as a container of individual attachment elements -->
-&lt;!ELEMENT attachments (@@documentType; | interstitial <include if="toc" v="| toc"/> <include if="components" v="| documentRef"/>)+ >
-&lt;!ATTLIST attachments ##coreopt; >
+&lt;!ELEMENT attachments (attachment)+ >
+&lt;!--- the element attachment is used as a container of individual attachment elements -->
+&lt;!ELEMENT attachment (@@documentType; | interstitial <include if="toc" v="| toc"/> <include if="components" v="| documentRef"/>)+ >
+&lt;!ATTLIST attachment ##corereq; >
 &lt;!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
 &lt;!ELEMENT interstitial  @blocksreq; >
 <include if="components" desc="references to components at the Work and Expression levels ($documentRef) and at the Manifestation level ($componentRef).">
@@ -1095,8 +1089,8 @@
      ===================================================================== -->
 
 &lt;!--- the type subFlowStructure specifies the overall content model of the elements that are subFlows -->
-&lt;!ENTITY @ subFlowStructure " (
-              @@documentType; |
+&lt;!ENTITY @ subFlowStructure "(
+              @@documentType; | (
 							@@blockElements; | 
 							@@containerElements; 
 	            <include if="table" v="| tr | th | td"/>
@@ -1104,7 +1098,7 @@
 							<include if="debateDocs" v="| @@ANcontainers;"/> 
 							<include if="prefaceSubstructures" v="| formula | recitals | citations | longTitle | recital | citation"/>
 							<include if="components" v="| componentRef | documentRef"/>
-							|	intro | wrap | heading | subheading | num  )+" "##corereq; ">
+							|	intro | wrap | heading | subheading | num  )+)" "##corereq; ">
 
 <include if="modifications" dependsOn="legislativeDocs">
 &lt;!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
@@ -1406,8 +1400,8 @@
 
 <include if="analysis">
 &lt;!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events, of judgments and of votes in parliamentary documents -->
-&lt;!ELEMENT analysis              (<include if="modifications" dependsOn="legislativeDocs" v="activeModifications?, passiveModifications?,"/>
-				 <include if="judgmentDocs" v="judicial?,"/> <include if="debateDocs" v="parliamentary?,"/> otherAnalysis*) >
+&lt;!ELEMENT analysis              (<include if="modifications" dependsOn="legislativeDocs" v="activeModifications?, passiveModifications?, "/>
+<include if="restrictions" v="restrictions?, "/><include if="judgmentDocs" v="judicial?, "/> <include if="debateDocs" v="parliamentary?, "/> otherAnalysis*) >
 &lt;!ATTLIST analysis              ##source; >
 
 <include if="modifications"  dependsOn="legislativeDocs" desc="Metadata for the analysis of modification acts: amendments and relative metadata">
@@ -1495,6 +1489,19 @@
 &lt;!ELEMENT distinguishes  @judicialArgumentType; > 
 </include>
 
+<include if="restrictions" desc="Metadata for the analysis of jurisdictions and other types of restrictions of validity: restrictions">
+&lt;!--- The element restrictions is a metadata container of the elements for the determination of specification of jurisdictions and other types of restrictions. -->
+&lt;!ELEMENT restrictions   (restriction)+ >
+&lt;!ATTLIST restrictions 	##source; >
+
+&lt;!--- The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the -->
+&lt;!ELEMENT restriction  	@anyOtherType; >
+&lt;!ATTLIST restriction		##refers; 
+                            type #restrictionType; #REQUIRED 
+>
+
+
+</include>
 <include if="debateDocs" desc="Metadata for the analysis of debate: voting and quorum analysis">
 &lt;!--- The complex type parliamentaryAnalysis is a list of all the parliamentary analysis elements that can be used on the analysis of a debate -->
 &lt;!ENTITY @ parliamentaryAnalysis          "(quorumVerification | voting | recount)+" >
@@ -1633,11 +1640,6 @@ with respect to the element being identified with the relative currentId. -->
 &lt;!--- The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI of an ontology instance of a class specified through the name attribute -->
 &lt;!ELEMENT TLCReference     @referenceType; >
 &lt;!ATTLIST TLCReference     ##name; >
-
-
-
-
-
 
 &lt;!--- The element notes is a metadata container of all the note elements used as footnotes and endnotes in the document. -->
 &lt;!ELEMENT notes        (note)+>

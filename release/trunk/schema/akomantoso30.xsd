@@ -16,7 +16,7 @@
 		Copyright (C) Africa i-Parliaments
 		
 		
-		Release 25/9/2013 - Akoma Ntoso 3.0 CSD06
+		Release 20/12/2013 - Akoma Ntoso 3.0 CSD07
 		Complete version.
 		
 		
@@ -31,19 +31,9 @@
 		
 		TERMS AND CONDITIONS
 		
-		This program is free software; you can redistribute it and/or
-		modify it under the terms of the GNU General Public License
-		as published by the Free Software Foundation; either version 2
-		of the License, or (at your option) any later version.
+		This schema is provided by OASIS, the Copyright Holder, under the licence
+		specified in the file licence.txt that can also be found at the URL xxxx
 		
-		This program is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-		GNU General Public License for more details.
-		
-		You should have received a copy of the GNU General Public License
-		along with this program; if not, write to the Free Software
-		Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		===================================================================== 
 		</xsd:documentation>
 	  </xsd:annotation>
@@ -1344,6 +1334,21 @@ This is the list of possible positions of the text being analyzed by the element
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
+	  <xsd:simpleType name="restrictionType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>restrictionType</name>
+            <comment>
+This is the list of allowed values for the restriction type attribute</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="jurisdiction"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
 	  <xsd:annotation>
 		    <xsd:documentation>
 		 =====================================================================
@@ -2570,13 +2575,21 @@ the element header is used as a container of all prefacing material of judgments
 
 	  <xsd:element name="attachments">
 		    <xsd:complexType>
+			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="attachment"/>
+			      </xsd:sequence>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="attachment">
+		    <xsd:complexType>
 			      <xsd:choice minOccurs="1" maxOccurs="unbounded">
 				        <xsd:group ref="documentType"/>
 				        <xsd:element ref="interstitial"/>
 				        <xsd:element ref="toc"/>
 				        <xsd:element ref="documentRef"/>
 			      </xsd:choice>
-				     <xsd:attributeGroup ref="coreopt"/>
+				     <xsd:attributeGroup ref="corereq"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -4735,29 +4748,31 @@ the type subFlowStructure specifies the overall content model of the elements th
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+		    <xsd:choice>
 			      <xsd:group ref="documentType"/>
-			      <xsd:group ref="blockElements"/>
-			      <xsd:group ref="containerElements"/>
-			      <xsd:element ref="tr"/>
-			      <xsd:element ref="th"/>
-			      <xsd:element ref="td"/>
-			      <xsd:group ref="hierElements"/>
-			      <xsd:element ref="content"/>
-			      <xsd:group ref="ANcontainers"/>
-			      <xsd:element ref="formula"/>
-			      <xsd:element ref="recitals"/>
-			      <xsd:element ref="citations"/>
-			      <xsd:element ref="longTitle"/>
-			      <xsd:element ref="recital"/>
-			      <xsd:element ref="citation"/>
-			      <xsd:element ref="componentRef"/>
-			      <xsd:element ref="documentRef"/>
-			      <xsd:element ref="intro"/>
-			      <xsd:element ref="wrap"/>
-			      <xsd:element ref="heading"/>
-			      <xsd:element ref="subheading"/>
-			      <xsd:element ref="num"/>
+			      <xsd:choice minOccurs="1" maxOccurs="unbounded">
+				        <xsd:group ref="blockElements"/>
+				        <xsd:group ref="containerElements"/>
+				        <xsd:element ref="tr"/>
+				        <xsd:element ref="th"/>
+				        <xsd:element ref="td"/>
+				        <xsd:group ref="hierElements"/>
+				        <xsd:element ref="content"/>
+				        <xsd:group ref="ANcontainers"/>
+				        <xsd:element ref="formula"/>
+				        <xsd:element ref="recitals"/>
+				        <xsd:element ref="citations"/>
+				        <xsd:element ref="longTitle"/>
+				        <xsd:element ref="recital"/>
+				        <xsd:element ref="citation"/>
+				        <xsd:element ref="componentRef"/>
+				        <xsd:element ref="documentRef"/>
+				        <xsd:element ref="intro"/>
+				        <xsd:element ref="wrap"/>
+				        <xsd:element ref="heading"/>
+				        <xsd:element ref="subheading"/>
+				        <xsd:element ref="num"/>
+			      </xsd:choice>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="corereq"/>
 	  </xsd:complexType>
@@ -5896,6 +5911,7 @@ The element step is a metadata element specifying facts about a workflow step oc
 			      <xsd:sequence>
 				        <xsd:element ref="activeModifications" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="passiveModifications" minOccurs="0" maxOccurs="1"/>
+				        <xsd:element ref="restrictions" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="judicial" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="parliamentary" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="otherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
@@ -6445,6 +6461,35 @@ The element distinguishes is a metadata element specifying a reference to a sour
    </xsd:element>
 		
 
+
+	  <xsd:element name="restrictions">
+		    <xsd:complexType>
+			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="restriction"/>
+			      </xsd:sequence>
+				     <xsd:attributeGroup ref="source"/>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="restriction">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>restriction</name>
+            <comment>
+The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="anyOtherType">
+					          <xsd:attributeGroup ref="refers"/>
+					          <xsd:attribute name="type" type="restrictionType" use="required"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:complexType name="parliamentaryAnalysis">
 		    <xsd:annotation>

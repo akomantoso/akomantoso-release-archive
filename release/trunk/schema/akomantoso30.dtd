@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 25/9/2013 - Akoma Ntoso 3.0 CSD06
+Release 20/12/2013 - Akoma Ntoso 3.0 CSD07
 Complete version.
 
 
@@ -23,19 +23,9 @@ mentions.
 
 TERMS AND CONDITIONS
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+This schema is provided by OASIS, the Copyright Holder, under the licence
+specified in the file licence.txt that can also be found at the URL xxxx
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =====================================================================  -->
 
 
@@ -265,6 +255,11 @@ Simple types (data values)
 
 <!ENTITY % posType  "(start|before|inside|after|end|unspecified)" >
 <!ENTITY % EposType "((start|before|inside|after|end|unspecified))" >
+
+
+<!ENTITY % restrictionType    "(jurisdiction)" >
+<!ENTITY % ErestrictionType "((jurisdiction))" >
+
 
 
 <!--  =====================================================================
@@ -556,9 +551,11 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT header      %blocksopt; >
 <!ATTLIST header %coreopt;  >
 
-<!ELEMENT attachments (%documentType; | interstitial | toc | documentRef)+>
+<!ELEMENT attachments (attachment)+>
 
-<!ATTLIST attachments %coreopt;  >
+<!ELEMENT attachment (%documentType; | interstitial | toc | documentRef)+>
+
+<!ATTLIST attachment %corereq;  >
 
 <!ELEMENT interstitial  %blocksreq; >
 <!ATTLIST interstitial %corereq;  >
@@ -1193,7 +1190,7 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % subFlowStructure "(%documentType; | %blockElements; | %containerElements; | tr | th | td | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | documentRef | intro | wrap | heading | subheading | num)+" >
+<!ENTITY % subFlowStructure "(%documentType; | (%blockElements; | %containerElements; | tr | th | td | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | documentRef | intro | wrap | heading | subheading | num)+)" >
 
 
 
@@ -1533,7 +1530,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT analysis              (activeModifications?,passiveModifications?,judicial?,parliamentary?,otherAnalysis*)>
+<!ELEMENT analysis              (activeModifications?,passiveModifications?,restrictions?,judicial?,parliamentary?,otherAnalysis*)>
 
 <!ATTLIST analysis %source;  >
 
@@ -1645,6 +1642,20 @@ Metadata elements for all documents
 
 <!ELEMENT distinguishes  %judicialArgumentType; >
 <!ATTLIST distinguishes %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
+
+
+
+
+<!ELEMENT restrictions   (restriction)+>
+
+<!ATTLIST restrictions %source;  >
+
+
+<!ELEMENT restriction   %anyOtherType; >
+<!ATTLIST restriction %core;  %idopt;  %linkopt;  >
+
+<!ATTLIST restriction %refers;  type %restrictionType; #REQUIRED >
+
 
 
 
@@ -1817,11 +1828,6 @@ Metadata elements for all documents
 <!ATTLIST TLCReference %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST TLCReference %name;  >
-
-
-
-
-
 
 
 <!ELEMENT notes        (note)+>

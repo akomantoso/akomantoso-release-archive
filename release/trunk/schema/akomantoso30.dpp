@@ -5,7 +5,7 @@
      Copyright (C) Africa i-Parliaments
 
 
-     Release 25/9/2013 - Akoma Ntoso 3.0 CSD06 
+     Release 20/12/2013 - Akoma Ntoso 3.0 CSD07 
 				Complete version. 
 			
 
@@ -19,20 +19,10 @@
      mentions.
 
      TERMS AND CONDITIONS
-     
-     This program is free software; you can redistribute it and/or
-     modify it under the terms of the GNU General Public License
-     as published by the Free Software Foundation; either version 2
-     of the License, or (at your option) any later version.
-     
-     This program is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     GNU General Public License for more details.
-     
-     You should have received a copy of the GNU General Public License
-     along with this program; if not, write to the Free Software
-     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+		 
+		 This schema is provided by OASIS, the Copyright Holder, under the licence 
+		 specified in the file licence.txt that can also be found at the URL xxxx
+		 
      ===================================================================== -->
 
 <!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD06'>
@@ -302,6 +292,10 @@
 
 <!--- This is the list of possible positions of the text being analyzed by the element in the analysis section -->
 <!ENTITY # posType  "#STRING(start|before|inside|after|end|unspecified)">
+	
+<!--- This is the list of allowed values for the restriction type attribute   -->
+<!ENTITY # restrictionType    "#STRING(jurisdiction)" >
+	
 
 	
 <!-- =====================================================================
@@ -613,8 +607,10 @@
 <!--- the element header is used as a container of all prefacing material of judgments (e.g. headers, formulas, etc.) -->
 <!ELEMENT header      @blocksopt; >
 <!--- the element attachments is used as a container of individual attachment elements -->
-<!ELEMENT attachments (@@documentType; | interstitial | toc | documentRef)+ >
-<!ATTLIST attachments ##coreopt; >
+<!ELEMENT attachments (attachment)+ >
+<!--- the element attachment is used as a container of individual attachment elements -->
+<!ELEMENT attachment (@@documentType; | interstitial | toc | documentRef)+ >
+<!ATTLIST attachment ##corereq; >
 <!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
 <!ELEMENT interstitial  @blocksreq; >
 
@@ -1082,8 +1078,8 @@
      ===================================================================== -->
 
 <!--- the type subFlowStructure specifies the overall content model of the elements that are subFlows -->
-<!ENTITY @ subFlowStructure " (
-              @@documentType; |
+<!ENTITY @ subFlowStructure "(
+              @@documentType; | (
 							@@blockElements; | 
 							@@containerElements; 
 	            | tr | th | td
@@ -1091,7 +1087,7 @@
 							| @@ANcontainers; 
 							| formula | recitals | citations | longTitle | recital | citation
 							| componentRef | documentRef
-							|	intro | wrap | heading | subheading | num  )+" "##corereq; ">
+							|	intro | wrap | heading | subheading | num  )+)" "##corereq; ">
 
 
 <!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
@@ -1393,8 +1389,8 @@
 
 
 <!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events, of judgments and of votes in parliamentary documents -->
-<!ELEMENT analysis              (activeModifications?, passiveModifications?,
-				 judicial?, parliamentary?, otherAnalysis*) >
+<!ELEMENT analysis              (activeModifications?, passiveModifications?, 
+restrictions?, judicial?,  parliamentary?,  otherAnalysis*) >
 <!ATTLIST analysis              ##source; >
 
 
@@ -1480,6 +1476,19 @@
 <!ELEMENT putsInQuestion  @judicialArgumentType; >
 <!--- The element distinguishes is a metadata element specifying a reference to a source being distinguished by the argument being described. -->
 <!ELEMENT distinguishes  @judicialArgumentType; > 
+
+
+
+<!--- The element restrictions is a metadata container of the elements for the determination of specification of jurisdictions and other types of restrictions. -->
+<!ELEMENT restrictions   (restriction)+ >
+<!ATTLIST restrictions 	##source; >
+
+<!--- The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the -->
+<!ELEMENT restriction  	@anyOtherType; >
+<!ATTLIST restriction		##refers; 
+                            type #restrictionType; #REQUIRED 
+>
+
 
 
 
@@ -1620,11 +1629,6 @@ with respect to the element being identified with the relative currentId. -->
 <!--- The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI of an ontology instance of a class specified through the name attribute -->
 <!ELEMENT TLCReference     @referenceType; >
 <!ATTLIST TLCReference     ##name; >
-
-
-
-
-
 
 <!--- The element notes is a metadata container of all the note elements used as footnotes and endnotes in the document. -->
 <!ELEMENT notes        (note)+>
