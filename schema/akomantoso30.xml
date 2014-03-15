@@ -18,7 +18,7 @@
      Copyright (C) Africa i-Parliaments
 
 
-     <report version="Release 20/12/2013 - Akoma Ntoso 3.0 CSD07"/>
+     <report version="Release 16/01/2014 - Akoma Ntoso 3.0 CSD08"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -36,7 +36,7 @@
 		 
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD07'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -63,7 +63,7 @@
 &lt;!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
 &lt;!ENTITY @@ ANblock         "(blockList | blockContainer <include if="tblock" v="| tblock"/><include if="toc" v="| toc"/>)" >
 &lt;!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
-&lt;!ENTITY @@ ANinline        "(ref <include if="advancedRefs" v="| mref | rref"/> <include if="modifications" v="| mod | mmod | rmod"/><include if="debateDocs" v="| remark | recordedTime | vote | outcome"/> <include if="publishing" v=" | ins | del | omissis"/> <include if="extracts" v="| extractText | extractStructure"/> <include if="specials" v="| placeholder | fillIn | decoration"/>)" >
+&lt;!ENTITY @@ ANinline        "(ref <include if="advancedRefs" v="| mref | rref"/> <include if="modifications" v="| mod | mmod | rmod"/><include if="debateDocs" v="| remark | recordedTime | vote | outcome"/> <include if="publishing" v=" | ins | del | omissis"/> <include if="embedded" v="| embeddedText | embeddedStructure"/> <include if="specials" v="| placeholder | fillIn | decoration"/>)" >
 &lt;!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
 &lt;!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate <include if="legislativePreface" v="| legislature | session | shortTitle"/><include if="advancedPreface" v="|docAuthority|docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber"/>)" >
 
@@ -214,7 +214,7 @@
 &lt;!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
 &lt;!ENTITY ## outcome "outcome #ANYURI #IMPLIED">
 
-&lt;!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, extractText and extractStructure to specify the start and quote character delimiting the quoted or extracted part. If the characters are the same, one can use only startQuote. -->
+&lt;!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote. -->
 &lt;!ENTITY ## quote "
 	startQuote #STRING #IMPLIED 
 	endQuote #STRING #IMPLIED
@@ -362,6 +362,10 @@
 &lt;!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
 &lt;!ENTITY @ anyOtherType      "ANY{##other}"                "##core; ##idopt; ##linkopt;" >                 
 
+&lt;!--- the complex type docContainerType defines a shared content model for elements that contain whole documents, namely attachment, collectionItem, component. -->
+&lt;!ENTITY @ docContainerType      "(@@documentType; | interstitial <include if="toc" v="| toc"/> <include if="components" v="| documentRef"/>)"                "##corereq;" > 
+
+
 &lt;!-- =====================================================================
 
         Root element
@@ -373,11 +377,13 @@
 
 &lt;!--- the type documentType lists all the document types that are managed by Akoma Ntoso -->
 	&lt;!ENTITY @@ documentType      "(	
-						<include if="collectionDocs">
-							<include if="amendmentList" v="amendmentList | "/>
-							<include if="officialGazette" v="officialGazette | "/>							
-							documentCollection |
-						</include> 
+						<include if="components">
+							<include if="collectionDocs">
+								<include if="amendmentList" v="amendmentList | "/>
+								<include if="officialGazette" v="officialGazette | "/>							
+								documentCollection |
+							</include> 
+						</include>
 						<include if="legislativeDocs">
 							<include if="act" v="act | "/>
 							<include if="bill" v="bill | "/>							
@@ -431,8 +437,15 @@
 &lt;!ATTLIST statement  xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 </include>
 
+<include if="components" dependsOn="core" label="Components" desc="Elements $components and $component for the specification of parts and fragments of composite documents"	>
 	
-<include if="collectionDocs" label="Collections of smaller documents" desc="Document types $amendmentList, $officialGazette and $documentCollection">		
+&lt;!--- The element components is a container of all components referred to in the main part of the document -->
+&lt;!ELEMENT components (component)+ >
+
+&lt;!--- The element component is a container of a subdocument specified in a composite document -->
+&lt;!ELEMENT component @docContainerType; >
+	
+<include if="collectionDocs" label="Collections of smaller documents" desc="Document types $amendmentList, $officialGazette and $documentCollection">	
 &lt;!--- the type collectionStructure specifies the overall content model of the document types that are collections of other documents -->
 &lt;!ENTITY @ collectionStructure "(meta, 
                                    coverPage?,
@@ -452,15 +465,19 @@
 &lt;!--- Element officialGazette is used for describing the structure and content of an issue of an official gazette -->
 &lt;!ELEMENT officialGazette           @collectionStructure; >
 </include>
+
 &lt;!--- Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever -->
 &lt;!ELEMENT documentCollection           @collectionStructure; >
 
 &lt;!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
-&lt;!ENTITY @ collectionBodyType  "(@@documentType; | documentRef | interstitial?)+" "##coreopt;" >
+&lt;!ENTITY @ collectionBodyType  (component+)>
 &lt;!--- the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 &lt;!ELEMENT collectionBody       @collectionBodyType; >
 </include>
 	
+</include>
+
+
 <include if="components" label="Component: an independent fragment of another document" desc="Document element $fragment">		
 &lt;!--- the type fragmentStructure specifies the overall content model of the document type that is a fragment of another document -->
 &lt;!ENTITY @ fragmentStructure   "(meta, 
@@ -620,8 +637,7 @@
 &lt;!--- the element attachments is used as a container of individual attachment elements -->
 &lt;!ELEMENT attachments (attachment)+ >
 &lt;!--- the element attachment is used as a container of individual attachment elements -->
-&lt;!ELEMENT attachment (@@documentType; | interstitial <include if="toc" v="| toc"/> <include if="components" v="| documentRef"/>)+ >
-&lt;!ATTLIST attachment ##corereq; >
+&lt;!ELEMENT attachment @docContainerType; >
 &lt;!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
 &lt;!ELEMENT interstitial  @blocksreq; >
 <include if="components" desc="references to components at the Work and Expression levels ($documentRef) and at the Manifestation level ($componentRef).">
@@ -1071,8 +1087,8 @@
 &lt;!ATTLIST noteRef      ##notes; ##link;>
 
 <include if="delimiters"  dependsOn="core" label="Typographical delimiters" desc="Elements for the definition of typographical delimitation of line ($eol) and page ($eop)">
-&lt;!--- the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen -->
-&lt;!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED">
+&lt;!--- the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue -->
+&lt;!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED number #STRING #IMPLIED">
 &lt;!--- the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
 &lt;!ELEMENT eol   @eolType; >
 &lt;!--- the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
@@ -1107,14 +1123,14 @@
                               for #ANYURI #IMPLIED>
 
 </include>
-<include if="extract" dependsOn="core" label="Extracts" desc="inline and subFlow elements $extractStructure and $extractText for the specification of extracts from other documents.">
+<include if="embedded" dependsOn="core" label="embedded" desc="inline and subFlow elements $embeddedStructure and $embeddedText for the specification of embedded parts or wholes from other documents.">
 
-&lt;!--- the element extractText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
-&lt;!ELEMENT extractText        @inline; >
-&lt;!ATTLIST extractText        ##quote; >
-&lt;!--- the element extractStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
-&lt;!ELEMENT extractStructure   @subFlowStructure;>
-&lt;!ATTLIST extractStructure   ##quote; >
+&lt;!--- the element embeddedText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
+&lt;!ELEMENT embeddedText        @inline; >
+&lt;!ATTLIST embeddedText        ##quote; ##linkopt; >
+&lt;!--- the element embeddedStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
+&lt;!ELEMENT embeddedStructure   @subFlowStructure;>
+&lt;!ATTLIST embeddedStructure   ##quote; ##linkopt; >
 
 </include>
 
@@ -1655,20 +1671,10 @@ with respect to the element being identified with the relative currentId. -->
 &lt;!ELEMENT presentation @anyOtherType; >
 &lt;!ATTLIST presentation ##source; ></include>
 	
-<include if="components" dependsOn="core" label="Components" desc="Elements $components and $component for the specification of parts and fragments of composite documents"	>
-&lt;!-- =====================================================================
 
-        Components
 
-     ===================================================================== -->
-	
-&lt;!--- The element components is a container of all components referred to in the main part of the document -->
-&lt;!ELEMENT components (component)+ >
 
-&lt;!--- The element component is a container of a subdocument specified in a composite document -->
-&lt;!ELEMENT component (@@documentType;) >
-&lt;!ATTLIST component ##core; ##idreq; >
-</include>
+
 
 &lt;!-- =====================================================================
 

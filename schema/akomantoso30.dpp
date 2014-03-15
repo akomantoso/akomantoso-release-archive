@@ -5,7 +5,7 @@
      Copyright (C) Africa i-Parliaments
 
 
-     Release 20/12/2013 - Akoma Ntoso 3.0 CSD07 
+     Release 16/01/2014 - Akoma Ntoso 3.0 CSD08 
 				Complete version. 
 			
 
@@ -25,7 +25,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD07'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -52,7 +52,7 @@
 <!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
 <!ENTITY @@ ANblock         "(blockList | blockContainer | tblock| toc)" >
 <!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
-<!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | extractText | extractStructure | placeholder | fillIn | decoration)" >
+<!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | embeddedText | embeddedStructure | placeholder | fillIn | decoration)" >
 <!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
 <!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle|docAuthority|docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber)" >
 
@@ -203,7 +203,7 @@
 <!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
 <!ENTITY ## outcome "outcome #ANYURI #IMPLIED">
 
-<!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, extractText and extractStructure to specify the start and quote character delimiting the quoted or extracted part. If the characters are the same, one can use only startQuote. -->
+<!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote. -->
 <!ENTITY ## quote "
 	startQuote #STRING #IMPLIED 
 	endQuote #STRING #IMPLIED
@@ -351,6 +351,10 @@
 <!--- the complex type anyOtherType defines an open content model for elements that may use elements from other namespaces. -->
 <!ENTITY @ anyOtherType      "ANY{##other}"                "##core; ##idopt; ##linkopt;" >                 
 
+<!--- the complex type docContainerType defines a shared content model for elements that contain whole documents, namely attachment, collectionItem, component. -->
+<!ENTITY @ docContainerType      "(@@documentType; | interstitial | toc | documentRef)"                "##corereq;" > 
+
+
 <!-- =====================================================================
 
         Root element
@@ -363,10 +367,12 @@
 <!--- the type documentType lists all the document types that are managed by Akoma Ntoso -->
 	<!ENTITY @@ documentType      "(	
 						
-							amendmentList | 
-							officialGazette | 							
-							documentCollection |
-						 
+							
+								amendmentList | 
+								officialGazette | 							
+								documentCollection |
+							 
+						
 						
 							act | 
 							bill | 							
@@ -420,8 +426,15 @@
 <!ATTLIST statement  xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 
+
 	
-		
+<!--- The element components is a container of all components referred to in the main part of the document -->
+<!ELEMENT components (component)+ >
+
+<!--- The element component is a container of a subdocument specified in a composite document -->
+<!ELEMENT component @docContainerType; >
+	
+	
 <!--- the type collectionStructure specifies the overall content model of the document types that are collections of other documents -->
 <!ENTITY @ collectionStructure "(meta, 
                                    coverPage?,
@@ -441,15 +454,19 @@
 <!--- Element officialGazette is used for describing the structure and content of an issue of an official gazette -->
 <!ELEMENT officialGazette           @collectionStructure; >
 
+
 <!--- Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever -->
 <!ELEMENT documentCollection           @collectionStructure; >
 
 <!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
-<!ENTITY @ collectionBodyType  "(@@documentType; | documentRef | interstitial?)+" "##coreopt;" >
+<!ENTITY @ collectionBodyType  (component+)>
 <!--- the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 <!ELEMENT collectionBody       @collectionBodyType; >
 
 	
+
+
+
 		
 <!--- the type fragmentStructure specifies the overall content model of the document type that is a fragment of another document -->
 <!ENTITY @ fragmentStructure   "(meta, 
@@ -609,8 +626,7 @@
 <!--- the element attachments is used as a container of individual attachment elements -->
 <!ELEMENT attachments (attachment)+ >
 <!--- the element attachment is used as a container of individual attachment elements -->
-<!ELEMENT attachment (@@documentType; | interstitial | toc | documentRef)+ >
-<!ATTLIST attachment ##corereq; >
+<!ELEMENT attachment @docContainerType; >
 <!--- the element interstitial is used as a container of text elements and blocks that are placed for any reason between individual documents in a collection of documents -->
 <!ELEMENT interstitial  @blocksreq; >
 
@@ -1060,8 +1076,8 @@
 <!ATTLIST noteRef      ##notes; ##link;>
 
 
-<!--- the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen -->
-<!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED">
+<!--- the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue -->
+<!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED number #STRING #IMPLIED">
 <!--- the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
 <!ELEMENT eol   @eolType; >
 <!--- the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
@@ -1098,12 +1114,12 @@
 
 
 
-<!--- the element extractText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
-<!ELEMENT extractText        @inline; >
-<!ATTLIST extractText        ##quote; >
-<!--- the element extractStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
-<!ELEMENT extractStructure   @subFlowStructure;>
-<!ATTLIST extractStructure   ##quote; >
+<!--- the element embeddedText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
+<!ELEMENT embeddedText        @inline; >
+<!ATTLIST embeddedText        ##quote; ##linkopt; >
+<!--- the element embeddedStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
+<!ELEMENT embeddedStructure   @subFlowStructure;>
+<!ATTLIST embeddedStructure   ##quote; ##linkopt; >
 
 
 
@@ -1645,18 +1661,8 @@ with respect to the element being identified with the relative currentId. -->
 <!ATTLIST presentation ##source; >
 	
 
-<!-- =====================================================================
 
-        Components
 
-     ===================================================================== -->
-	
-<!--- The element components is a container of all components referred to in the main part of the document -->
-<!ELEMENT components (component)+ >
-
-<!--- The element component is a container of a subdocument specified in a composite document -->
-<!ELEMENT component (@@documentType;) >
-<!ATTLIST component ##core; ##idreq; >
 
 
 <!-- =====================================================================
