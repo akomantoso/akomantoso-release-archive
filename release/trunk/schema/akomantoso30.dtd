@@ -8,7 +8,7 @@ Nations Department of Economic and Social Affairs
 Copyright (C) Africa i-Parliaments
 
 
-Release 20/12/2013 - Akoma Ntoso 3.0 CSD07
+Release 16/01/2014 - Akoma Ntoso 3.0 CSD08
 Complete version.
 
 
@@ -55,7 +55,7 @@ Main element groups
 
 <!ENTITY % ANblock         "blockList | blockContainer | tblock | toc" >
 
-<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | extractText | extractStructure | placeholder | fillIn | decoration" >
+<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | embeddedText | embeddedStructure | placeholder | fillIn | decoration" >
 
 <!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle | docAuthority | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
 
@@ -318,6 +318,10 @@ Complex types (markup structures)
 
 <!ENTITY % anyOtherType      "ANY" >
 
+
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | fragment | doc" ><!ENTITY % docContainerType      "(%documentType; | interstitial | toc | documentRef)" >
+
+
 <!--  =====================================================================
 
 Root element
@@ -328,7 +332,7 @@ Reference: http://www.xmlpatterns.com/UniversalRootMain.shtml
 =====================================================================  -->
 
 
-<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | fragment | doc" >
+
 
 
 
@@ -344,7 +348,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD07"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -371,6 +375,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
+<!ELEMENT components (component)+>
+
+
+<!ELEMENT component %docContainerType; >
+<!ATTLIST component %corereq;  >
+
+
+
 <!ENTITY % collectionStructure "(meta,coverPage?,preface?,preamble?,collectionBody,conclusions?,attachments?,components?)" >
 
 
@@ -384,14 +396,17 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST officialGazette %name;  contains %versionType; 'originalVersion'  >
 
 
+
 <!ELEMENT documentCollection           %collectionStructure; >
 <!ATTLIST documentCollection %name;  contains %versionType; 'originalVersion'  >
 
 
-<!ENTITY % collectionBodyType  "(%documentType; | documentRef | interstitial?)+" >
+<!ENTITY % collectionBodyType  "(component+)" >
 
 <!ELEMENT collectionBody       %collectionBodyType; >
-<!ATTLIST collectionBody %coreopt;  >
+
+
+
 
 
 
@@ -553,8 +568,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ELEMENT attachments (attachment)+>
 
-<!ELEMENT attachment (%documentType; | interstitial | toc | documentRef)+>
-
+<!ELEMENT attachment %docContainerType; >
 <!ATTLIST attachment %corereq;  >
 
 <!ELEMENT interstitial  %blocksreq; >
@@ -1174,10 +1188,10 @@ there is text.
 <!ENTITY % eolType  "%markeropt;" >
 
 <!ELEMENT eol   %eolType; >
-<!ATTLIST eol breakat %INTEGER; #IMPLIED %coreopt;  >
+<!ATTLIST eol breakat %INTEGER; #IMPLIED number %STRING; #IMPLIED %coreopt;  >
 
 <!ELEMENT eop   %eolType; >
-<!ATTLIST eop breakat %INTEGER; #IMPLIED %coreopt;  >
+<!ATTLIST eop breakat %INTEGER; #IMPLIED number %STRING; #IMPLIED %coreopt;  >
 
 
 <!--  =====================================================================
@@ -1203,15 +1217,15 @@ within a text content, but are not of textual nature.
 
 
 
-<!ELEMENT extractText        %inline; >
-<!ATTLIST extractText %coreopt;  >
+<!ELEMENT embeddedText        %inline; >
+<!ATTLIST embeddedText %coreopt;  >
 
-<!ATTLIST extractText %quote;  >
+<!ATTLIST embeddedText %quote;  %linkopt;  >
 
-<!ELEMENT extractStructure   %subFlowStructure; >
-<!ATTLIST extractStructure %corereq;  >
+<!ELEMENT embeddedStructure   %subFlowStructure; >
+<!ATTLIST embeddedStructure %corereq;  >
 
-<!ATTLIST extractStructure %quote;  >
+<!ATTLIST embeddedStructure %quote;  %linkopt;  >
 
 
 
@@ -1850,19 +1864,8 @@ Metadata elements for all documents
 <!ATTLIST presentation %source;  >
 
 
-<!--  =====================================================================
-
-Components
-
-=====================================================================  -->
 
 
-<!ELEMENT components (component)+>
-
-
-<!ELEMENT component (%documentType;)>
-
-<!ATTLIST component %core;  %idreq;  >
 
 
 <!--  =====================================================================
