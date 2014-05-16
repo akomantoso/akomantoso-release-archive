@@ -1,11 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
-     supported by Africa i-Parliaments, a project sponsored by United
-     Nations Department of Economic and Social Affairs
-     Copyright (C) Africa i-Parliaments
 
-
-     Release 16/01/2014 - Akoma Ntoso 3.0 CSD08 
+     Release 02/04/2014 - Akoma Ntoso 3.0 CSD09 
 				Complete version. 
 			
 
@@ -25,7 +21,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD09'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -129,7 +125,7 @@
 
      ===================================================================== -->
      
-<!--- The attribute alternativeTo is used to specify, when the element contains an alternative version of some content, the currentId of the main element which this element is an alternative copy of -->
+<!--- The attribute alternativeTo is used to specify, when the element contains an alternative version of some content, the eId of the main element which this element is an alternative copy of -->
 <!ENTITY ## alt         "alternativeTo         #ANYURI        #IMPLIED" >
 <!--- The attribute name is used to give a name to all generic elements -->
 <!ENTITY ## name         "name         #STRING        #REQUIRED" >
@@ -140,7 +136,7 @@
 <!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD or a normalized value for a dateTime according to the XSD syntax YYYY-MM-DDThh:mm:ss(zzzz)  -->
 <!ENTITY ## date         "date         #DATE | #DATETIME         #REQUIRED" >
 <!--- The attribute time is used to give a normalized value for a time according to the XSD syntax HH:MM:SS -->
-<!ENTITY ## time         "time         #TIME          #REQUIRED" >
+<!ENTITY ## time         "time         #TIME | #DATETIME         #REQUIRED" >
 <!--- The attribute href is used to specify an internal or external destination for a reference, a citation, an access to the ontology or a hypertext link. In elements using this attribute definition the href attribute is required -->
 <!ENTITY ## link         "href         #ANYURI        #REQUIRED" >
 <!--- The attribute href is used to specify an internal or external destination for a reference, a citation, an access to the ontology or a hypertext link. In elements using this attribute definition the href attribute is optional -->
@@ -221,13 +217,13 @@
                           title        #STRING      #IMPLIED">
 <!--- This attribute list are used to specify the fact that any attribute can be specified for this element if it belongs to a different namespace. -->
 <!ENTITY ## core    "xxxdirtyTrick        #STRING      #IMPLIED">
-<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the currentId attribute is required. The originalId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
-<!ENTITY ## idreq        "currentId    #NMTOKEN           #REQUIRED
-                             originalId   #NMTOKEN           #IMPLIED 
+<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is required. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
+<!ENTITY ## idreq        "eId    #NMTOKEN           #REQUIRED
+                             wId   #NMTOKEN           #IMPLIED 
                              GUID         #NMTOKEN           #IMPLIED">
-<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the currentId attribute is optional. The originalId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
-<!ENTITY ## idopt        "currentId    #NMTOKEN           #IMPLIED
-                             originalId   #NMTOKEN           #IMPLIED 
+<!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is optional. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
+<!ENTITY ## idopt        "eId    #NMTOKEN           #IMPLIED
+                             wId   #NMTOKEN           #IMPLIED 
                              GUID         #NMTOKEN           #IMPLIED">
 
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
@@ -240,11 +236,11 @@
                    xml:space          (default|preserve) #IMPLIED
                    " >
 
-<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the currentId attribute is required -->
+<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the eId attribute is required -->
 <!ENTITY ## corereq      "##core; ##HTMLattrs; ##enactment; ##idreq; ##refers; ##xmllang; ##alt;" >
-<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the currentId attribute are required -->
+<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the eId attribute are required -->
 <!ENTITY ## corereqreq   "##core; ##HTMLattrs; ##enactment; ##idreq; ##refersreq; ##xmllang; ##alt;" >
-<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the currentId attribute are optional -->
+<!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition both the refersTo attribute and the eId attribute are optional -->
 <!ENTITY ## coreopt      "##core; ##HTMLattrs; ##enactment; ##idopt; ##refers; ##xmllang; ##alt;" >
 
 <!-- =====================================================================
@@ -312,31 +308,31 @@
 
 <!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
 <!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | componentRef |  @@ANcontainers; | @@blockElements;)*" "##corereq;">
-<!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the currentId attribute is required -->
+<!--- the complex type blocksreq defines the content model and attributes shared by all containers. Here the eId attribute is required -->
 <!ENTITY @ blocksreq         "(@@blockElements;)*" "##corereq;">
-<!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the currentId attribute is optional -->
+<!--- the complex type blocksopt defines the content model and attributes shared by all containers. Here the eId attribute is optional -->
 <!ENTITY @ blocksopt         "(@@blockElements;)*" "##coreopt;">
-<!--- the complex type inline defines the content model and attributes shared by all blocks and inlines. Here the currentId attribute is optional -->
+<!--- the complex type inline defines the content model and attributes shared by all blocks and inlines. Here the eId attribute is optional -->
 <!ENTITY @ inline            "(#PCDATA | @@inlineCM;)*" "##coreopt;">
-<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the currentId attribute is required -->
+<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the eId attribute is required -->
 <!ENTITY @ inlinereq         "(#PCDATA | @@inlineCM;)*" "##corereq;">
-<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the currentId attribute is required and also the refersTo is required -->
+<!--- the complex type inlinereq defines the content model and attributes shared by all blocks and inlines. Here the eId attribute is required and also the refersTo is required -->
 <!ENTITY @ inlinereqreq      "(#PCDATA | @@inlineCM;)*" "##corereqreq;">
 
-<!--- the complex type markerreq defines the content model and attributes shared by all marker elements. Here the currentId attribute is required -->
+<!--- the complex type markerreq defines the content model and attributes shared by all marker elements. Here the eId attribute is required -->
 <!ENTITY @ markerreq         "" "##corereq;">
-<!--- the complex type markeropt defines the content model and attributes shared by all marker elements. Here the currentId attribute is optional -->
+<!--- the complex type markeropt defines the content model and attributes shared by all marker elements. Here the eId attribute is optional -->
 <!ENTITY @ markeropt         "" "##coreopt;">
-<!--- the complex type metareq defines the content model and attributes shared by all metadata elements. Here the currentId attribute is required -->
+<!--- the complex type metareq defines the content model and attributes shared by all metadata elements. Here the eId attribute is required -->
 <!ENTITY @ metareq           "" "##core; ##idreq;">
-<!--- the complex type metaopt defines the content model and attributes shared by all metadata elements. Here the currentId attribute is optional -->
+<!--- the complex type metaopt defines the content model and attributes shared by all metadata elements. Here the eId attribute is optional -->
 <!ENTITY @ metaopt           "" "##core; ##idopt;">
 
 <!--- the complex type maincontent is used by container elements that can contain basically any other Akoma Ntoso structure -->
 <!ENTITY @ maincontent       "(componentRef |  @@hierElements; | @@blockElements; | @@containerElements; )+" "##coreopt;" >
 
 	
-<!--- the complex type speechType defines the content model and attributes shared by all speech elements. Here the currentId attribute is optional -->
+<!--- the complex type speechType defines the content model and attributes shared by all speech elements. Here the eId attribute is optional -->
 <!ENTITY @ speechType        "@basehierarchy;, (from?, (@@blockElements;)+)" "##coreopt; ##speechAtts;" >
 
 
@@ -352,7 +348,7 @@
 <!ENTITY @ anyOtherType      "ANY{##other}"                "##core; ##idopt; ##linkopt;" >                 
 
 <!--- the complex type docContainerType defines a shared content model for elements that contain whole documents, namely attachment, collectionItem, component. -->
-<!ENTITY @ docContainerType      "(@@documentType; | interstitial | toc | documentRef)"                "##corereq;" > 
+<!ENTITY @ docContainerType      "@basehierarchy;, (@@documentType; | interstitial | toc | documentRef)"                "##corereq;" > 
 
 
 <!-- =====================================================================
@@ -607,15 +603,15 @@
 
 
 		
-<!--- the complex type basicopt defines the content model and attributes used by basic containers such as coverPage and conclusions. Here the currentId attribute is optional -->
+<!--- the complex type basicopt defines the content model and attributes used by basic containers such as coverPage and conclusions. Here the eId attribute is optional -->
 <!ENTITY @ basicopt         "(@@blockElements; | @@basicContainers; )+" "##coreopt;">
 <!--- the element coverPage is used as a container of the text that acts as a cover page -->
 <!ELEMENT coverPage    @basicopt; >
-<!--- the complex type preambleopt defines the content model and attributes used by preambles. Here the currentId attribute is optional -->
+<!--- the complex type preambleopt defines the content model and attributes used by preambles. Here the eId attribute is optional -->
 <!ENTITY @ preambleopt         "(@@blockElements; | @@preambleContainers; )+" "##coreopt;">
 <!--- the element preamble is used as a container of the text that opens the main body of the document as a preamble -->
 <!ELEMENT preamble    @preambleopt; >
-<!--- the complex type prefaceopt defines the content model and attributes used by preface. Here the currentId attribute is optional -->
+<!--- the complex type prefaceopt defines the content model and attributes used by preface. Here the eId attribute is optional -->
 <!ENTITY @ prefaceopt         "(@@blockElements; | @@prefaceContainers; )+" "##coreopt;">
 <!--- the element preface is used as a container of all prefacing material (e.g. headers, formulas, etc.) -->
 <!ELEMENT preface     @prefaceopt; >
@@ -855,14 +851,14 @@
 <!ELEMENT blockContainer           @blockContainerType; >
 
 <!--- the element blocklist is used as a container of many individual item elements put in a list -->
-<!ELEMENT blockList                (listIntroduction?, item+, listConclusion?) >
+<!ELEMENT blockList                (listIntroduction?, item+, listWrap?) >
 <!ATTLIST blockList                ##corereq; >
 <!-- The element item is a container belonging to a list -->
 <!ELEMENT item                @itemType; >
 <!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
 <!ELEMENT listIntroduction   @inline; >
-<!--- the element listConclusion is an optional element of list after all items of the list itself.  -->
-<!ELEMENT listConclusion   @inline; >
+<!--- the element listWrap is an optional element of list after all items of the list itself.  -->
+<!ELEMENT listWrap @inline; >
 
 
 <!--- The element tblock (titled block) is used to specify a container for blocks introduced by heading elements, similarly to a hierarchical structure -->
@@ -1026,7 +1022,7 @@
 <!ATTLIST rmod  from   #ANYURI        #REQUIRED
                    upTo   #ANYURI        #REQUIRED >
 
-<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
+<!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
 <!ELEMENT quotedText       @inline; >
 <!ATTLIST quotedText       ##quote; 
 															for #ANYURI #IMPLIED>
@@ -1106,7 +1102,7 @@
 							|	intro | wrap | heading | subheading | num  )+)" "##corereq; ">
 
 
-<!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
+<!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
 <!ELEMENT quotedStructure   @subFlowStructure;>
 <!ATTLIST quotedStructure  ##quote;
                               for #ANYURI #IMPLIED>
@@ -1117,7 +1113,7 @@
 <!--- the element embeddedText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
 <!ELEMENT embeddedText        @inline; >
 <!ATTLIST embeddedText        ##quote; ##linkopt; >
-<!--- the element embeddedStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the currentId of the corresponding ref element. -->
+<!--- the element embeddedStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
 <!ELEMENT embeddedStructure   @subFlowStructure;>
 <!ATTLIST embeddedStructure   ##quote; ##linkopt; >
 
@@ -1287,7 +1283,7 @@
 <!--- The group workProperties lists the properties that are characteristics of the FRBR Work level. -->
 <!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber*, FRBRname*, FRBRprescriptive?, FRBRauthoritative?)" >
 <!--- The group exprProperties lists the properties that are characteristics of the FRBR Expression level. -->
-<!ENTITY @@ exprProperties   "(FRBRauthoritative?, FRBRlanguage+, FRBRtranslation*)" >
+<!ENTITY @@ exprProperties   "(FRBRauthoritative?, FRBRmasterExpression?, FRBRlanguage+, FRBRtranslation*)" >
 <!--- The group manifProperties lists the properties that are characteristics of the FRBR Expression level. -->
 <!ENTITY @@ manifProperties   "(FRBRformat?)" >
 
@@ -1345,6 +1341,8 @@
 <!ELEMENT FRBRprescriptive      @booleanValueType;>
 <!--- The element FRBRauthoritative is the metadata property containing a boolean value to determine whether the document contains authoritative text (i.e., content that is the official, authoritative product of an official workflow from an entity that is entrusted with generating an official, authoriative version of the document. -->
 <!ELEMENT FRBRauthoritative      @booleanValueType;>
+<!--- The element FRBRmasterExpression is the metadata property identifying the master expression, i.e., the expression whose ids are used as permanent ids in the wId attributes. An expression without the FRBRmasterExpression element is considered a master expression itself, i.e., the first version, or the most important version, of a document expressed in the only language, or in the most important language. Any other situation (subsequent versions, or language variants, or content variants) must have the FRBRmasterExpression element pointing to the URI of the master expression. If the FRBRmasterEpression is specified, but without a href pointing to the masterExpression, it is assumed that NO master expression exist in reality, but an UR-Expression exist, whose ids are used in this expression as wIds. In this case, the refersTo attribute must be used to point to an TLCConcept specifying facts about the UR-Expression.  -->
+<!ELEMENT FRBRmasterExpression  @linkType;>
 
 
 <!--- The element components is the metadata property containing a list of component elements in the respective level of the FRBR hierarchy. -->
@@ -1406,7 +1404,7 @@
 
 <!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events, of judgments and of votes in parliamentary documents -->
 <!ELEMENT analysis              (activeModifications?, passiveModifications?, 
-restrictions?, judicial?,  parliamentary?,  otherAnalysis*) >
+restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
 <!ATTLIST analysis              ##source; >
 
 
@@ -1438,7 +1436,7 @@ restrictions?, judicial?,  parliamentary?,  otherAnalysis*) >
 <!--- The element passiveModifications is a metadata container of the passive modifications affecting the document. -->
 <!ELEMENT passiveModifications  @Amendments; >
 <!--- The element textualMod is a metadata element specifying an (active or passive) textual modification for the document. -->
-<!ELEMENT textualMod            (@modificationType;, (old*, new*)) > 
+<!ELEMENT textualMod            (@modificationType;, (previous?, old*, new*)) > 
 <!ATTLIST textualMod            type #TextualMods; #REQUIRED >
 <!--- The element meaningMod is a metadata element specifying an (active or passive) modification in meaning for the document. -->
 <!ELEMENT meaningMod            (@modificationType;, (domain?)) > 
@@ -1506,8 +1504,7 @@ restrictions?, judicial?,  parliamentary?,  otherAnalysis*) >
 >
 
 
-
-
+	
 <!--- The complex type parliamentaryAnalysis is a list of all the parliamentary analysis elements that can be used on the analysis of a debate -->
 <!ENTITY @ parliamentaryAnalysis          "(quorumVerification | voting | recount)+" >
 <!--- The element parliamentary is a metadata container of the analysis of the events of a debate. -->
@@ -1533,13 +1530,27 @@ restrictions?, judicial?,  parliamentary?,  otherAnalysis*) >
 
 
 	
+<!--- The element mappings is a metadata container of the elements for the mapping of ids in case of renumbering or differences between this expression and the master expression. -->
+<!ELEMENT mappings   (mapping)+ >
+<!ATTLIST mappings 	##source; >
+
+<!-- The element mapping contains a reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup and a final temporalGroup. This is useful for tracking the evolving ids of documents frequently renumbered (e,g., bills). Every single element whose wId does not match its eId needs to be represented here. --> 
+<!ELEMENT mapping  @metareq; >
+<!ATTLIST mapping  
+    original        #ANYURI        #IMPLIED
+    current         #ANYURI        #IMPLIED
+    start           #ANYURI        #IMPLIED
+    end             #ANYURI        #IMPLIED
+>
+
+
 <!--- The element otherAnalysis is a metadata container of any additional metadata analysis element that does not belong to the specific categories provided before. Anything can be placed in this element.. -->
 <!ELEMENT otherAnalysis @anyOtherType; >
 <!ATTLIST otherAnalysis ##source; >
 
 
 <!--- The attribute pos is used to identify the specific position of the reference (e.g., in source or destination) 
-with respect to the element being identified with the relative currentId. -->
+with respect to the element being identified with the relative eId. -->
 <!ENTITY ## pos "pos #posType; #IMPLIED">
 <!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
 <!ENTITY @ argumentType      ""                            "##core; ##idopt; ##link; ##pos; ##modifiers; upTo   #ANYURI #IMPLIED" >
@@ -1561,10 +1572,11 @@ with respect to the element being identified with the relative currentId. -->
 <!--- The element condition is a metadata element specifying an open set (non managed by Akoma Ntoso) of conditions on the modification -->
 <!ELEMENT condition        @anyOtherType; >
 <!ATTLIST condition        frozen #BOOLEAN #IMPLIED >
-<!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the currentId of the element new it is being substituted by. -->
+<!--- The element previous is a metadata element referring to the element (rather than the text) of the modification in the previous version of the document. This is especially useful when renumbering occurs, so as to specify the eId of the instance that was modified in the previous version. Attribute href points to the eId of the element being modified in the old version, using a full expression-level URI. -->
+<!ELEMENT previous         @linkType; >
+<!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the eId of the element new it is being substituted by. -->
 <!ELEMENT old              @anyOtherType; >
-
-<!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. Attribute href points to the currentId of the element old it is substituting. -->
+<!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. Attribute href points to the eId of the element old it is substituting. -->
 <!ELEMENT new              @anyOtherType; >
 
 <!--- The element domain is a metadata element containing (in some non-managed form) the domain to which the modification applies. -->
@@ -1574,7 +1586,7 @@ with respect to the element being identified with the relative currentId. -->
 
 
 <!--- The element temporalData is a metadata container of all the temporal groups that cntain temporal information about any aspect of the document. In particular, versioned fragments of the text are assigned to temporal groups via the period attribute for the specification of in force or efficacy intervals, or any other type of temporal specification. -->
-<!ELEMENT temporalData  (temporalGroup+, renumberingInfo*) >
+<!ELEMENT temporalData  (temporalGroup+) >
 <!ATTLIST temporalData     ##source; >
 
 <!-- The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept. --> 
@@ -1588,16 +1600,6 @@ with respect to the element being identified with the relative currentId. -->
     end             #ANYURI        #IMPLIED
     duration      #DURATION   #IMPLIED
 >
-
-<!-- The element renumberingInfo contains a reference to the originalId (attribute original) and to thecurrentId (attribute current) of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills). --> 
-<!ELEMENT renumberingInfo  @metareq; >
-<!ATTLIST renumberingInfo  
-    original        #ANYURI        #IMPLIED
-    current         #ANYURI        #IMPLIED
-    start           #ANYURI        #IMPLIED
-    end             #ANYURI        #IMPLIED
->
-
 
 <!--- The group docrefs is a list of types of legal references to documents. -->
 <!ENTITY @@ docRefs        "(original|passiveRef|activeRef|jurisprudence|hasAttachment|attachmentOf)" >
