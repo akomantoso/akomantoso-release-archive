@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 02/04/2014 - Akoma Ntoso 3.0 CSD09
+Release 16/04/2014 - Akoma Ntoso 3.0 CSD10
 Complete version.
 
 
@@ -190,9 +190,10 @@ Attribute groups
 
 <!ENTITY % core    " xxxdirtyTrick %STRING; #IMPLIED" >
 
-<!ENTITY % idreq        " eId NMTOKEN #REQUIRED wId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
+<!ENTITY % noWhiteSpace "%STRING;" >
+<!ENTITY % EnoWhiteSpace "(%ESTRING;)" ><!ENTITY % idreq        " eId %noWhiteSpace; #REQUIRED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
 
-<!ENTITY % idopt        " eId NMTOKEN #IMPLIED wId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
+<!ENTITY % idopt        " eId %noWhiteSpace; #IMPLIED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
 
 
 <!ENTITY % refersreq    " refersTo CDATA #REQUIRED" >
@@ -214,6 +215,8 @@ Attribute groups
 Simple types (data values)
 
 =====================================================================  -->
+
+
 
 
 
@@ -268,7 +271,7 @@ Complex types (markup structures)
 <!ENTITY % basehierarchy     "(num?,heading?,subheading?)" >
 
 
-<!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(componentRef | %hierElements;)*,wrap?) | content))" >
+<!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(componentRef | %hierElements;)*,wrapUp?) | content))" >
 
 
 <!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements; | componentRef | %ANcontainers; | %blockElements;)*)" >
@@ -344,7 +347,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD09"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD10"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -509,7 +512,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % recitalHierarchy         "(%basehierarchy;,(intro?,(componentRef | recital)+,wrap?))" >
+<!ENTITY % recitalHierarchy         "(%basehierarchy;,(intro?,(componentRef | recital)+,wrapUp?))" >
 
 
 <!ELEMENT recitals    %recitalHierarchy; >
@@ -518,7 +521,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT recital    %itemType; >
 <!ATTLIST recital %corereq;  >
 
-<!ENTITY % citationHierarchy         "(%basehierarchy;,(intro?,(componentRef | citation)+,wrap?))" >
+<!ENTITY % citationHierarchy         "(%basehierarchy;,(intro?,(componentRef | citation)+,wrapUp?))" >
 
 
 <!ELEMENT citations    %citationHierarchy; >
@@ -685,14 +688,14 @@ Elements for hierarchical documents
 <!ELEMENT heading       %inlinereq; >
 <!ATTLIST heading %corereq;  >
 
-<!ELEMENT subheading    %inline; >
-<!ATTLIST subheading %coreopt;  >
+<!ELEMENT subheading    %inlinereq; >
+<!ATTLIST subheading %corereq;  >
 
 <!ELEMENT intro    %blocksreq; >
 <!ATTLIST intro %corereq;  >
 
-<!ELEMENT wrap    %blocksreq; >
-<!ATTLIST wrap %corereq;  >
+<!ELEMENT wrapUp    %blocksreq; >
+<!ATTLIST wrapUp %corereq;  >
 
 
 
@@ -874,12 +877,12 @@ main document, the list item and the titled block
 =====================================================================  -->
 
 
-<!ENTITY % blockContainerType      "(%basehierarchy;,(intro?,(componentRef | %blockElements;)+,wrap?))" >
+<!ENTITY % blockContainerType      "(%basehierarchy;,(intro?,(componentRef | %blockElements;)+,wrapUp?))" >
 <!ELEMENT blockContainer           %blockContainerType; >
 <!ATTLIST blockContainer %corereq;  >
 
 
-<!ELEMENT blockList                (listIntroduction?,item+,listWrap?)>
+<!ELEMENT blockList                (listIntroduction?,item+,listWrapUp?)>
 
 <!ATTLIST blockList %corereq;  >
 <!--  The element item is a container belonging to a list  -->
@@ -889,8 +892,8 @@ main document, the list item and the titled block
 <!ELEMENT listIntroduction   %inline; >
 <!ATTLIST listIntroduction %coreopt;  >
 
-<!ELEMENT listWrap %inline; >
-<!ATTLIST listWrap %coreopt;  >
+<!ELEMENT listWrapUp %inline; >
+<!ATTLIST listWrapUp %coreopt;  >
 
 
 
@@ -1200,7 +1203,7 @@ within a text content, but are not of textual nature.
 =====================================================================  -->
 
 
-<!ENTITY % subFlowStructure "(%documentType; | (%blockElements; | %containerElements; | tr | th | td | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | documentRef | intro | wrap | heading | subheading | num)+)" >
+<!ENTITY % subFlowStructure "(%documentType; | (%blockElements; | %containerElements; | tr | th | td | %hierElements; | content | %ANcontainers; | formula | recitals | citations | longTitle | recital | citation | componentRef | documentRef | intro | wrapUp | heading | subheading | num)+)" >
 
 
 
@@ -1749,8 +1752,8 @@ Metadata elements for all documents
 
 <!ATTLIST condition frozen %BOOLEAN; #IMPLIED >
 
-<!ELEMENT previous         %linkType; >
-<!ATTLIST previous %core;  %idreq;  %link;  %show;  >
+<!ELEMENT previous         %anyOtherType; >
+<!ATTLIST previous %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT old              %anyOtherType; >
 <!ATTLIST old %core;  %idopt;  %linkopt;  >
@@ -1853,7 +1856,7 @@ Metadata elements for all documents
 
 <!ATTLIST notes %source;  >
 
-<!ELEMENT note         %blocksreq; >
+<!ELEMENT note         %subFlowStructure; >
 <!ATTLIST note %corereq;  >
 
 

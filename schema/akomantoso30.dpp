@@ -1,7 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     Release 02/04/2014 - Akoma Ntoso 3.0 CSD09 
+     Release 16/04/2014 - Akoma Ntoso 3.0 CSD10 
 				Complete version. 
 			
 
@@ -21,7 +21,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD09'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD10'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -218,13 +218,13 @@
 <!--- This attribute list are used to specify the fact that any attribute can be specified for this element if it belongs to a different namespace. -->
 <!ENTITY ## core    "xxxdirtyTrick        #STRING      #IMPLIED">
 <!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is required. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
-<!ENTITY ## idreq        "eId    #NMTOKEN           #REQUIRED
-                             wId   #NMTOKEN           #IMPLIED 
-                             GUID         #NMTOKEN           #IMPLIED">
+<!ENTITY ## idreq        "eId   #noWhiteSpace;           #REQUIRED
+                             wId   #noWhiteSpace;           #IMPLIED 
+                             GUID  #noWhiteSpace;           #IMPLIED">
 <!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is optional. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
-<!ENTITY ## idopt        "eId    #NMTOKEN           #IMPLIED
-                             wId   #NMTOKEN           #IMPLIED 
-                             GUID         #NMTOKEN           #IMPLIED">
+<!ENTITY ## idopt        "eId   #noWhiteSpace;           #IMPLIED
+                             wId   #noWhiteSpace;           #IMPLIED 
+                             GUID  #noWhiteSpace;           #IMPLIED">
 
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
 <!ENTITY ## refersreq    "refersTo           (#ANYURI+)         #REQUIRED" >
@@ -248,6 +248,8 @@
         Simple types (data values)
 
      ===================================================================== -->
+<!--- This attribute the values of ids such as eId, wId and GUID as a collection of any printable character except whitespaces.  -->
+<!ENTITY # noWhiteSpace "#STRING/[^\s]+/" >
 <!--- This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.  -->
 <!ENTITY # language           "#STRING" >
 <!--- This is the list of allowed values for the contains attribute   -->
@@ -304,7 +306,7 @@
 <!ENTITY @ basehierarchy     "(num?, heading?, subheading?)" >
 
 <!--- The complex type hierarchy is used by most or all the hierarchical elements of act-like documents. -->
-<!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (componentRef |  @@hierElements;)*, wrap?) | content)"            "##corereq;">
+<!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (componentRef |  @@hierElements;)*, wrapUp?) | content)"            "##corereq;">
 
 <!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
 <!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | componentRef |  @@ANcontainers; | @@blockElements;)*" "##corereq;">
@@ -579,14 +581,14 @@
 	
 	
 	
-<!ENTITY @ recitalHierarchy         "@basehierarchy;, (intro?, (componentRef |  recital)+, wrap?)"            "##corereq;">
+<!ENTITY @ recitalHierarchy         "@basehierarchy;, (intro?, (componentRef |  recital)+, wrapUp?)"            "##corereq;">
 
 <!--- the element recitals is the section of the preface that contains recitals -->
 <!ELEMENT recitals    @recitalHierarchy; >
 <!--- the element recital is the individual element of the preface that is called recital -->
 <!ELEMENT recital    @itemType; >
 
-<!ENTITY @ citationHierarchy         "@basehierarchy;, (intro?, (componentRef |  citation)+, wrap?)"            "##corereq;">
+<!ENTITY @ citationHierarchy         "@basehierarchy;, (intro?, (componentRef |  citation)+, wrapUp?)"            "##corereq;">
 
 <!--- the element citations is the section of the preface that contains citations -->
 <!ELEMENT citations    @citationHierarchy; >
@@ -710,11 +712,11 @@
 <!--- the element heading is a heading element in a hierarchy that contains a title or any other textual content to describe the structure. -->
 <!ELEMENT heading       @inlinereq; >
 <!--- the element subheading is a heading element in a hierarchy that contains a subtitle or any other textual content to further describe the structure. -->
-<!ELEMENT subheading    @inline; >
+<!ELEMENT subheading    @inlinereq; >
 <!--- the element intro is a heading element in a hierarchy that contains paragraphs introducing one or more lower hierarchical elements. -->
 <!ELEMENT intro    @blocksreq; >
-<!--- the element wrap is a concluding element in a hierarchy that contains paragraphs wrapping up the preceding lower hierarchical elements. -->
-<!ELEMENT wrap    @blocksreq; >
+<!--- the element wrapUp is a concluding element in a hierarchy that contains paragraphs wrapping up the preceding lower hierarchical elements. -->
+<!ELEMENT wrapUp    @blocksreq; >
 
 	
 
@@ -847,18 +849,18 @@
     ===================================================================== -->
 
 <!--- the element blockContainer is used as a container of many individual block elements in a block context -->
-<!ENTITY @ blockContainerType      "@basehierarchy;, (intro?, (componentRef |  @@blockElements;)+, wrap?)"            "##corereq;" >
+<!ENTITY @ blockContainerType      "@basehierarchy;, (intro?, (componentRef |  @@blockElements;)+, wrapUp?)"            "##corereq;" >
 <!ELEMENT blockContainer           @blockContainerType; >
 
 <!--- the element blocklist is used as a container of many individual item elements put in a list -->
-<!ELEMENT blockList                (listIntroduction?, item+, listWrap?) >
+<!ELEMENT blockList                (listIntroduction?, item+, listWrapUp?) >
 <!ATTLIST blockList                ##corereq; >
 <!-- The element item is a container belonging to a list -->
 <!ELEMENT item                @itemType; >
 <!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
 <!ELEMENT listIntroduction   @inline; >
-<!--- the element listWrap is an optional element of list after all items of the list itself.  -->
-<!ELEMENT listWrap @inline; >
+<!--- the element listWrapUp is an optional element of list after all items of the list itself.  -->
+<!ELEMENT listWrapUp @inline; >
 
 
 <!--- The element tblock (titled block) is used to specify a container for blocks introduced by heading elements, similarly to a hierarchical structure -->
@@ -1099,7 +1101,7 @@
 							| @@ANcontainers; 
 							| formula | recitals | citations | longTitle | recital | citation
 							| componentRef | documentRef
-							|	intro | wrap | heading | subheading | num  )+)" "##corereq; ">
+							|	intro | wrapUp | heading | subheading | num  )+)" "##corereq; ">
 
 
 <!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
@@ -1573,7 +1575,7 @@ with respect to the element being identified with the relative eId. -->
 <!ELEMENT condition        @anyOtherType; >
 <!ATTLIST condition        frozen #BOOLEAN #IMPLIED >
 <!--- The element previous is a metadata element referring to the element (rather than the text) of the modification in the previous version of the document. This is especially useful when renumbering occurs, so as to specify the eId of the instance that was modified in the previous version. Attribute href points to the eId of the element being modified in the old version, using a full expression-level URI. -->
-<!ELEMENT previous         @linkType; >
+<!ELEMENT previous         @anyOtherType; >
 <!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the eId of the element new it is being substituted by. -->
 <!ELEMENT old              @anyOtherType; >
 <!--- The element new is a metadata element containing (in some non-managed form) the new text of the modification. Attribute href points to the eId of the element old it is substituting. -->
@@ -1652,7 +1654,7 @@ with respect to the element being identified with the relative eId. -->
 <!ELEMENT notes        (note)+>
 <!ATTLIST notes        ##source; >
 <!--- The element note is a metadata element containing the text of the footnote and endnote specified. -->
-<!ELEMENT note         @blocksreq;>
+<!ELEMENT note         @subFlowStructure;>
 
 
 <!--- The element proprietary is a metadata container of any additional metadata property that does not belong to the Akoma Ntoso properties. Anything can be placed in this element. -->
