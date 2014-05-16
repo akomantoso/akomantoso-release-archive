@@ -3,12 +3,8 @@
 
 <!--  =====================================================================
 Akoma Ntoso main schema
-supported by Africa i-Parliaments, a project sponsored by United
-Nations Department of Economic and Social Affairs
-Copyright (C) Africa i-Parliaments
 
-
-Release 16/01/2014 - Akoma Ntoso 3.0 CSD08
+Release 02/04/2014 - Akoma Ntoso 3.0 CSD09
 Complete version.
 
 
@@ -140,7 +136,7 @@ Attribute groups
 
 <!ENTITY % date         " date CDATA #REQUIRED" >
 
-<!ENTITY % time         " time %TIME; #REQUIRED" >
+<!ENTITY % time         " time CDATA #REQUIRED" >
 
 <!ENTITY % link         " href %ANYURI; #REQUIRED" >
 
@@ -194,9 +190,9 @@ Attribute groups
 
 <!ENTITY % core    " xxxdirtyTrick %STRING; #IMPLIED" >
 
-<!ENTITY % idreq        " currentId NMTOKEN #REQUIRED originalId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
+<!ENTITY % idreq        " eId NMTOKEN #REQUIRED wId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
 
-<!ENTITY % idopt        " currentId NMTOKEN #IMPLIED originalId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
+<!ENTITY % idopt        " eId NMTOKEN #IMPLIED wId NMTOKEN #IMPLIED GUID NMTOKEN #IMPLIED" >
 
 
 <!ENTITY % refersreq    " refersTo CDATA #REQUIRED" >
@@ -319,7 +315,7 @@ Complex types (markup structures)
 <!ENTITY % anyOtherType      "ANY" >
 
 
-<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | fragment | doc" ><!ENTITY % docContainerType      "(%documentType; | interstitial | toc | documentRef)" >
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | fragment | doc" ><!ENTITY % docContainerType      "(%basehierarchy;,(%documentType; | interstitial | toc | documentRef))" >
 
 
 <!--  =====================================================================
@@ -348,7 +344,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD09"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -883,7 +879,7 @@ main document, the list item and the titled block
 <!ATTLIST blockContainer %corereq;  >
 
 
-<!ELEMENT blockList                (listIntroduction?,item+,listConclusion?)>
+<!ELEMENT blockList                (listIntroduction?,item+,listWrap?)>
 
 <!ATTLIST blockList %corereq;  >
 <!--  The element item is a container belonging to a list  -->
@@ -893,8 +889,8 @@ main document, the list item and the titled block
 <!ELEMENT listIntroduction   %inline; >
 <!ATTLIST listIntroduction %coreopt;  >
 
-<!ELEMENT listConclusion   %inline; >
-<!ATTLIST listConclusion %coreopt;  >
+<!ELEMENT listWrap %inline; >
+<!ATTLIST listWrap %coreopt;  >
 
 
 
@@ -1415,7 +1411,7 @@ Metadata elements for all documents
 
 <!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber* , FRBRname* , FRBRprescriptive? , FRBRauthoritative?" >
 
-<!ENTITY % exprProperties   "FRBRauthoritative? , FRBRlanguage+ , FRBRtranslation*" >
+<!ENTITY % exprProperties   "FRBRauthoritative? , FRBRmasterExpression? , FRBRlanguage+ , FRBRtranslation*" >
 
 <!ENTITY % manifProperties   "FRBRformat?" >
 
@@ -1488,6 +1484,9 @@ Metadata elements for all documents
 <!ELEMENT FRBRauthoritative      %booleanValueType; >
 <!ATTLIST FRBRauthoritative %booleanvalue;  %core;  %idopt;  >
 
+<!ELEMENT FRBRmasterExpression  %linkType; >
+<!ATTLIST FRBRmasterExpression %core;  %idreq;  %link;  %show;  >
+
 
 
 <!ELEMENT componentInfo          (componentData)*>
@@ -1544,7 +1543,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT analysis              (activeModifications?,passiveModifications?,restrictions?,judicial?,parliamentary?,otherAnalysis*)>
+<!ELEMENT analysis              (activeModifications?,passiveModifications?,restrictions?,judicial?,parliamentary?,mappings?,otherAnalysis*)>
 
 <!ATTLIST analysis %source;  >
 
@@ -1578,7 +1577,7 @@ Metadata elements for all documents
 
 <!ELEMENT passiveModifications  %Amendments; >
 
- <!ENTITY            % textualMod_entity "(%modificationType;,(old*,new*))" ><!ELEMENT textualMod %textualMod_entity;>
+ <!ENTITY            % textualMod_entity "(%modificationType;,(previous?,old*,new*))" ><!ELEMENT textualMod %textualMod_entity;>
 <!ATTLIST textualMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
 <!ATTLIST textualMod type %TextualMods; #REQUIRED >
@@ -1673,7 +1672,6 @@ Metadata elements for all documents
 
 
 
-
 <!ENTITY % parliamentaryAnalysis          "(quorumVerification | voting | recount)+" >
 
 <!ELEMENT parliamentary   %parliamentaryAnalysis; >
@@ -1699,6 +1697,18 @@ Metadata elements for all documents
 <!ELEMENT count  %countType; >
 <!ATTLIST count %core;  %idreq;  %value;  %refers;  %linkopt;  >
 
+
+
+
+<!ELEMENT mappings   (mapping)+>
+
+<!ATTLIST mappings %source;  >
+
+<!--  The element mapping contains a reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup and a final temporalGroup. This is useful for tracking the evolving ids of documents frequently renumbered (e,g., bills). Every single element whose wId does not match its eId needs to be represented here.  -->
+<!ELEMENT mapping  %metareq; >
+<!ATTLIST mapping %core;  %idreq;  >
+
+<!ATTLIST mapping original %ANYURI; #IMPLIED current %ANYURI; #IMPLIED start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED >
 
 
 
@@ -1739,9 +1749,11 @@ Metadata elements for all documents
 
 <!ATTLIST condition frozen %BOOLEAN; #IMPLIED >
 
+<!ELEMENT previous         %linkType; >
+<!ATTLIST previous %core;  %idreq;  %link;  %show;  >
+
 <!ELEMENT old              %anyOtherType; >
 <!ATTLIST old %core;  %idopt;  %linkopt;  >
-
 
 <!ELEMENT new              %anyOtherType; >
 <!ATTLIST new %core;  %idopt;  %linkopt;  >
@@ -1754,7 +1766,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT temporalData  (temporalGroup+,renumberingInfo*)>
+<!ELEMENT temporalData  (temporalGroup+)>
 
 <!ATTLIST temporalData %source;  >
 
@@ -1768,13 +1780,6 @@ Metadata elements for all documents
 <!ATTLIST timeInterval %core;  %idopt;  >
 
 <!ATTLIST timeInterval %refersreq;  start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED duration %DURATION; #IMPLIED >
-
-<!--  The element renumberingInfo contains a reference to the originalId (attribute original) and to thecurrentId (attribute current) of a structure during a time period included between an initial temporalGroup and a final temporalGroup. This is useful for ttracking the evolving ids of documetns frequently renumbered (e,g., bills).  -->
-<!ELEMENT renumberingInfo  %metareq; >
-<!ATTLIST renumberingInfo %core;  %idreq;  >
-
-<!ATTLIST renumberingInfo original %ANYURI; #IMPLIED current %ANYURI; #IMPLIED start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED >
-
 
 
 <!ENTITY % docRefs        "original | passiveRef | activeRef | jurisprudence | hasAttachment | attachmentOf" >
