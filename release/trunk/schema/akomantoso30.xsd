@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD09"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD10"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD09"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD10"
             elementFormDefault="qualified">
 
 
@@ -12,7 +12,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 02/04/2014 - Akoma Ntoso 3.0 CSD09
+		Release 16/04/2014 - Akoma Ntoso 3.0 CSD10
 		Complete version.
 		
 		
@@ -1005,9 +1005,9 @@ These attributes identify the element in an absolute manner. In elements using t
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="eId" type="xsd:NMTOKEN" use="required"/>
-		    <xsd:attribute name="wId" type="xsd:NMTOKEN"/>
-		    <xsd:attribute name="GUID" type="xsd:NMTOKEN"/>
+		    <xsd:attribute name="eId" type="noWhiteSpace" use="required"/>
+		    <xsd:attribute name="wId" type="noWhiteSpace"/>
+		    <xsd:attribute name="GUID" type="noWhiteSpace"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="idopt">
@@ -1020,9 +1020,9 @@ These attributes identify the element in an absolute manner. In elements using t
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="eId" type="xsd:NMTOKEN"/>
-		    <xsd:attribute name="wId" type="xsd:NMTOKEN"/>
-		    <xsd:attribute name="GUID" type="xsd:NMTOKEN"/>
+		    <xsd:attribute name="eId" type="noWhiteSpace"/>
+		    <xsd:attribute name="wId" type="noWhiteSpace"/>
+		    <xsd:attribute name="GUID" type="noWhiteSpace"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="refersreq">
@@ -1147,6 +1147,21 @@ This is the list of the core attributes that all elements in the content part of
 		===================================================================== 
 		</xsd:documentation>
 	  </xsd:annotation>
+
+	  <xsd:simpleType name="noWhiteSpace">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>noWhiteSpace</name>
+            <comment>
+This attribute the values of ids such as eId, wId and GUID as a collection of any printable character except whitespaces.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:pattern value="[^\s]+"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
 
 	  <xsd:simpleType name="language">
 		    <xsd:annotation>
@@ -1402,7 +1417,7 @@ The complex type hierarchy is used by most or all the hierarchical elements of a
 							              <xsd:element ref="componentRef"/>
 							              <xsd:group ref="hierElements"/>
 						            </xsd:choice>
-						            <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
+						            <xsd:element ref="wrapUp" minOccurs="0" maxOccurs="1"/>
 					          </xsd:sequence>
 					          <xsd:element ref="content"/>
 				        </xsd:choice>
@@ -2396,7 +2411,7 @@ the element amendmentBody is the container of the main hierarchy of a amendment 
 						            <xsd:element ref="componentRef"/>
 						            <xsd:element ref="recital"/>
 					          </xsd:choice>
-					          <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
+					          <xsd:element ref="wrapUp" minOccurs="0" maxOccurs="1"/>
 				        </xsd:sequence>
 				        <xsd:attributeGroup ref="corereq"/>
 			      </xsd:extension>
@@ -2440,7 +2455,7 @@ the element recital is the individual element of the preface that is called reci
 						            <xsd:element ref="componentRef"/>
 						            <xsd:element ref="citation"/>
 					          </xsd:choice>
-					          <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
+					          <xsd:element ref="wrapUp" minOccurs="0" maxOccurs="1"/>
 				        </xsd:sequence>
 				        <xsd:attributeGroup ref="corereq"/>
 			      </xsd:extension>
@@ -3068,7 +3083,7 @@ the element heading is a heading element in a hierarchy that contains a title or
 		
 
 
-	  <xsd:element name="subheading" type="inline">
+	  <xsd:element name="subheading" type="inlinereq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -3094,13 +3109,13 @@ the element intro is a heading element in a hierarchy that contains paragraphs i
 		
 
 
-	  <xsd:element name="wrap" type="blocksreq">
+	  <xsd:element name="wrapUp" type="blocksreq">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>wrap</name>
+            <name>wrapUp</name>
             <comment>
-the element wrap is a concluding element in a hierarchy that contains paragraphs wrapping up the preceding lower hierarchical elements.</comment>
+the element wrapUp is a concluding element in a hierarchy that contains paragraphs wrapping up the preceding lower hierarchical elements.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3750,7 +3765,7 @@ the element blockContainer is used as a container of many individual block eleme
 						            <xsd:element ref="componentRef"/>
 						            <xsd:group ref="blockElements"/>
 					          </xsd:choice>
-					          <xsd:element ref="wrap" minOccurs="0" maxOccurs="1"/>
+					          <xsd:element ref="wrapUp" minOccurs="0" maxOccurs="1"/>
 				        </xsd:sequence>
 				        <xsd:attributeGroup ref="corereq"/>
 			      </xsd:extension>
@@ -3771,7 +3786,7 @@ the element blockContainer is used as a container of many individual block eleme
 			      <xsd:sequence>
 				        <xsd:element ref="listIntroduction" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="item" minOccurs="1" maxOccurs="unbounded"/>
-				        <xsd:element ref="listWrap" minOccurs="0" maxOccurs="1"/>
+				        <xsd:element ref="listWrapUp" minOccurs="0" maxOccurs="1"/>
 			      </xsd:sequence>
 				     <xsd:attributeGroup ref="corereq"/>
 		    </xsd:complexType>
@@ -3796,13 +3811,13 @@ the element listIntroduction is an optional element of list before any item of t
 		
 
 
-	  <xsd:element name="listWrap" type="inline">
+	  <xsd:element name="listWrapUp" type="inline">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>listWrap</name>
+            <name>listWrapUp</name>
             <comment>
-the element listWrap is an optional element of list after all items of the list itself.</comment>
+the element listWrapUp is an optional element of list after all items of the list itself.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -4818,7 +4833,7 @@ the type subFlowStructure specifies the overall content model of the elements th
 				        <xsd:element ref="componentRef"/>
 				        <xsd:element ref="documentRef"/>
 				        <xsd:element ref="intro"/>
-				        <xsd:element ref="wrap"/>
+				        <xsd:element ref="wrapUp"/>
 				        <xsd:element ref="heading"/>
 				        <xsd:element ref="subheading"/>
 				        <xsd:element ref="num"/>
@@ -6889,7 +6904,7 @@ The element condition is a metadata element specifying an open set (non managed 
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="previous" type="linkType">
+	  <xsd:element name="previous" type="anyOtherType">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
@@ -7298,7 +7313,7 @@ The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI 
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="note" type="blocksreq">
+	  <xsd:element name="note" type="subFlowStructure">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
