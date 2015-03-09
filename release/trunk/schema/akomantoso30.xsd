@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD11"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD11"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12"
             elementFormDefault="qualified">
 
 
@@ -12,7 +12,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 23/06/2014 - Akoma Ntoso 3.0 CSD11
+		Release 16/12/2014 - Akoma Ntoso 3.0 CSD12
 		Complete version.
 		
 		
@@ -1853,9 +1853,9 @@ the type openStructure specifies the overall content model of all the document t
 Element doc is used for describing the structure and content of any other document that is not included in the list of document explicitly managed by Akoma Ntoso</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-doc">
+      <xsd:unique name="eId-doc">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-doc">
          <xsd:selector xpath=".//*"/>
@@ -1885,9 +1885,9 @@ the element mainBody is the container of the main part of all other document typ
 Element statement is used for describing the structure and content of a official documents of a legislative assembly that are not normative in structure (e.g., statements, non-normative resolutions, etc.).</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-statement">
+      <xsd:unique name="eId-statement">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-statement">
          <xsd:selector xpath=".//*"/>
@@ -1949,9 +1949,15 @@ the type collectionStructure specifies the overall content model of the document
 Element amendmentList is used for describing the structure and content of a collection of amendments</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+      <xsd:unique name="eId-amendmentList">
+         <xsd:selector xpath=".//*"/>
+         <xsd:field xpath="@eId"/>
+      </xsd:unique>
+      <xsd:unique name="GUID-amendmentList">
+         <xsd:selector xpath=".//*"/>
+         <xsd:field xpath="@GUID"/>
+      </xsd:unique>
    </xsd:element>
-		
-
 
 	  <xsd:element name="officialGazette" type="collectionStructure">
       <xsd:annotation>
@@ -1962,9 +1968,15 @@ Element amendmentList is used for describing the structure and content of a coll
 Element officialGazette is used for describing the structure and content of an issue of an official gazette</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+      <xsd:unique name="eId-officialGazette">
+         <xsd:selector xpath=".//*"/>
+         <xsd:field xpath="@eId"/>
+      </xsd:unique>
+      <xsd:unique name="GUID-officialGazette">
+         <xsd:selector xpath=".//*"/>
+         <xsd:field xpath="@GUID"/>
+      </xsd:unique>
    </xsd:element>
-		
-
 
 	  <xsd:element name="documentCollection" type="collectionStructure">
       <xsd:annotation>
@@ -1975,9 +1987,15 @@ Element officialGazette is used for describing the structure and content of an i
 Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
+      <xsd:unique name="eId-documentCollection">
+         <xsd:selector xpath=".//*"/>
+         <xsd:field xpath="@eId"/>
+      </xsd:unique>
+      <xsd:unique name="GUID-documentCollection">
+         <xsd:selector xpath=".//*"/>
+         <xsd:field xpath="@GUID"/>
+      </xsd:unique>
    </xsd:element>
-		
-
 
 	  <xsd:complexType name="collectionBodyType">
 		    <xsd:annotation>
@@ -2033,9 +2051,9 @@ the type fragmentStructure specifies the overall content model of the document t
 Element fragment is used for describing the structure and content of an independent fragment of a document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-fragment">
+      <xsd:unique name="eId-fragment">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-fragment">
          <xsd:selector xpath=".//*"/>
@@ -2109,9 +2127,9 @@ the type hierarchicalStructure specifies the overall content model of the docume
 Element act is used for describing the structure and content of an act</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-act">
+      <xsd:unique name="eId-act">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-act">
          <xsd:selector xpath=".//*"/>
@@ -2128,9 +2146,9 @@ Element act is used for describing the structure and content of an act</comment>
 Element bill is used for describing the structure and content of a bill</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-bill">
+      <xsd:unique name="eId-bill">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-bill">
          <xsd:selector xpath=".//*"/>
@@ -2200,9 +2218,9 @@ the type debateStructure specifies the overall content model of the document typ
 Element debateReport is used for describing the structure and content of a report</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-debateReport">
+      <xsd:unique name="eId-debateReport">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-debateReport">
          <xsd:selector xpath=".//*"/>
@@ -2219,9 +2237,9 @@ Element debateReport is used for describing the structure and content of a repor
 Element debate is used for describing the structure and content of a debate record</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-debate">
+      <xsd:unique name="eId-debate">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-debate">
          <xsd:selector xpath=".//*"/>
@@ -2290,9 +2308,9 @@ the type judgmentStructure specifies the overall content model of the document t
 Element judgment is used for describing the structure and content of a judgment</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-judgment">
+      <xsd:unique name="eId-judgment">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-judgment">
          <xsd:selector xpath=".//*"/>
@@ -2361,9 +2379,9 @@ the type amendmentStructure specifies the overall content model of the document 
 Element amendment is used for describing the structure and content of an amendment</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="currentId-amendment">
+      <xsd:unique name="eId-amendment">
          <xsd:selector xpath=".//*"/>
-         <xsd:field xpath="@currentId"/>
+         <xsd:field xpath="@eId"/>
       </xsd:unique>
       <xsd:unique name="GUID-amendment">
          <xsd:selector xpath=".//*"/>
@@ -4506,7 +4524,7 @@ the element rref is an inline element containing a range of references between t
 			         <type>Complex</type>
             <name>modType</name>
             <comment>
-the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements</comment>
+the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements. Attribute for is used to point to the eId of the corresponding ref element.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -4516,6 +4534,7 @@ the complex type modType specifies the content that is allowed within mod, mmod 
 			      <xsd:element ref="quotedStructure"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="corereq"/>
+		    <xsd:attribute name="for" type="xsd:anyURI"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="mod" type="modType">
@@ -4570,7 +4589,7 @@ the element rmod is an inline element containing the specification of a range of
 			         <type>Element</type>
             <name>quotedText</name>
             <comment>
-the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element.</comment>
+the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used to point to the eId of the corresponding ref element.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5470,6 +5489,7 @@ The group exprProperties lists the properties that are characteristics of the FR
 		    </xsd:annotation>
 
 		    <xsd:sequence>
+			      <xsd:element ref="FRBRversionNumber" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRauthoritative" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRmasterExpression" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRlanguage" minOccurs="1" maxOccurs="unbounded"/>
@@ -5488,6 +5508,7 @@ The group manifProperties lists the properties that are characteristics of the F
 		    </xsd:annotation>
 
 		    <xsd:sequence>
+			      <xsd:element ref="FRBRportion" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="FRBRformat" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 	  </xsd:group>
@@ -5783,6 +5804,26 @@ The element FRBRname is the metadata property containing a string for the title 
 		
 
 
+	  <xsd:element name="FRBRportion">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRportion</name>
+            <comment>
+The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level fragment. If the fragment contains
+an interval of elements, the upTo attribute specifies the last one.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="valueType">
+					          <xsd:attribute name="upTo" type="xsd:anyURI"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
 	  <xsd:element name="FRBRformat" type="valueType">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -5803,6 +5844,19 @@ The element FRBRformat is the metadata property containing a string for the data
             <name>FRBRprescriptive</name>
             <comment>
 The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="FRBRversionNumber" type="valueType">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>FRBRversionNumber</name>
+            <comment>
+The element FRBRversionNumber is the metadata property containing the value of the version number if appropriate to identify the specific expression here contained. It allows an arbitrary string.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6784,12 +6838,13 @@ the complex type argumentType defines the empty content model and the list of at
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attributeGroup ref="core"/>
-		    <xsd:attributeGroup ref="idopt"/>
-		    <xsd:attributeGroup ref="link"/>
-		    <xsd:attributeGroup ref="pos"/>
-		    <xsd:attributeGroup ref="modifiers"/>
-		    <xsd:attribute name="upTo" type="xsd:anyURI"/>
+		    <xsd:complexContent>
+			      <xsd:extension base="anyOtherType">
+				        <xsd:attributeGroup ref="pos"/>
+				        <xsd:attributeGroup ref="modifiers"/>
+				        <xsd:attribute name="upTo" type="xsd:anyURI"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
 	  </xsd:complexType>
 
 	  <xsd:complexType name="periodType">
@@ -6802,9 +6857,11 @@ the complex type periodType defines the empty content model and the list of attr
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attributeGroup ref="core"/>
-		    <xsd:attributeGroup ref="idopt"/>
-		    <xsd:attributeGroup ref="period"/>
+		    <xsd:complexContent>
+			      <xsd:extension base="anyOtherType">
+				        <xsd:attributeGroup ref="period"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
 	  </xsd:complexType>
 
 	  <xsd:element name="source" type="argumentType">
