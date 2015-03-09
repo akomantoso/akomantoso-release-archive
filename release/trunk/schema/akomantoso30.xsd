@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13"
             elementFormDefault="qualified">
 
 
@@ -12,7 +12,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 16/12/2014 - Akoma Ntoso 3.0 CSD12
+		Release 07/01/2015 - Akoma Ntoso 3.0 CSD13
 		Complete version.
 		
 		
@@ -1769,7 +1769,7 @@ the type documentType lists all the document types that are managed by Akoma Nto
 			      <xsd:element ref="statement"/>
 			      <xsd:element ref="amendment"/>
 			      <xsd:element ref="judgment"/>
-			      <xsd:element ref="fragment"/>
+			      <xsd:element ref="portion"/>
 			      <xsd:element ref="doc"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -1900,6 +1900,7 @@ Element statement is used for describing the structure and content of a official
 			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
 				        <xsd:element ref="component"/>
 			      </xsd:sequence>
+				     <xsd:attributeGroup ref="idreq"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -2025,49 +2026,49 @@ the element collectionBody is the container of a list of other documents (e.g, a
 		
 
 
-	  <xsd:complexType name="fragmentStructure">
+	  <xsd:complexType name="portionStructure">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Complex</type>
-            <name>fragmentStructure</name>
+            <name>portionStructure</name>
             <comment>
-the type fragmentStructure specifies the overall content model of the document type that is a fragment of another document</comment>
+the type portionStructure specifies the overall content model of the document type that is a portion of another document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:sequence>
 			      <xsd:element ref="meta"/>
-			      <xsd:element ref="fragmentBody"/>
+			      <xsd:element ref="portionBody"/>
 		    </xsd:sequence>
 		    <xsd:attribute name="includedIn" type="xsd:anyURI" use="required"/>
 	  </xsd:complexType>
 
-	  <xsd:element name="fragment" type="fragmentStructure">
+	  <xsd:element name="portion" type="portionStructure">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>fragment</name>
+            <name>portion</name>
             <comment>
-Element fragment is used for describing the structure and content of an independent fragment of a document</comment>
+Element portion is used for describing the structure and content of an independent portion of a document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-      <xsd:unique name="eId-fragment">
+      <xsd:unique name="eId-portion">
          <xsd:selector xpath=".//*"/>
          <xsd:field xpath="@eId"/>
       </xsd:unique>
-      <xsd:unique name="GUID-fragment">
+      <xsd:unique name="GUID-portion">
          <xsd:selector xpath=".//*"/>
          <xsd:field xpath="@GUID"/>
       </xsd:unique>
    </xsd:element>
 
-	  <xsd:complexType name="fragmentBodyType">
+	  <xsd:complexType name="portionBodyType">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Complex</type>
-            <name>fragmentBodyType</name>
+            <name>portionBodyType</name>
             <comment>
-the type fragmentBodyType specifies a content model of a container of a fragment of another document</comment>
+the type portionBodyType specifies a content model of a container of a portion of another document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -2081,13 +2082,13 @@ the type fragmentBodyType specifies a content model of a container of a fragment
 		    <xsd:attributeGroup ref="coreopt"/>
 	  </xsd:complexType>
 
-	  <xsd:element name="fragmentBody" type="fragmentBodyType">
+	  <xsd:element name="portionBody" type="portionBodyType">
       <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
-            <name>fragmentBody</name>
+            <name>portionBody</name>
             <comment>
-the element fragmentBody is the container of a fragment of another document</comment>
+the element portionBody is the container of a portion of another document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5810,14 +5811,17 @@ The element FRBRname is the metadata property containing a string for the title 
 			         <type>Element</type>
             <name>FRBRportion</name>
             <comment>
-The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level fragment. If the fragment contains
+The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains
 an interval of elements, the upTo attribute specifies the last one.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:complexType>
 			      <xsd:complexContent>
-				        <xsd:extension base="valueType">
+				        <xsd:extension base="metaopt">
+					          <xsd:attributeGroup ref="refers"/>
+					          <xsd:attributeGroup ref="showopt"/>
+					          <xsd:attribute name="from" type="xsd:anyURI" use="required"/>
 					          <xsd:attribute name="upTo" type="xsd:anyURI"/>
 				        </xsd:extension>
 			      </xsd:complexContent>

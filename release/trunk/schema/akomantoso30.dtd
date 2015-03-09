@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 16/12/2014 - Akoma Ntoso 3.0 CSD12
+Release 07/01/2015 - Akoma Ntoso 3.0 CSD13
 Complete version.
 
 
@@ -318,7 +318,7 @@ Complex types (markup structures)
 <!ENTITY % anyOtherType      "ANY" >
 
 
-<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | fragment | doc" ><!ENTITY % docContainerType      "(%basehierarchy;,(%documentType; | interstitial | toc | documentRef))" >
+<!ENTITY % documentType      "amendmentList | officialGazette | documentCollection | act | bill | debateReport | debate | statement | amendment | judgment | portion | doc" ><!ENTITY % docContainerType      "(%basehierarchy;,(%documentType; | interstitial | toc | documentRef))" >
 
 
 <!--  =====================================================================
@@ -347,7 +347,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -375,6 +375,8 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT components (component)+>
+
+<!ATTLIST components %idreq;  >
 
 
 <!ELEMENT component %docContainerType; >
@@ -417,19 +419,19 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 
-<!ENTITY % fragmentStructure   "(meta,fragmentBody)" >
+<!ENTITY % portionStructure   "(meta,portionBody)" >
 
 
-<!ELEMENT fragment           %fragmentStructure; >
-<!ATTLIST fragment includedIn %ANYURI; #REQUIRED >
+<!ELEMENT portion           %portionStructure; >
+<!ATTLIST portion includedIn %ANYURI; #REQUIRED >
 
-<!ATTLIST fragment xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+<!ATTLIST portion xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
-<!ENTITY % fragmentBodyType  "(%containerElements; | %hierElements; | %ANcontainers; | recital | citation)" >
+<!ENTITY % portionBodyType  "(%containerElements; | %hierElements; | %ANcontainers; | recital | citation)" >
 
-<!ELEMENT fragmentBody       %fragmentBodyType; >
-<!ATTLIST fragmentBody %coreopt;  >
+<!ELEMENT portionBody       %portionBodyType; >
+<!ATTLIST portionBody %coreopt;  >
 
 
 
@@ -1485,10 +1487,10 @@ Metadata elements for all documents
 <!ELEMENT FRBRname               %valueType; >
 <!ATTLIST FRBRname %value;  %refers;  %showopt;  %core;  %idopt;  >
 
-<!ELEMENT FRBRportion             %valueType; >
-<!ATTLIST FRBRportion %value;  %refers;  %showopt;  %core;  %idopt;  >
+<!ELEMENT FRBRportion             %metaopt; >
+<!ATTLIST FRBRportion %core;  %idopt;  >
 
-<!ATTLIST FRBRportion upTo %ANYURI; #IMPLIED >
+<!ATTLIST FRBRportion %refers;  %showopt;  from %ANYURI; #REQUIRED upTo %ANYURI; #IMPLIED >
 
 
 <!ELEMENT FRBRformat             %valueType; >
