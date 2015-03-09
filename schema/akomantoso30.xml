@@ -14,7 +14,7 @@
 &lt;!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     <report version="Release 23/06/2014 - Akoma Ntoso 3.0 CSD11"/>
+     <report version="Release 16/12/2014 - Akoma Ntoso 3.0 CSD12"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -32,7 +32,7 @@
 		 
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD11'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -458,14 +458,18 @@
 <include if="amendmentList" dependsOn="collectionDocs" label="Amendment list" desc="A document containing lists of amendments" >
 &lt;!--- Element amendmentList is used for describing the structure and content of a collection of amendments -->
 &lt;!ELEMENT amendmentList           @collectionStructure; >
+&lt;!ATTLIST amendmentList           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
+
 </include>
 <include if="officialGazette" dependsOn="collectionDocs" label="Official Gazette" desc="A document containing sequences of acts and other legislative documents" >
 &lt;!--- Element officialGazette is used for describing the structure and content of an issue of an official gazette -->
 &lt;!ELEMENT officialGazette           @collectionStructure; >
+&lt;!ATTLIST officialGazette           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 </include>
 
 &lt;!--- Element documentCollection is used for describing the structure and content of a collection of other documents chosen and combined for any reason whatsoever -->
 &lt;!ELEMENT documentCollection           @collectionStructure; >
+&lt;!ATTLIST documentCollection           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 &lt;!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 &lt;!ENTITY @ collectionBodyType  (component+)>
@@ -1024,8 +1028,8 @@
 </include>
 	
 <include if="modifications" dependsOn="legislativeDocs" label="Modifications" desc="elements for modification acts $mod, $mmod, $rmod, $quotedText and $quotedStructure">                       
-&lt;!--- the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements -->
-&lt;!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure)*" "##corereq;" >
+&lt;!--- the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements. Attribute for is used to point to the eId of the corresponding ref element. -->
+&lt;!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure)*" "##corereq; for #ANYURI #IMPLIED" >
 &lt;!--- the element mod is an inline element containing the specification of a modification on another document -->
 &lt;!ELEMENT mod   @modType;>
 &lt;!--- the element mmod is an inline element containing multiple specifications of modifications on another document -->
@@ -1035,7 +1039,7 @@
 &lt;!ATTLIST rmod  from   #ANYURI        #REQUIRED
                    upTo   #ANYURI        #REQUIRED >
 
-&lt;!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
+&lt;!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used to point to the eId of the corresponding ref element. -->
 &lt;!ELEMENT quotedText       @inline; >
 &lt;!ATTLIST quotedText       ##quote; 
 															for #ANYURI #IMPLIED>
@@ -1296,9 +1300,9 @@
 &lt;!--- The group workProperties lists the properties that are characteristics of the FRBR Work level. -->
 &lt;!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber*, FRBRname*, FRBRprescriptive?, FRBRauthoritative?)" >
 &lt;!--- The group exprProperties lists the properties that are characteristics of the FRBR Expression level. -->
-&lt;!ENTITY @@ exprProperties   "(FRBRauthoritative?, FRBRmasterExpression?, FRBRlanguage+, FRBRtranslation*)" >
+&lt;!ENTITY @@ exprProperties   "(FRBRversionNumber?, FRBRauthoritative?, FRBRmasterExpression?, FRBRlanguage+, FRBRtranslation*)" >
 &lt;!--- The group manifProperties lists the properties that are characteristics of the FRBR Expression level. -->
-&lt;!ENTITY @@ manifProperties   "(FRBRformat?)" >
+&lt;!ENTITY @@ manifProperties   "(FRBRportion?, FRBRformat?)" >
 
 &lt;!--- The element FRBRWork is the metadata container of identifying properties related to the Work level according to the FRBR hierarchy -->
 &lt;!ELEMENT FRBRWork             (@coreProperties;, (@@workProperties;)) >
@@ -1345,13 +1349,20 @@
 &lt;!--- The element FRBRcountry is the metadata property containing a ISO 3166-1 Alpha-2 code for the country or jurisdiction to be used in the work-level IRI of this document-->
 &lt;!ELEMENT FRBRcountry            @valueType;>
 &lt;!--- The element FRBRnumber is the metadata property containing a string or number for the number to be used in the work-level IRI of this document -->
-&lt;!ELEMENT FRBRnumber            @valueType;>
+&lt;!ELEMENT FRBRnumber             @valueType;>
 &lt;!--- The element FRBRname is the metadata property containing a string for the title to be used in the work-level IRI of this document -->
-&lt;!ELEMENT FRBRname            @valueType;>
+&lt;!ELEMENT FRBRname               @valueType;>
+&lt;!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level fragment. If the fragment contains 
+an interval of elements, the upTo attribute specifies the last one. -->
+&lt;!ELEMENT FRBRportion             @valueType;>
+&lt;!ATTLIST FRBRportion            upTo   #ANYURI #IMPLIED >
+
 &lt;!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document -->
-&lt;!ELEMENT FRBRformat            @valueType;>
+&lt;!ELEMENT FRBRformat             @valueType;>
 &lt;!--- The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly. -->
-&lt;!ELEMENT FRBRprescriptive      @booleanValueType;>
+&lt;!ELEMENT FRBRprescriptive       @booleanValueType;>
+&lt;!--- The element FRBRversionNumber is the metadata property containing the value of the version number if appropriate to identify the specific expression here contained. It allows an arbitrary string. -->
+&lt;!ELEMENT FRBRversionNumber      @valueType;>
 &lt;!--- The element FRBRauthoritative is the metadata property containing a boolean value to determine whether the document contains authoritative text (i.e., content that is the official, authoritative product of an official workflow from an entity that is entrusted with generating an official, authoriative version of the document. -->
 &lt;!ELEMENT FRBRauthoritative      @booleanValueType;>
 &lt;!--- The element FRBRmasterExpression is the metadata property identifying the master expression, i.e., the expression whose ids are used as permanent ids in the wId attributes. An expression without the FRBRmasterExpression element is considered a master expression itself, i.e., the first version, or the most important version, of a document expressed in the only language, or in the most important language. Any other situation (subsequent versions, or language variants, or content variants) must have the FRBRmasterExpression element pointing to the URI of the master expression. If the FRBRmasterEpression is specified, but without a href pointing to the masterExpression, it is assumed that NO master expression exist in reality, but an UR-Expression exist, whose ids are used in this expression as wIds. In this case, the refersTo attribute must be used to point to an TLCConcept specifying facts about the UR-Expression.  -->
@@ -1566,9 +1577,9 @@
 with respect to the element being identified with the relative eId. -->
 &lt;!ENTITY ## pos "pos #posType; #IMPLIED">
 &lt;!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
-&lt;!ENTITY @ argumentType      ""                            "##core; ##idopt; ##link; ##pos; ##modifiers; upTo   #ANYURI #IMPLIED" >
+&lt;!ENTITY @ argumentType      "@anyOtherType;"               "##pos; ##modifiers; upTo   #ANYURI #IMPLIED" >
 &lt;!--- the complex type periodType defines the empty content model and the list of attributes for metadata elements in the analysis section using periods -->
-&lt;!ENTITY @ periodType        ""                            "##core; ##idopt; ##period;" >                 
+&lt;!ENTITY @ periodType        "@anyOtherType;"               "##period;" >                 
 
 &lt;!--- The element source is a metadata element specifying the IRI of the source of the modification. -->
 &lt;!ELEMENT source           @argumentType;>

@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 23/06/2014 - Akoma Ntoso 3.0 CSD11
+Release 16/12/2014 - Akoma Ntoso 3.0 CSD12
 Complete version.
 
 
@@ -347,7 +347,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD11"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -389,15 +389,22 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ELEMENT amendmentList           %collectionStructure; >
 <!ATTLIST amendmentList %name;  contains %versionType; 'originalVersion'  >
 
+<!ATTLIST amendmentList xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+
+
 
 
 <!ELEMENT officialGazette           %collectionStructure; >
 <!ATTLIST officialGazette %name;  contains %versionType; 'originalVersion'  >
 
+<!ATTLIST officialGazette xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
+
 
 
 <!ELEMENT documentCollection           %collectionStructure; >
 <!ATTLIST documentCollection %name;  contains %versionType; 'originalVersion'  >
+
+<!ATTLIST documentCollection xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 <!ENTITY % collectionBodyType  "(component+)" >
@@ -1109,13 +1116,13 @@ legal structure, regardless of their position in the document.
 <!ENTITY % modType "(#PCDATA | %modType_mixed;)*" >
 
 <!ELEMENT mod   %modType; >
-<!ATTLIST mod %corereq;  >
+<!ATTLIST mod %corereq;  for %ANYURI; #IMPLIED >
 
 <!ELEMENT mmod  %modType; >
-<!ATTLIST mmod %corereq;  >
+<!ATTLIST mmod %corereq;  for %ANYURI; #IMPLIED >
 
 <!ELEMENT rmod  %modType; >
-<!ATTLIST rmod %corereq;  >
+<!ATTLIST rmod %corereq;  for %ANYURI; #IMPLIED >
 
 <!ATTLIST rmod from %ANYURI; #REQUIRED upTo %ANYURI; #REQUIRED >
 
@@ -1414,9 +1421,9 @@ Metadata elements for all documents
 
 <!ENTITY % workProperties   "FRBRcountry , FRBRsubtype? , FRBRnumber* , FRBRname* , FRBRprescriptive? , FRBRauthoritative?" >
 
-<!ENTITY % exprProperties   "FRBRauthoritative? , FRBRmasterExpression? , FRBRlanguage+ , FRBRtranslation*" >
+<!ENTITY % exprProperties   "FRBRversionNumber? , FRBRauthoritative? , FRBRmasterExpression? , FRBRlanguage+ , FRBRtranslation*" >
 
-<!ENTITY % manifProperties   "FRBRformat?" >
+<!ENTITY % manifProperties   "FRBRportion? , FRBRformat?" >
 
 
  <!ENTITY             % FRBRWork_entity "(%coreProperties;,(%workProperties;))" ><!ELEMENT FRBRWork %FRBRWork_entity;>
@@ -1472,17 +1479,26 @@ Metadata elements for all documents
 <!ELEMENT FRBRcountry            %valueType; >
 <!ATTLIST FRBRcountry %value;  %refers;  %showopt;  %core;  %idopt;  >
 
-<!ELEMENT FRBRnumber            %valueType; >
+<!ELEMENT FRBRnumber             %valueType; >
 <!ATTLIST FRBRnumber %value;  %refers;  %showopt;  %core;  %idopt;  >
 
-<!ELEMENT FRBRname            %valueType; >
+<!ELEMENT FRBRname               %valueType; >
 <!ATTLIST FRBRname %value;  %refers;  %showopt;  %core;  %idopt;  >
 
-<!ELEMENT FRBRformat            %valueType; >
+<!ELEMENT FRBRportion             %valueType; >
+<!ATTLIST FRBRportion %value;  %refers;  %showopt;  %core;  %idopt;  >
+
+<!ATTLIST FRBRportion upTo %ANYURI; #IMPLIED >
+
+
+<!ELEMENT FRBRformat             %valueType; >
 <!ATTLIST FRBRformat %value;  %refers;  %showopt;  %core;  %idopt;  >
 
-<!ELEMENT FRBRprescriptive      %booleanValueType; >
+<!ELEMENT FRBRprescriptive       %booleanValueType; >
 <!ATTLIST FRBRprescriptive %booleanvalue;  %core;  %idopt;  >
+
+<!ELEMENT FRBRversionNumber      %valueType; >
+<!ATTLIST FRBRversionNumber %value;  %refers;  %showopt;  %core;  %idopt;  >
 
 <!ELEMENT FRBRauthoritative      %booleanValueType; >
 <!ATTLIST FRBRauthoritative %booleanvalue;  %core;  %idopt;  >
@@ -1724,28 +1740,28 @@ Metadata elements for all documents
 
 <!ENTITY % pos " pos %posType; #IMPLIED" >
 
-<!ENTITY % argumentType      "EMPTY" >
+<!ENTITY % argumentType      "%anyOtherType;" >
 
-<!ENTITY % periodType        "EMPTY" >
+<!ENTITY % periodType        "%anyOtherType;" >
 
 
 <!ELEMENT source           %argumentType; >
-<!ATTLIST source %core;  %idopt;  %link;  %pos;  %modifiers;  upTo %ANYURI; #IMPLIED >
+<!ATTLIST source %pos;  %modifiers;  upTo %ANYURI; #IMPLIED %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT destination      %argumentType; >
-<!ATTLIST destination %core;  %idopt;  %link;  %pos;  %modifiers;  upTo %ANYURI; #IMPLIED >
+<!ATTLIST destination %pos;  %modifiers;  upTo %ANYURI; #IMPLIED %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT force            %periodType; >
-<!ATTLIST force %core;  %idopt;  %period;  >
+<!ATTLIST force %period;  %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT efficacy         %periodType; >
-<!ATTLIST efficacy %core;  %idopt;  %period;  >
+<!ATTLIST efficacy %period;  %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT application      %periodType; >
-<!ATTLIST application %core;  %idopt;  %period;  >
+<!ATTLIST application %period;  %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT duration         %periodType; >
-<!ATTLIST duration %core;  %idopt;  %period;  >
+<!ATTLIST duration %period;  %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT condition        %anyOtherType; >
 <!ATTLIST condition %core;  %idopt;  %linkopt;  >
