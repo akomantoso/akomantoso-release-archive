@@ -14,7 +14,7 @@
 &lt;!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     <report version="Release 16/12/2014 - Akoma Ntoso 3.0 CSD12"/>
+     <report version="Release 07/01/2015 - Akoma Ntoso 3.0 CSD13"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -32,7 +32,7 @@
 		 
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -393,7 +393,7 @@
 						<include if="statementDocs" v="statement |" />
 						<include if="amendmentDocs" v="amendment |" />
 						<include if="judgmentDocs" v="judgment |" />
-						<include if="components" v="fragment |" /> doc)">
+						<include if="components" v="portion |" /> doc)">
 
   
 
@@ -435,10 +435,11 @@
 &lt;!ATTLIST statement  xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 </include>
 
-<include if="components" dependsOn="core" label="Components" desc="Elements $components and $component for the specification of parts and fragments of composite documents"	>
+<include if="components" dependsOn="core" label="Components" desc="Elements $components and $component for the specification of parts and portions of composite documents"	>
 	
 &lt;!--- The element components is a container of all components referred to in the main part of the document -->
 &lt;!ELEMENT components (component)+ >
+&lt;!ATTLIST components ##idreq; >
 
 &lt;!--- The element component is a container of a subdocument specified in a composite document -->
 &lt;!ELEMENT component @docContainerType; >
@@ -480,20 +481,20 @@
 </include>
 
 
-<include if="components" label="Component: an independent fragment of another document" desc="Document element $fragment">		
-&lt;!--- the type fragmentStructure specifies the overall content model of the document type that is a fragment of another document -->
-&lt;!ENTITY @ fragmentStructure   "(meta, 
-                                   fragmentBody)" 
+<include if="components" label="Component: an independent portion of another document" desc="Document element $portion">		
+&lt;!--- the type portionStructure specifies the overall content model of the document type that is a portion of another document -->
+&lt;!ENTITY @ portionStructure   "(meta, 
+                                   portionBody)" 
                                   "includedIn #ANYURI #REQUIRED">
 
-&lt;!--- Element fragment is used for describing the structure and content of an independent fragment of a document -->
-&lt;!ELEMENT fragment           @fragmentStructure; >
-&lt;!ATTLIST fragment           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
+&lt;!--- Element portion is used for describing the structure and content of an independent portion of a document -->
+&lt;!ELEMENT portion           @portionStructure; >
+&lt;!ATTLIST portion           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
-&lt;!--- the type fragmentBodyType specifies a content model of a container of a fragment of another document -->
-&lt;!ENTITY @ fragmentBodyType  "(@@containerElements; <include if="legislativeDocs" v="| @@hierElements; "/> <include if="debateDocs" v="| @@ANcontainers;"/> <include if="prefaceSubstructures" v="| recital | citation"/>)" "##coreopt;" >
-&lt;!--- the element fragmentBody is the container of a fragment of another document -->
-&lt;!ELEMENT fragmentBody       @fragmentBodyType; >
+&lt;!--- the type portionBodyType specifies a content model of a container of a portion of another document -->
+&lt;!ENTITY @ portionBodyType  "(@@containerElements; <include if="legislativeDocs" v="| @@hierElements; "/> <include if="debateDocs" v="| @@ANcontainers;"/> <include if="prefaceSubstructures" v="| recital | citation"/>)" "##coreopt;" >
+&lt;!--- the element portionBody is the container of a portion of another document -->
+&lt;!ELEMENT portionBody       @portionBodyType; >
 </include>
 
 <include if="legislativeDocs" label="Legislative documents">
@@ -1352,10 +1353,12 @@
 &lt;!ELEMENT FRBRnumber             @valueType;>
 &lt;!--- The element FRBRname is the metadata property containing a string for the title to be used in the work-level IRI of this document -->
 &lt;!ELEMENT FRBRname               @valueType;>
-&lt;!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level fragment. If the fragment contains 
+&lt;!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains 
 an interval of elements, the upTo attribute specifies the last one. -->
-&lt;!ELEMENT FRBRportion             @valueType;>
-&lt;!ATTLIST FRBRportion            upTo   #ANYURI #IMPLIED >
+&lt;!ELEMENT FRBRportion             @metaopt;>
+&lt;!ATTLIST FRBRportion             ##refers; ##showopt;
+                                     from   #ANYURI        #REQUIRED  
+                                     upTo   #ANYURI        #IMPLIED >
 
 &lt;!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document -->
 &lt;!ELEMENT FRBRformat             @valueType;>

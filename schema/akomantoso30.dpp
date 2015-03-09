@@ -1,7 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     Release 16/12/2014 - Akoma Ntoso 3.0 CSD12 
+     Release 07/01/2015 - Akoma Ntoso 3.0 CSD13 
 				Complete version. 
 			
 
@@ -21,7 +21,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD12'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -382,7 +382,7 @@
 						statement |
 						amendment |
 						judgment |
-						fragment | doc)">
+						portion | doc)">
 
   
 
@@ -428,6 +428,7 @@
 	
 <!--- The element components is a container of all components referred to in the main part of the document -->
 <!ELEMENT components (component)+ >
+<!ATTLIST components ##idreq; >
 
 <!--- The element component is a container of a subdocument specified in a composite document -->
 <!ELEMENT component @docContainerType; >
@@ -470,19 +471,19 @@
 
 
 		
-<!--- the type fragmentStructure specifies the overall content model of the document type that is a fragment of another document -->
-<!ENTITY @ fragmentStructure   "(meta, 
-                                   fragmentBody)" 
+<!--- the type portionStructure specifies the overall content model of the document type that is a portion of another document -->
+<!ENTITY @ portionStructure   "(meta, 
+                                   portionBody)" 
                                   "includedIn #ANYURI #REQUIRED">
 
-<!--- Element fragment is used for describing the structure and content of an independent fragment of a document -->
-<!ELEMENT fragment           @fragmentStructure; >
-<!ATTLIST fragment           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
+<!--- Element portion is used for describing the structure and content of an independent portion of a document -->
+<!ELEMENT portion           @portionStructure; >
+<!ATTLIST portion           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
-<!--- the type fragmentBodyType specifies a content model of a container of a fragment of another document -->
-<!ENTITY @ fragmentBodyType  "(@@containerElements; | @@hierElements;  | @@ANcontainers; | recital | citation)" "##coreopt;" >
-<!--- the element fragmentBody is the container of a fragment of another document -->
-<!ELEMENT fragmentBody       @fragmentBodyType; >
+<!--- the type portionBodyType specifies a content model of a container of a portion of another document -->
+<!ENTITY @ portionBodyType  "(@@containerElements; | @@hierElements;  | @@ANcontainers; | recital | citation)" "##coreopt;" >
+<!--- the element portionBody is the container of a portion of another document -->
+<!ELEMENT portionBody       @portionBodyType; >
 
 
 
@@ -1341,10 +1342,12 @@
 <!ELEMENT FRBRnumber             @valueType;>
 <!--- The element FRBRname is the metadata property containing a string for the title to be used in the work-level IRI of this document -->
 <!ELEMENT FRBRname               @valueType;>
-<!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level fragment. If the fragment contains 
+<!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains 
 an interval of elements, the upTo attribute specifies the last one. -->
-<!ELEMENT FRBRportion             @valueType;>
-<!ATTLIST FRBRportion            upTo   #ANYURI #IMPLIED >
+<!ELEMENT FRBRportion             @metaopt;>
+<!ATTLIST FRBRportion             ##refers; ##showopt;
+                                     from   #ANYURI        #REQUIRED  
+                                     upTo   #ANYURI        #IMPLIED >
 
 <!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document -->
 <!ELEMENT FRBRformat             @valueType;>
