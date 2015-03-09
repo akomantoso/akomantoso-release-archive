@@ -14,7 +14,7 @@
 &lt;!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     <report version="Release 16/04/2014 - Akoma Ntoso 3.0 CSD10"/>
+     <report version="Release 23/06/2014 - Akoma Ntoso 3.0 CSD11"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -32,7 +32,7 @@
 		 
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD10'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD11'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -228,8 +228,8 @@
                           title        #STRING      #IMPLIED">
 &lt;!--- This attribute list are used to specify the fact that any attribute can be specified for this element if it belongs to a different namespace. -->
 &lt;!ENTITY ## core    "xxxdirtyTrick        #STRING      #IMPLIED">
-&lt;!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is required. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
-&lt;!ENTITY ## idreq        "eId   #noWhiteSpace;           #REQUIRED
+&lt;!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is required whenever the Akoma Ntoso naming Convention is used. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
+&lt;!ENTITY ## idreq        "eId   #noWhiteSpace;           #IMPLIED
                              wId   #noWhiteSpace;           #IMPLIED 
                              GUID  #noWhiteSpace;           #IMPLIED">
 &lt;!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is optional. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
