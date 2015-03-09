@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 16/04/2014 - Akoma Ntoso 3.0 CSD10
+Release 23/06/2014 - Akoma Ntoso 3.0 CSD11
 Complete version.
 
 
@@ -191,7 +191,7 @@ Attribute groups
 <!ENTITY % core    " xxxdirtyTrick %STRING; #IMPLIED" >
 
 <!ENTITY % noWhiteSpace "%STRING;" >
-<!ENTITY % EnoWhiteSpace "(%ESTRING;)" ><!ENTITY % idreq        " eId %noWhiteSpace; #REQUIRED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
+<!ENTITY % EnoWhiteSpace "(%ESTRING;)" ><!ENTITY % idreq        " eId %noWhiteSpace; #IMPLIED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
 
 <!ENTITY % idopt        " eId %noWhiteSpace; #IMPLIED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
 
@@ -347,7 +347,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD10"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD11"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
