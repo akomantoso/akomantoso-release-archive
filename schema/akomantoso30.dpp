@@ -1,7 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     Release 07/01/2015 - Akoma Ntoso 3.0 CSD13 
+     Release 22/07/2015 - Akoma Ntoso 3.0 WD14 
 				Complete version. 
 			
 
@@ -21,7 +21,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -125,14 +125,16 @@
 
      ===================================================================== -->
      
+<!--- The attribute contains is used in the root of document types to indicate whether the document is original or modified wrt the orignal version -->
+<!ENTITY ## contains "contains #versionType; 'originalVersion' " >
 <!--- The attribute alternativeTo is used to specify, when the element contains an alternative version of some content, the eId of the main element which this element is an alternative copy of -->
-<!ENTITY ## alt         "alternativeTo         #ANYURI        #IMPLIED" >
+<!ENTITY ## alt         "alternativeTo         #eIdRef;        #IMPLIED" >
 <!--- The attribute name is used to give a name to all generic elements -->
 <!ENTITY ## name         "name         #STRING        #REQUIRED" >
 <!--- The attribute number is used to specify a number in the publication of the document -->
 <!ENTITY ## number       "number       #STRING        #IMPLIED" >
 <!--- The attribute source links to the agent (person, organization) providing the specific annotation or markup -->
-<!ENTITY ## source       "source       #ANYURI        #REQUIRED" >
+<!ENTITY ## source       "source       #agentRef;        #REQUIRED" >
 <!--- The attribute date is used to give a normalized value for a date according to the XSD syntax YYYY-MM-DD or a normalized value for a dateTime according to the XSD syntax YYYY-MM-DDThh:mm:ss(zzzz)  -->
 <!ENTITY ## date         "date         #DATE | #DATETIME         #REQUIRED" >
 <!--- The attribute time is used to give a normalized value for a time according to the XSD syntax HH:MM:SS -->
@@ -148,39 +150,207 @@
 <!--- The attribute value is used here to specify a boolean value for metadata elements. In elements using this attribute definition the value attribute is required -->
 <!ENTITY ## booleanvalue     "value        #BOOLEAN        #REQUIRED" >
 
-<!--- The attributes in speechAtts are used in speeches to identify actors and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section -->
-<!ENTITY ## speechAtts "by           #ANYURI        #REQUIRED 
-                           as           #ANYURI        #IMPLIED
+
+<!--- The start and end attributes are used to specify events that mark the beginning and the end of a time interval. Both are references to eventRef elements in the lifecycle element -->
+<!ENTITY ## interval     "
+		start           #eventRefRef;        #IMPLIED
+    end             #eventRefRef;        #IMPLIED
+" >
+<!--- The duration attribute is used to specify a duration when either the start or the end event of a time interval is not known. -->
+<!ENTITY ## duration     "duration      #DURATION   #IMPLIED" >
+
+
+<!--- The attributes in speechAtts are used in speeches to identify agents and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section -->
+<!ENTITY ## speechAtts "##agent; 
+                           ##role;
                            startTime    #DATETIME      #IMPLIED
                            endTime      #DATETIME      #IMPLIED
-                           to           #ANYURI        #IMPLIED ">
-<!--- The attributes in voteAtts are used in votes to identify actors and choices in votes. In particular, attribute 'by' identifies the voter, optional attribute 'as' identifies the role under which the voter is acting, optional attribute 'choice' specifies the voe that was casted. -->
-<!ENTITY ## voteAtts   "by           #ANYURI        #REQUIRED 
-                           as           #ANYURI        #IMPLIED
-                           choice       #ANYURI        #IMPLIED ">
+                           to           #agentRef;     #IMPLIED ">
+<!--- The attributes in voteAtts are used in votes to identify agents and choices in votes. In particular, attribute 'by' identifies the voter, optional attribute 'as' identifies the role under which the voter is acting, optional attribute 'choice' specifies the vote that was casted. -->
+<!ENTITY ## voteAtts   "##agent; 
+                           ##role;
+                           choice       #voteRef;        #IMPLIED ">
+<!--- The attribute frozen for the condition element specifies whether the condition is frozen or not in the time period of this expression. -->
+<!ENTITY ## frozen     "frozen #BOOLEAN #IMPLIED" >
+                           
+
+
+<!--- The attributes in lawyerAtts are used in the inline element lawyer to identify representation aspects of lawyers. In particular, attribute 'as' identifies his/her role, attribute 'for' identifies which party it represents, and attribute 'empoweredBy' identifies another lawyer, if any, this lawyer received the power delegation of power. -->
+<!ENTITY ## lawyerAtts   "##role; 
+                             for         #agentRef;    #IMPLIED 
+                             empoweredBy #agentRef;    #IMPLIED">
+
+
+<!--- The attribute normalized is used in the inline element quantity to provide a normalized value of the number, if appropriate. -->
+<!ENTITY ## normalizedAtt   "normalized  #STRING  #IMPLIED">
+
+                    
+<!--- The attribute for is used in modification elements to specify the element this is a modification of. -->
+<!ENTITY ## for "for #eIdRef; #IMPLIED">
+
+
+
+<!-- The mappingAtts attributes represent the reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup (attribute start) and a final temporalGroup (attribute end). --> 
+<!ENTITY ## mappingAtts " 
+    original        #wIdRef;        #IMPLIED
+    current         #eIdRef;        #IMPLIED
+    start           #eventRefRef;        #IMPLIED
+    end             #eventRefRef;        #IMPLIED
+">
+<!--- The attribute originating is used to identify whether the event is the one originating this expression -->
+<!ENTITY ## originating "originatingExpression #BOOLEAN #IMPLIED">
+
+<!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
+<!ENTITY ## outcome "outcome #conceptRef; #IMPLIED">
+
+
+		
+<!--- the attribute includedIn specifies the eId of the element of the references section identifying the document that this portion is a portion of.  -->
+<!ENTITY ## portionAtt   "includedIn #referenceRef; #REQUIRED">
+	
+
+<!--- the attribute level specifies the level of the toc element.  -->
+<!ENTITY ## level "level #INTEGER #REQUIRED" >
+	
+
+<!--- the attribute target specifies the target of the a element.  -->
+<!ENTITY ## target   "target    #STRING    #IMPLIED">
+
+<!--- these attributes specify the dimension of the image.  -->
+<!ENTITY ## imgAtts    "
+		width  #INTEGER      #IMPLIED
+    height #INTEGER      #IMPLIED
+">	
+
+
+<!--- these attributes specify the characteristics of the table.  -->
+<!ENTITY ## tableAtts    "
+    width       #INTEGER #IMPLIED
+    border      #INTEGER #IMPLIED
+    cellspacing #INTEGER #IMPLIED
+    cellpadding #INTEGER #IMPLIED
+">
+
+
+<!--- the attribute originalText contains the original text of a placeholder -->
+<!ENTITY ## originalText "originalText #STRING #IMPLIED" >
+<!--- the attribute width of the element fillIn specifies the width of the fillIn element. -->
+<!ENTITY ## fillInWidth  "width #STRING #IMPLIED" >
+
+	
+<!--- The attribute upTo is used in range-based elements to specify the eId of the ending element of the range. -->
+<!ENTITY ## upTo "upTo #eIdRef; #REQUIRED">
+<!ENTITY ## upToOpt "upTo #eIdRef; #IMPLIED">
+<!--- These attributes are used in range-based elements to specify the eId of the beginning and ending element of the range. -->
+<!ENTITY ## range "from #eIdRef; #REQUIRED ##upTo;">
+<!ENTITY ## rangeOpt "from #eIdRef; #REQUIRED ##upToOpt;">
+
+<!--- The attribute pos is used to identify the specific position of the reference (e.g., in source or destination) 
+with respect to the element being identified with the relative eId. -->
+<!ENTITY ## pos "pos #posType; #IMPLIED">
+
+<!--- This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646. -->
+<!ENTITY ## language     "language     #language; #REQUIRED">
+<!--- This attribute specifies the human language of the expression this is a translation of. Values are taken from the RFC 4646. -->
+<!ENTITY ## fromLanguage "fromLanguage #language; #REQUIRED">
+<!--- This attribute specifies the human language used as a pivot in the translation. Values are taken from the RFC 4646. -->
+<!ENTITY ## pivot        "pivot        #language; #IMPLIED">
+<!--- This attribute specifies whether the translation is authoritative or not -->
+<!ENTITY ## authoritative        "authoritative #BOOLEAN #IMPLIED">
+
+<!--- This attribute specifies the eId of the element in the references section detailing the dictionary used for the keyword. -->
+<!ENTITY ## dictionary        "dictionary  #referenceRef;  #REQUIRED">
+
+
+<!-- =====================================================================
+
+        Attribute groups: attribute "type"
+
+     ===================================================================== -->
+<!--- The type attribute is used in various element to identify a type without restrictions as to its values. -->
+<!ENTITY ## type   "type  CDATA #IMPLIED">
+
+
+<!--- This is the list of allowed values for the type attribute of the event and action elements  -->
+<!ENTITY #  eventType     "#STRING(generation|amendment|repeal)" >
+<!ENTITY ## eventType     "type   #eventType; #IMPLIED">
+
+
+
+<!--- This is the list of allowed values for the type attribute of the opinion element  -->
+<!ENTITY #  opinionType   "#STRING(dissenting|agreeing|null)">
+<!ENTITY ## opinionType   "type  #opinionType; #IMPLIED">
+
+<!--- This is the list of allowed values for the type attribute of the result element  -->
+<!ENTITY #  resultType  "#STRING(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)">
+<!ENTITY ## resultType    "type  #resultType; #REQUIRED" >
+
+
+
+<!--- This is the list of allowed values for the restriction type attribute   -->
+<!ENTITY #  restrictionType    "#STRING(jurisdiction)" >
+<!ENTITY ## restrictionType    "type #restrictionType; #REQUIRED" >
+
+
+
+<!--- This is the list of allowed values for the type attribute of the remark element for the specification of editorial remarks (e.g., applauses, laughters, etc.) especially within debate records  -->
+<!ENTITY # remarkType     "#STRING(sceneDescription|phenomenon|caption|translation)">
+<!ENTITY ## remarkType   "type #remarkType; #IMPLIED" >
+
+<!--- This is the list of allowed values for the type attribute of the recordedTime element for the specification of an explicit mention of a time (e.g., in a debate) -->
+<!ENTITY # timeType       "#STRING(startEvent|endEvent)">
+<!ENTITY ## recordedTimeType   "type #timeType; #IMPLIED">
+
+	
+
+<!--- The simple type TextualMods lists all the types of textual modifications as values for the type attribute of the textualMod element. -->
+<!ENTITY # TextualMods         "#STRING(repeal|substitution|insertion|replacement|renumbering|split|join)" >
+<!ENTITY ## textualModType            "type #TextualMods; #REQUIRED" >
+
+<!--- The simple type MeaningMods lists all the types of modifications in meaning as values for the type attribute of the meaningMod element. -->
+<!ENTITY # MeaningMods         "#STRING(variation|termModification|authenticInterpretation)" >
+<!ENTITY ## meaningModType            "type #MeaningMods; #REQUIRED" >
+
+<!--- The simple type ScopeMods lists all the types of modifications in scope as values for the type attribute of the scopeMod element. -->
+<!ENTITY # ScopeMods           "#STRING(exceptionOfScope|extensionOfScope)" >
+<!ENTITY ## scopeModType              "type #ScopeMods; #REQUIRED" >
+
+<!--- The simple type ForceMods lists all the types of modifications in force as values for the type attribute of the forceMod element. -->
+<!ENTITY # ForceMods           "#STRING(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|
+prorogationOfForce|reEnactment|uncostitutionality)" >
+<!ENTITY ## forceModType              "type #ForceMods; #REQUIRED" >
+
+<!--- The simple type EfficacyMods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element. -->
+<!ENTITY # EfficacyMods        "#STRING(entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy| postponementOfEfficacy|prorogationOfEfficacy)" >
+<!ENTITY ## efficacyModType           "type #EfficacyMods; #REQUIRED" >
+
+<!--- The simple type LegalSystemMods lists all the types of modifications in the legal system as values for the type attribute of the LegalSystemMod element. -->
+<!ENTITY # LegalSystemMods     "#STRING(staticReference|implementation|ratification|application| legislativeDelegation|deregulation|conversion|expiration|
+reiteration|remaking|republication|coordination)" >
+<!ENTITY ## legalSystemModType        "type #LegalSystemMods; #REQUIRED" >
+
 
 <!--- These attributes are used in metadata to propose visible representations of the metadata itself. Both a full visualization (attribute showAs) and an abbreviated one (attribute shortForm) can be specified -->
-<!ENTITY ## show         "showAs       #STRING        #REQUIRED  
+<!ENTITY ## show      "showAs       #STRING        #REQUIRED  
                           shortForm    #STRING        #IMPLIED">
-<!ENTITY ## showopt    "showAs       #STRING        #IMPLIED  
+<!ENTITY ## showopt   "showAs       #STRING        #IMPLIED  
                           shortForm    #STRING        #IMPLIED">
-<!--- These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level IRI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason. -->
-<!ENTITY ## src         "src       #ANYURI        #REQUIRED  
-                            alt       #STRING        #IMPLIED">
+<!--- These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level IRI of the resource, while the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason. -->
+<!ENTITY ## src         "src       #manifestationURI;       #REQUIRED  
+                            alt       #STRING                  #IMPLIED">
 <!--- The period attribute is used in versioned content and metadata elements to indicate a time interval in which they were in force, in efficacy, or in any other type of interval as specified in the corresponding temporalGroup.  -->
-<!ENTITY ## period "
-    period           #ANYURI        #IMPLIED"
->
+<!ENTITY ## period "     period    #temporalGroupRef;       #IMPLIED" >
+
 <!--- These attributes are those already defined in attribute list "period", plus the attribute status, that allows to specify the status of the piece of text it wraps.  -->
 <!ENTITY ## enactment "
     ##period;
     status     #statusType;  #IMPLIED
 ">
-<!--- These attributes are used by notes, both authorial and editorial -->
+<!--- These attributes are used by notes, both authorial and editorial. The marker is the string to be used as a marker of the note, the placement is the position where the note should be placed, and placementBase is the eId of the element respect to which the note should be placed near.  -->
 <!ENTITY ## notes "
-		                      marker    #STRING         #IMPLIED
-                          placement #placementType; #IMPLIED	
-                          placementBase #ANYURI     #IMPLIED	
+		                      marker         #STRING         #IMPLIED
+                          placement      #placementType; #IMPLIED	
+                          placementBase  #eIdRef;        #IMPLIED	
 ">
 
 <!--- These attributes are used in the analysis to allow manifestation editors to specify whether the analysis is complete and/or ignored in the text -->
@@ -189,15 +359,9 @@
     incomplete #BOOLEAN #IMPLIED
 ">
 <!--- The attribute role is used to identify the role of an individual mentioned in the text. It is a reference to a TLCRole element in the references section -->
-<!ENTITY ## role "
-    as #ANYURI #IMPLIED
-">
-<!--- The attribute actor is used to identify the actor of a step of a workflow of the document. It is a reference to a TLCPerson or TLCOrganization element in the references section -->
-<!ENTITY ## actor "
-    actor #ANYURI #IMPLIED
-">
-<!--- The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section -->
-<!ENTITY ## outcome "outcome #ANYURI #IMPLIED">
+<!ENTITY ## role "as #roleRef; #IMPLIED ">
+<!--- The attribute by is used to identify the agent of an action. It is a reference to a TLCPerson or TLCOrganization element in the references section -->
+<!ENTITY ## agent "by #agentRef; #REQUIRED ">
 
 <!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote. -->
 <!ENTITY ## quote "
@@ -208,13 +372,13 @@
 
 <!--- These attributes are used to specify that table cells span more than one row or one column, exactly as in HTML -->
 <!ENTITY ## cellattrs    "rowspan      #INTEGER     '1'
-                          colspan      #INTEGER     '1'  ">
+                             colspan      #INTEGER     '1'  ">
 
 	
 <!--- These attributes are used to specify class, style and title of the element, exactly as in HTML -->
 <!ENTITY ## HTMLattrs    "class        #STRING      #IMPLIED    
-                          style        #STRING      #IMPLIED
-                          title        #STRING      #IMPLIED">
+                             style        #STRING      #IMPLIED
+                             title        #STRING      #IMPLIED">
 <!--- This attribute list are used to specify the fact that any attribute can be specified for this element if it belongs to a different namespace. -->
 <!ENTITY ## core    "xxxdirtyTrick        #STRING      #IMPLIED">
 <!--- These attributes identify the element in an absolute manner. In elements using this attribute definition the eId attribute is required whenever the Akoma Ntoso naming Convention is used. The wId is used to mark the identifier that the structure used to have in the original version, and is only needed when a renumbering occurred. -->
@@ -227,11 +391,11 @@
                              GUID  #noWhiteSpace;           #IMPLIED">
 
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is required -->
-<!ENTITY ## refersreq    "refersTo           (#ANYURI+)         #REQUIRED" >
+<!ENTITY ## refersreq    "refersTo           (#referenceRef;+)         #REQUIRED" >
 <!--- This attribute creates a connection between the element and an element of the Akoma Ntoso ontology to which it refers. In elements using this attribute definition the refersTo attribute is optional -->
-<!ENTITY ## refers       "refersTo           (#ANYURI+)         #IMPLIED" >
+<!ENTITY ## refers       "refersTo           (#referenceRef;+)         #IMPLIED" >
 <!--- These attribute specify the human language in which the content of the element is expressed as well as the rules for whitespace management in the element. Values for xml:lang are taken from the RFC 4646. Both xml:lang and xml:space are reserved attributes of the XML language, and cannot be used for any other purpose than these ones.  -->
-<!ENTITY ## xmllang       "
+<!ENTITY ## xmllang   "
                    xml:lang           #language;         #IMPLIED
                    xml:space          (default|preserve) #IMPLIED
                    " >
@@ -248,18 +412,35 @@
         Simple types (data values)
 
      ===================================================================== -->
-<!--- This attribute the values of ids such as eId, wId and GUID as a collection of any printable character except whitespaces.  -->
-<!ENTITY # noWhiteSpace "#STRING/[^\s]+/" >
-<!--- This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.  -->
-<!ENTITY # language           "#STRING" >
+<!--- These values are those of ids such as eId, wId and GUID as a collection of any printable character except whitespaces.  -->
+<!ENTITY # noWhiteSpace     "#STRING/[^\s]+/" >
+<!--- These values are references to existing eIds only, i.e., given an existing eId of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # eIdRef           "#ANYURI" >
+<!--- These values are references to existing wIds only, i.e., given an existing wId of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # wIdRef           "#ANYURI" >
+<!--- These values are references to existing roles (i.e., TLCRole) only, i.e., given an existing eId of a role of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # roleRef          "#ANYURI" >
+<!--- These values are references to existing agents (i.e., TLCPerson or TLCOrganization) only, i.e., given an existing eId of an agent of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # agentRef         "#ANYURI" >
+<!--- These values are references to existing concepts (i.e., TLCConcept) only, i.e., given an existing eId of a concept of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # conceptRef       "#ANYURI" >
+<!--- These values are references to existing References elements only, i.e., given an existing eId of an element of the References section of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # referenceRef     "#ANYURI" >
+<!--- These values are references to existing votes (i.e., quorum or count) only, i.e., given an existing eId of a vote element of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # voteRef          "#ANYURI" >
+<!--- These values are references to existing event references (i.e., eventRef) only, i.e., given an existing eId of an eventRef of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # eventRefRef      "#ANYURI" >
+<!--- These values are references to existing temporal groups only, i.e., given an existing eId of a temporal group of the form XYZ, the value is necessarily #XYZ -->
+<!ENTITY # temporalGroupRef        "#ANYURI" >
+<!--- These values are references of a manifestation-Level document only -->
+<!ENTITY # manifestationURI "#ANYURI" >
+
+<!--- This type specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.  -->
+<!ENTITY # language         "#STRING" >
 <!--- This is the list of allowed values for the contains attribute   -->
-<!ENTITY # versionType    "#STRING(originalVersion|singleVersion|multipleVersions)" >
+<!ENTITY # versionType      "#STRING(originalVersion|singleVersion|multipleVersions)" >
 <!--- This is the list of allowed values for the placement attribute of notes  -->
 <!ENTITY # placementType    "#STRING(side|left|right|bottom|inline)" >
-
-
-<!--- This is the list of allowed values for the type attribute of the event and action elements  -->
-<!ENTITY # eventType      "#STRING(generation|amendment|repeal)" >
 
 <!--- This is the list of allowed values for the status attribute. This is the list of possible reasons for a dscrepancy between the manifestation as it should be (e.g., a faithful representation of the content of an expression), and the manifestation as it actually is. Values should be interpreted as follows: 
 - removed: the content of the element is present in the markup (manifestation) but is not present in the real content of the document (expression level) because it has been definitely removed (either ex tunc, as in annullments, or ex nunc, as in abrogations). 
@@ -275,25 +456,8 @@
 <!ENTITY # statusType     "#STRING(removed | temporarilyRemoved | translated | editorial | edited | verbatim | incomplete | unknown | undefined | ignored)">
 
 
-<!--- This is the list of allowed values for the type attribute of the remark element  -->
-<!ENTITY # remarkType     "#STRING(sceneDescription|phenomenon|caption|translation)">
-<!--- This is the list of allowed values for the type attribute of the recordedTime element  -->
-<!ENTITY # timeType       "#STRING(startEvent|endEvent)">
-
-
-
-<!--- This is the list of allowed values for the type attribute of the opinion element  -->
-<!ENTITY # opinionType  "#STRING(dissenting|agreeing|null)">
-<!--- This is the list of allowed values for the type attribute of the result element  -->
-<!ENTITY # resultType  "#STRING(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)">
-
-
 <!--- This is the list of possible positions of the text being analyzed by the element in the analysis section -->
 <!ENTITY # posType  "#STRING(start|before|inside|after|end|unspecified)">
-	
-<!--- This is the list of allowed values for the restriction type attribute   -->
-<!ENTITY # restrictionType    "#STRING(jurisdiction)" >
-	
 
 	
 <!-- =====================================================================
@@ -410,7 +574,7 @@
                                  conclusions?, 
                                  attachments?
                                  , components?)" 
-                                 "##name; contains #versionType; 'originalVersion'">
+                                 "##name; ##contains;">
 
 <!--- Element doc is used for describing the structure and content of any other document that is not included in the list of document explicitly managed by Akoma Ntoso -->
 <!ELEMENT doc           @openStructure; >
@@ -443,7 +607,7 @@
                                    conclusions?, 
                                    attachments?
                                    , components?)" 
-                                 "##name; contains #versionType; 'originalVersion'">
+                                 "##name; ##contains;">
 
 
 <!--- Element amendmentList is used for describing the structure and content of a collection of amendments -->
@@ -472,9 +636,7 @@
 
 		
 <!--- the type portionStructure specifies the overall content model of the document type that is a portion of another document -->
-<!ENTITY @ portionStructure   "(meta, 
-                                   portionBody)" 
-                                  "includedIn #ANYURI #REQUIRED">
+<!ENTITY @ portionStructure   "(meta, portionBody)"  "##portionAtt;">
 
 <!--- Element portion is used for describing the structure and content of an independent portion of a document -->
 <!ELEMENT portion           @portionStructure; >
@@ -496,7 +658,7 @@
                                      conclusions?, 
                                      attachments?
                                      , components?)" 
-                                   "##name; contains #versionType; 'originalVersion'">
+                                   "##name; ##contains;">
 
 <!--- Element act is used for describing the structure and content of an act -->
 <!ELEMENT act           @hierarchicalStructure; >
@@ -523,7 +685,7 @@
                                    conclusions?, 
                                    attachments?
                                    , components?)" 
-                                 "##name; contains #versionType; 'originalVersion'">
+                                 "##name; ##contains;">
 
 
 <!--- Element debateReport is used for describing the structure and content of a report -->
@@ -551,7 +713,7 @@
                                    conclusions?, 
                                    attachments?
                                    , components?)" 
-                                 "##name; contains #versionType; 'originalVersion'">
+                                 "##name; ##contains;">
 
 <!--- Element judgment is used for describing the structure and content of a judgment -->
 <!ELEMENT judgment     @judgmentStructure; >
@@ -572,7 +734,7 @@
                                    conclusions?, 
                                    attachments?
                                    , components?)" 
-                                 "##name; contains #versionType; 'originalVersion'">
+                                 "##name; ##contains;">
 
 <!--- Element amendment is used for describing the structure and content of an amendment -->
 <!ELEMENT amendment     @amendmentStructure; >
@@ -879,7 +1041,7 @@
 
 <!--- the element tocItem is a component of the table of content and contains header information about sections or parts of the rest of the document -->
 <!ELEMENT tocItem   @inline; >
-<!ATTLIST tocItem   ##link; level #INTEGER #REQUIRED >
+<!ATTLIST tocItem   ##link; ##level; >
 
 	
    
@@ -901,7 +1063,7 @@
 <!ELEMENT docNumber    @inline; >
 <!--- the element docProponent is an inline element within preface to identify the string used by the document for its proponent -->
 <!ELEMENT docProponent @inline; >
-<!ATTLIST docProponent as #ANYURI #IMPLIED >
+<!ATTLIST docProponent ##role; >
 
 <!--- the element docDate is an inline element within preface to identify the string used by the document for its own date(s). Documents with multiple dates may use multiple docDate elements. -->
 <!ELEMENT docDate      @inline; >
@@ -950,12 +1112,10 @@
 <!ATTLIST judge              ##role; >
 <!--- the element lawyer is an inline element within judgments to identify where the document defines one of the lawyers, his/her role, which party it represents, and the other lawyer, if any, this lawyer received the power delegation of power in some role -->
 <!ELEMENT lawyer             @inlinereqreq; >
-<!ATTLIST lawyer             ##role; 
-                             for         #ANYURI    #IMPLIED 
-                             empoweredBy #ANYURI    #IMPLIED >
+<!ATTLIST lawyer             ##lawyerAtts; >
 <!--- the element opinion is an inline element within judgments to identify where the document defines the opinion of one of the judges -->
 <!ELEMENT opinion            @inline; >
-<!ATTLIST opinion            type  #opinionType; #IMPLIED>
+<!ATTLIST opinion            ##opinionType; >
 
 <!--- the element argument is an inline element within judgments for classifying the arguments in the motivation part of the judgment -->
 <!ELEMENT argument            @inline; >
@@ -978,7 +1138,7 @@
 <!ATTLIST entity             ##name; >
 <!--- the element person is an inline element to identify a text fragment introducing or referring to a person in the ontology. Attribute as allows to specify a TLCrole the person is holding in the context of the document's mention -->
 <!ELEMENT person             @inlinereqreq; >
-<!ATTLIST person					    as  #ANYURI  #IMPLIED >
+<!ATTLIST person					    ##role; >
 <!--- The element organization is an inline element to identify a text fragment introducing or referring to an organization in the ontology -->
 <!ELEMENT organization  @inlinereqreq; >
 <!--- The element concept is is an inline element to identify a text fragment introducing or referring to a concept in the ontology -->
@@ -997,7 +1157,7 @@
 <!ELEMENT term          @inlinereqreq; >
 <!--- The element quantity is an inline element to identify a text fragment introducing or referring to a quantity. This could be a dimensionless number, or a number referring to a length, weight, duration, etc. or even a sum of money. The attribute normalized contains the value normalized in a number, if appropriate. -->
 <!ELEMENT quantity          @inlinereqreq; >
-<!ATTLIST quantity					normalized  #STRING  #IMPLIED >
+<!ATTLIST quantity					##normalizedAtt; >
 
 <!--- the element def is an inline element used for the definition of a term used in the rest of the document-->
 <!ELEMENT def          @inline; >
@@ -1013,36 +1173,32 @@
 <!ELEMENT mref         @inline; >
 <!--- the element rref is an inline element containing a range of references between the IRI specified in the href attribute and the one specified in the upTo attribute. -->
 <!ELEMENT rref         @inlinereq; >
-<!ATTLIST rref      from   #ANYURI        #REQUIRED  
-                       upTo   #ANYURI        #REQUIRED >
+<!ATTLIST rref         ##range; >
 
 	
                        
 <!--- the complex type modType specifies the content that is allowed within mod, mmod and rmod elements, i.e. it adds quotedText and quotedStructure to the normal list of inline elements. Attribute for is used to point to the eId of the corresponding ref element. -->
-<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure)*" "##corereq; for #ANYURI #IMPLIED" >
+<!ENTITY @ modType  "(#PCDATA | @@inlineCM; | quotedText | quotedStructure)*" "##corereq; ##for;" >
 <!--- the element mod is an inline element containing the specification of a modification on another document -->
 <!ELEMENT mod   @modType;>
 <!--- the element mmod is an inline element containing multiple specifications of modifications on another document -->
 <!ELEMENT mmod  @modType;>
 <!--- the element rmod is an inline element containing the specification of a range of modifications on another document -->
 <!ELEMENT rmod  @modType;>
-<!ATTLIST rmod  from   #ANYURI        #REQUIRED
-                   upTo   #ANYURI        #REQUIRED >
+<!ATTLIST rmod  ##range; >
 
 <!--- the element quotedText is an inline element containing a small string that is used either as the text being replaced, or the replacement, or the positioning at which some modification should take place. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used to point to the eId of the corresponding ref element. -->
 <!ELEMENT quotedText       @inline; >
-<!ATTLIST quotedText       ##quote; 
-															for #ANYURI #IMPLIED>
+<!ATTLIST quotedText       ##quote;  ##for;>
 
 
 
 <!--- the element remark is an inline element for the specification of editorial remarks (e.g., applauses, laughters, etc.) especially within debate records -->
 <!ELEMENT remark       @inline; >
-<!ATTLIST remark       type #remarkType; #IMPLIED >
+<!ATTLIST remark       ##remarkType; >
 <!--- the element recordedTime is an inline element for the specification of an explicit mention of a time (e.g., in a debate) -->
 <!ELEMENT recordedTime   @inline; >
-<!ATTLIST recordedTime   type #timeType; #IMPLIED
-                         ##time; >
+<!ATTLIST recordedTime   ##recordedTimeType;  ##time; >
 
 
 
@@ -1056,10 +1212,10 @@
 
 <!--- the element placeholder is an inline element containing the text of a computable expression (e.g., '30 days after the publication of this act') that can be replaced editorially with an actual value -->
 <!ELEMENT placeholder  @inline; >
-<!ATTLIST placeholder originalText #STRING #IMPLIED >
+<!ATTLIST placeholder ##originalText; >
 <!--- the element fillIn is an inline element shown as a dotted line or any other typoaphical characteristics to represent a fill-in element in a printed form, that is as ane example of an actual form. It is NOT meant to be used for form elements as in HTML, i.e. as a way to collect input from the reader and deliver to some server-side process. -->
 <!ELEMENT fillIn  @inline; >
-<!ATTLIST fillIn  width #STRING #IMPLIED >
+<!ATTLIST fillIn  ##fillInWidth; >
 <!--- the element decoration is an inline element to represent a decorative aspect that is present in the orignal text and that is meant as additional information to the text (e.g., the annotation 'new' on the side of a freshly inserted structure. -->
 <!ELEMENT decoration  @inline; >
 
@@ -1080,7 +1236,7 @@
 
 
 <!--- the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue -->
-<!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED number #STRING #IMPLIED">
+<!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED ##number; ">
 <!--- the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
 <!ELEMENT eol   @eolType; >
 <!--- the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
@@ -1111,8 +1267,7 @@
 
 <!--- the element quotedStructure is a subFlow element containing a full structure proposed as an insertion or a replacement. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
 <!ELEMENT quotedStructure   @subFlowStructure;>
-<!ATTLIST quotedStructure  ##quote;
-                              for #ANYURI #IMPLIED>
+<!ATTLIST quotedStructure  ##quote; ##for; >
 
 
 
@@ -1131,7 +1286,9 @@
 <!ELEMENT authorialNote   @subFlowStructure;>
 <!ATTLIST authorialNote   ##notes;>
 
+<!--- the element subFlow is a generic element for a subFlow.  -->
 <!ELEMENT subFlow    @subFlowStructure;>
+<!ATTLIST subFlow    ##name; >
 
 
 
@@ -1221,15 +1378,14 @@
 <!ELEMENT a    @inline; >
 <!ATTLIST a
     ##link;
-    target    #STRING    #IMPLIED
+    ##target;
 >
 
 <!--- The element img is an HTML element and is used in Akoma Ntoso as in HTML, for including an image. It is a marker. -->
 <!ELEMENT img @markeropt;>
 <!ATTLIST img
     ##src;
-    width  #INTEGER      #IMPLIED
-    height #INTEGER      #IMPLIED
+    ##imgAtts;
 >
 
 <!--- the complex type listItems specifies the content model of elements ul and ol, and specifies just a sequence of list items (elements li). -->
@@ -1246,13 +1402,7 @@
 
 <!--- The element table is an HTML element and is used in Akoma Ntoso as in HTML, for a table of rows and columns of data -->
 <!ELEMENT table (caption?, tr+)>
-<!ATTLIST table
-    ##corereq;
-    width       #INTEGER #IMPLIED
-    border      #INTEGER #IMPLIED
-    cellspacing #INTEGER #IMPLIED
-    cellpadding #INTEGER #IMPLIED
->
+<!ATTLIST table ##corereq; ##tableAtts; >
 
 <!--- The element caption is an HTML element and is used in Akoma Ntoso as in HTML, for the caption of a table (a block) -->
 <!ELEMENT caption    @inline; >
@@ -1321,18 +1471,18 @@
 <!--- The element FRBRauthor is the metadata property containing a relevant author of the document in the respective level of the FRBR hierarchy. Attribute as specifies the role of the author. -->
 <!ELEMENT FRBRauthor           @metaopt;>
 <!ATTLIST FRBRauthor           ##link; 
-                              as #ANYURI  #IMPLIED >
+                              ##role; >
 <!--- The element FRBRlanguage is the metadata property containing a RFC4646 (three-letter code) of the main human language used in the content of this expression -->
 <!ELEMENT FRBRlanguage            @metaopt;>
-<!ATTLIST FRBRlanguage            language #language; #REQUIRED >
+<!ATTLIST FRBRlanguage            ##language; >
 
 <!--- The element FRBRtranslation is the metadata property specifying the source of which this expression is a translation of. -->
 <!ELEMENT FRBRtranslation      @metaopt;>
 <!ATTLIST FRBRtranslation      ##link;
-                                  fromLanguage #language; #REQUIRED
-                                  authoritative #BOOLEAN #IMPLIED
-                                  pivot        #language; #IMPLIED
-                                  by   #ANYURI   #REQUIRED >
+                                  ##fromLanguage;
+                                  ##authoritative;
+                                  ##pivot;
+                                  ##agent; >
 
 <!--- The element FRBRsubtype is the metadata property containing a string for the specific subtype of the document to be used in the work-level IRI of this document -->
 <!ELEMENT FRBRsubtype            @valueType;>
@@ -1342,12 +1492,9 @@
 <!ELEMENT FRBRnumber             @valueType;>
 <!--- The element FRBRname is the metadata property containing a string for the title to be used in the work-level IRI of this document -->
 <!ELEMENT FRBRname               @valueType;>
-<!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains 
-an interval of elements, the upTo attribute specifies the last one. -->
+<!--- The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains an interval of elements, the range attributes specifies the first and last one. -->
 <!ELEMENT FRBRportion             @metaopt;>
-<!ATTLIST FRBRportion             ##refers; ##showopt;
-                                     from   #ANYURI        #REQUIRED  
-                                     upTo   #ANYURI        #IMPLIED >
+<!ATTLIST FRBRportion             ##refers; ##showopt; ##rangeOpt; >
 
 <!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document -->
 <!ELEMENT FRBRformat             @valueType;>
@@ -1387,7 +1534,7 @@ an interval of elements, the upTo attribute specifies the last one. -->
 						##linkopt; 
             ##value;
             ##show;
-            dictionary  #ANYURI  #REQUIRED >
+            ##dictionary; >
 
 
 <!--- The element lifecycle is a metadata container of the events associated to the FRBR expression of the document. -->
@@ -1395,22 +1542,22 @@ an interval of elements, the upTo attribute specifies the last one. -->
 <!ATTLIST lifecycle ##source; >
 <!--- The element eventInfo is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.  -->
 <!ELEMENT eventRef @anyOtherType;>
-<!ATTLIST eventRef
+<!ATTLIST eventRef 
     ##date;
     ##source;
     ##refers;
-    type   #eventType; #IMPLIED
-    originatingExpression #BOOLEAN #IMPLIED
+    ##eventType;
+    ##originating;
 >
 
 <!--- The element workflow is a metadata container of the steps associated to the workflow of the document. -->
 <!ELEMENT workflow   (step+)>
 <!ATTLIST workflow   ##source; >
-<!--- The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified. -->
+<!--- The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an agent (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified. -->
 <!ELEMENT step     @anyOtherType;>
 <!ATTLIST step
     ##date;
-    ##actor;
+    ##agent;
     ##role;
     ##refers;
     ##outcome;
@@ -1430,45 +1577,28 @@ restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
 <!ENTITY @ modificationType    "(source+, destination+, force?, efficacy?, application?, duration?, condition?)" 
                                "##core; ##idreq; ##enactment; ##modifiers; ##refers;" >
                                  
-<!--- The simple type TextualMods lists all the types of textual modifications as values for the type attribute of the textualMod element. -->
-<!ENTITY # TextualMods         "#STRING(repeal|substitution|insertion|replacement|renumbering|split|join)" >
-<!--- The simple type MeaningMods lists all the types of modifications in meaning as values for the type attribute of the meaningMod element. -->
-<!ENTITY # MeaningMods         "#STRING(variation|termModification|authenticInterpretation)" >
-<!--- The simple type ScopeMods lists all the types of modifications in scope as values for the type attribute of the scopeMod element. -->
-<!ENTITY # ScopeMods           "#STRING(exceptionOfScope|extensionOfScope)" >
-<!--- The simple type ForceMods lists all the types of modifications in force as values for the type attribute of the forceMod element. -->
-<!ENTITY # ForceMods           "#STRING(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|
-                                prorogationOfForce|reEnactment|uncostitutionality)" >
-<!--- The simple type EfficacyMods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element. -->
-<!ENTITY # EfficacyMods        "#STRING(entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy|
-                                postponementOfEfficacy|prorogationOfEfficacy)" >
-<!--- The simple type LegalSystemMods lists all the types of modifications in the legal system as values for the type attribute of the LegalSystemMod element. -->
-<!ENTITY # LegalSystemMods     "#STRING(staticReference|implementation|ratification|application|
-                                legislativeDelegation|deregulation|conversion|expiration|
-                                reiteration|remaking|republication|coordination)" >
-
 <!--- The element activeModifications is a metadata container of the active modifications generated by the document. -->
 <!ELEMENT activeModifications   @Amendments; >
 <!--- The element passiveModifications is a metadata container of the passive modifications affecting the document. -->
 <!ELEMENT passiveModifications  @Amendments; >
 <!--- The element textualMod is a metadata element specifying an (active or passive) textual modification for the document. -->
 <!ELEMENT textualMod            (@modificationType;, (previous?, old*, new*)) > 
-<!ATTLIST textualMod            type #TextualMods; #REQUIRED >
+<!ATTLIST textualMod            ##textualModType;>
 <!--- The element meaningMod is a metadata element specifying an (active or passive) modification in meaning for the document. -->
 <!ELEMENT meaningMod            (@modificationType;, (domain?)) > 
-<!ATTLIST meaningMod            type #MeaningMods; #REQUIRED >
+<!ATTLIST meaningMod            ##meaningModType; >
 <!--- The element scopeMod is a metadata element specifying an (active or passive) modification in scope for the document. -->
 <!ELEMENT scopeMod              (@modificationType;, (domain?)) > 
-<!ATTLIST scopeMod              type #ScopeMods; #REQUIRED >
+<!ATTLIST scopeMod              ##scopeModType; >
 <!--- The element forceMod is a metadata element specifying an (active or passive) modification in force for the document. -->
 <!ELEMENT forceMod              @modificationType; > 
-<!ATTLIST forceMod              type #ForceMods; #REQUIRED >
+<!ATTLIST forceMod              ##forceModType; >
 <!--- The element efficacyMod is a metadata element specifying an (active or passive) modification in efficacy for the document. -->
 <!ELEMENT efficacyMod           @modificationType; > 
-<!ATTLIST efficacyMod           type #EfficacyMods; #REQUIRED >
+<!ATTLIST efficacyMod           ##efficacyModType; >
 <!--- The element legalSystemMod is a metadata element specifying an (active or passive) modification in the legal system for the document. -->
 <!ELEMENT legalSystemMod        @modificationType; > 
-<!ATTLIST legalSystemMod        type #LegalSystemMods; #REQUIRED >
+<!ATTLIST legalSystemMod        ##legalSystemModType; >
 
 
 
@@ -1482,7 +1612,7 @@ restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
 <!ELEMENT judicial   @judicialArguments; >
 <!--- The element result is a metadata element specifying the overall result of the judgment. -->
 <!ELEMENT result   @anyOtherType; >
-<!ATTLIST result   type  #resultType; #REQUIRED >
+<!ATTLIST result   ##resultType; >
 
 <!--- The element supports is a metadata element specifying a reference to a source supported by the argument being described. -->
 <!ELEMENT supports  @judicialArgumentType; >
@@ -1513,11 +1643,9 @@ restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
 <!ELEMENT restrictions   (restriction)+ >
 <!ATTLIST restrictions 	##source; >
 
-<!--- The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the -->
+<!--- The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the refersTo attribute -->
 <!ELEMENT restriction  	@anyOtherType; >
-<!ATTLIST restriction		##refers; 
-                            type #restrictionType; #REQUIRED 
->
+<!ATTLIST restriction		##refers; ##restrictionType; >
 
 
 	
@@ -1552,24 +1680,16 @@ restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
 
 <!-- The element mapping contains a reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup and a final temporalGroup. This is useful for tracking the evolving ids of documents frequently renumbered (e,g., bills). Every single element whose wId does not match its eId needs to be represented here. --> 
 <!ELEMENT mapping  @metareq; >
-<!ATTLIST mapping  
-    original        #ANYURI        #IMPLIED
-    current         #ANYURI        #IMPLIED
-    start           #ANYURI        #IMPLIED
-    end             #ANYURI        #IMPLIED
->
+<!ATTLIST mapping  ##mappingAtts; >
+
 
 
 <!--- The element otherAnalysis is a metadata container of any additional metadata analysis element that does not belong to the specific categories provided before. Anything can be placed in this element.. -->
 <!ELEMENT otherAnalysis @anyOtherType; >
 <!ATTLIST otherAnalysis ##source; >
 
-
-<!--- The attribute pos is used to identify the specific position of the reference (e.g., in source or destination) 
-with respect to the element being identified with the relative eId. -->
-<!ENTITY ## pos "pos #posType; #IMPLIED">
 <!--- the complex type argumentType defines the empty content model and the list of attributes for metadata elements in the analysis section -->
-<!ENTITY @ argumentType      "@anyOtherType;"               "##pos; ##modifiers; upTo   #ANYURI #IMPLIED" >
+<!ENTITY @ argumentType      "@anyOtherType;"               "##pos; ##modifiers; ##upToOpt; " >
 <!--- the complex type periodType defines the empty content model and the list of attributes for metadata elements in the analysis section using periods -->
 <!ENTITY @ periodType        "@anyOtherType;"               "##period;" >                 
 
@@ -1585,9 +1705,9 @@ with respect to the element being identified with the relative eId. -->
 <!ELEMENT application      @periodType; >
 <!--- The element duration is a metadata element specifying the period of the duration modification. -->
 <!ELEMENT duration         @periodType; >
-<!--- The element condition is a metadata element specifying an open set (non managed by Akoma Ntoso) of conditions on the modification -->
+<!--- The element condition is a metadata element specifying an open set of conditions on the modification (non managed by Akoma Ntoso). -->
 <!ELEMENT condition        @anyOtherType; >
-<!ATTLIST condition        frozen #BOOLEAN #IMPLIED >
+<!ATTLIST condition        ##frozen; >
 <!--- The element previous is a metadata element referring to the element (rather than the text) of the modification in the previous version of the document. This is especially useful when renumbering occurs, so as to specify the eId of the instance that was modified in the previous version. Attribute href points to the eId of the element being modified in the old version, using a full expression-level URI. -->
 <!ELEMENT previous         @anyOtherType; >
 <!--- The element old is a metadata element containing (in some non-managed form) the old text of the modification. Attribute href points to the eId of the element new it is being substituted by. -->
@@ -1611,10 +1731,10 @@ with respect to the element being identified with the relative eId. -->
 
 <!-- The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section -->
 <!ELEMENT timeInterval  @metaopt; >
-<!ATTLIST   timeInterval     ##refersreq; 
-    start           #ANYURI        #IMPLIED
-    end             #ANYURI        #IMPLIED
-    duration      #DURATION   #IMPLIED
+<!ATTLIST   timeInterval     
+		##interval; 
+    ##duration;
+		##refersreq; 
 >
 
 <!--- The group docrefs is a list of types of legal references to documents. -->
@@ -1637,10 +1757,10 @@ with respect to the element being identified with the relative eId. -->
 <!ELEMENT jurisprudence    @referenceType; >
 <!--- The element hasAttachment is a metadata reference to the Akoma Ntoso IRI of an attachment of this document -->
 <!ELEMENT hasAttachment    @referenceType; >
-<!ATTLIST hasAttachment    type CDATA  #IMPLIED >
+<!ATTLIST hasAttachment    ##type; >
 <!--- The element attachmentOf is a metadata reference to the Akoma Ntoso IRI of a document of which this document is an attachment -->
 <!ELEMENT attachmentOf     @referenceType; >
-<!ATTLIST attachmentOf     type CDATA  #IMPLIED >
+<!ATTLIST attachmentOf     ##type; >
 
 <!--- The element TLCPerson is a metadata reference to the Akoma Ntoso IRI of an ontology instance of the class Person -->
 <!ELEMENT TLCPerson        @referenceType; >
@@ -1677,11 +1797,6 @@ with respect to the element being identified with the relative eId. -->
 <!--- The element presentation is a metadata container of any presentation specification for the visual rendering of Akoam Ntoso elements. Anything can be placed in this element. -->
 <!ELEMENT presentation @anyOtherType; >
 <!ATTLIST presentation ##source; >
-	
-
-
-
-
 
 <!-- =====================================================================
 

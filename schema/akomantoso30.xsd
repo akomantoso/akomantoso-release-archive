@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14"
             elementFormDefault="qualified">
 
 
@@ -12,7 +12,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 07/01/2015 - Akoma Ntoso 3.0 CSD13
+		Release 22/07/2015 - Akoma Ntoso 3.0 WD14
 		Complete version.
 		
 		
@@ -612,6 +612,19 @@ The group inlineCM is the content model of blocks and inlines, and is composed o
 		</xsd:documentation>
 	  </xsd:annotation>
 
+	  <xsd:attributeGroup name="contains">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>contains</name>
+            <comment>
+The attribute contains is used in the root of document types to indicate whether the document is original or modified wrt the orignal version</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+	  </xsd:attributeGroup>
+
 	  <xsd:attributeGroup name="alt">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -622,7 +635,7 @@ The attribute alternativeTo is used to specify, when the element contains an alt
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="alternativeTo" type="xsd:anyURI"/>
+		    <xsd:attribute name="alternativeTo" type="eIdRef"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="name">
@@ -661,7 +674,7 @@ The attribute source links to the agent (person, organization) providing the spe
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="source" type="xsd:anyURI" use="required"/>
+		    <xsd:attribute name="source" type="agentRef" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="date">
@@ -777,21 +790,48 @@ The attribute value is used here to specify a boolean value for metadata element
 		    <xsd:attribute name="value" type="xsd:boolean" use="required"/>
 	  </xsd:attributeGroup>
 
+	  <xsd:attributeGroup name="interval">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>interval</name>
+            <comment>
+The start and end attributes are used to specify events that mark the beginning and the end of a time interval. Both are references to eventRef elements in the lifecycle element</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="start" type="eventRefRef"/>
+		    <xsd:attribute name="end" type="eventRefRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="duration">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>duration</name>
+            <comment>
+The duration attribute is used to specify a duration when either the start or the end event of a time interval is not known.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="duration" type="xsd:duration"/>
+	  </xsd:attributeGroup>
+
 	  <xsd:attributeGroup name="speechAtts">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Attlist</type>
             <name>speechAtts</name>
             <comment>
-The attributes in speechAtts are used in speeches to identify actors and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section</comment>
+The attributes in speechAtts are used in speeches to identify agents and roles of speeches. In particular, attribute 'by' identifies the speaker, optional attribute 'as' identifies the role under which the speaker is speaking, optional attribute startTime specifies the absolute date and time where the individual speech item started, optional attribute endTime specifies the absolute date and time where the individual speech item ended, and  optional attribute to identifies the addressee of the speech. All of them are references to person or organization elements in the references section</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
-		    <xsd:attribute name="as" type="xsd:anyURI"/>
+		    <xsd:attributeGroup ref="agent"/>
+		    <xsd:attributeGroup ref="role"/>
 		    <xsd:attribute name="startTime" type="xsd:dateTime"/>
 		    <xsd:attribute name="endTime" type="xsd:dateTime"/>
-		    <xsd:attribute name="to" type="xsd:anyURI"/>
+		    <xsd:attribute name="to" type="agentRef"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="voteAtts">
@@ -800,13 +840,643 @@ The attributes in speechAtts are used in speeches to identify actors and roles o
 			         <type>Attlist</type>
             <name>voteAtts</name>
             <comment>
-The attributes in voteAtts are used in votes to identify actors and choices in votes. In particular, attribute 'by' identifies the voter, optional attribute 'as' identifies the role under which the voter is acting, optional attribute 'choice' specifies the voe that was casted.</comment>
+The attributes in voteAtts are used in votes to identify agents and choices in votes. In particular, attribute 'by' identifies the voter, optional attribute 'as' identifies the role under which the voter is acting, optional attribute 'choice' specifies the vote that was casted.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
-		    <xsd:attribute name="as" type="xsd:anyURI"/>
-		    <xsd:attribute name="choice" type="xsd:anyURI"/>
+		    <xsd:attributeGroup ref="agent"/>
+		    <xsd:attributeGroup ref="role"/>
+		    <xsd:attribute name="choice" type="voteRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="frozen">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>frozen</name>
+            <comment>
+The attribute frozen for the condition element specifies whether the condition is frozen or not in the time period of this expression.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="frozen" type="xsd:boolean"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="lawyerAtts">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>lawyerAtts</name>
+            <comment>
+The attributes in lawyerAtts are used in the inline element lawyer to identify representation aspects of lawyers. In particular, attribute 'as' identifies his/her role, attribute 'for' identifies which party it represents, and attribute 'empoweredBy' identifies another lawyer, if any, this lawyer received the power delegation of power.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attributeGroup ref="role"/>
+		    <xsd:attribute name="for" type="agentRef"/>
+		    <xsd:attribute name="empoweredBy" type="agentRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="normalizedAtt">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>normalizedAtt</name>
+            <comment>
+The attribute normalized is used in the inline element quantity to provide a normalized value of the number, if appropriate.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="normalized" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="for">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>for</name>
+            <comment>
+The attribute for is used in modification elements to specify the element this is a modification of.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="for" type="eIdRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:annotation>
+		    <xsd:documentation>
+		 The mappingAtts attributes represent the reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup (attribute start) and a final temporalGroup (attribute end). 
+		</xsd:documentation>
+	  </xsd:annotation>
+
+	  <xsd:attributeGroup name="mappingAtts">
+		
+
+		    <xsd:attribute name="original" type="wIdRef"/>
+		    <xsd:attribute name="current" type="eIdRef"/>
+		    <xsd:attribute name="start" type="eventRefRef"/>
+		    <xsd:attribute name="end" type="eventRefRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="originating">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>originating</name>
+            <comment>
+The attribute originating is used to identify whether the event is the one originating this expression</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="originatingExpression" type="xsd:boolean"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="outcome">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>outcome</name>
+            <comment>
+The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="outcome" type="conceptRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="portionAtt">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>portionAtt</name>
+            <comment>
+the attribute includedIn specifies the eId of the element of the references section identifying the document that this portion is a portion of.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="includedIn" type="referenceRef" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="level">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>level</name>
+            <comment>
+the attribute level specifies the level of the toc element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="level" type="xsd:integer" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="target">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>target</name>
+            <comment>
+the attribute target specifies the target of the a element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="target" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="imgAtts">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>imgAtts</name>
+            <comment>
+these attributes specify the dimension of the image.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="width" type="xsd:integer"/>
+		    <xsd:attribute name="height" type="xsd:integer"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="tableAtts">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>tableAtts</name>
+            <comment>
+these attributes specify the characteristics of the table.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="width" type="xsd:integer"/>
+		    <xsd:attribute name="border" type="xsd:integer"/>
+		    <xsd:attribute name="cellspacing" type="xsd:integer"/>
+		    <xsd:attribute name="cellpadding" type="xsd:integer"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="originalText">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>originalText</name>
+            <comment>
+the attribute originalText contains the original text of a placeholder</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="originalText" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="fillInWidth">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>fillInWidth</name>
+            <comment>
+the attribute width of the element fillIn specifies the width of the fillIn element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="width" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="upTo">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>upTo</name>
+            <comment>
+The attribute upTo is used in range-based elements to specify the eId of the ending element of the range.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="upTo" type="eIdRef" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="upToOpt">
+		
+
+		    <xsd:attribute name="upTo" type="eIdRef"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="range">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>range</name>
+            <comment>
+These attributes are used in range-based elements to specify the eId of the beginning and ending element of the range.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="from" type="eIdRef" use="required"/>
+		    <xsd:attributeGroup ref="upTo"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="rangeOpt">
+		
+
+		    <xsd:attribute name="from" type="eIdRef" use="required"/>
+		    <xsd:attributeGroup ref="upToOpt"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="pos">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>pos</name>
+            <comment>
+The attribute pos is used to identify the specific position of the reference (e.g., in source or destination)
+with respect to the element being identified with the relative eId.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="pos" type="posType"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="language">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>language</name>
+            <comment>
+This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="language" type="language" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="fromLanguage">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>fromLanguage</name>
+            <comment>
+This attribute specifies the human language of the expression this is a translation of. Values are taken from the RFC 4646.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="fromLanguage" type="language" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="pivot">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>pivot</name>
+            <comment>
+This attribute specifies the human language used as a pivot in the translation. Values are taken from the RFC 4646.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="pivot" type="language"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="authoritative">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>authoritative</name>
+            <comment>
+This attribute specifies whether the translation is authoritative or not</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="authoritative" type="xsd:boolean"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:attributeGroup name="dictionary">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>dictionary</name>
+            <comment>
+This attribute specifies the eId of the element in the references section detailing the dictionary used for the keyword.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="dictionary" type="referenceRef" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:annotation>
+		    <xsd:documentation>
+		 =====================================================================
+		
+		Attribute groups: attribute "type"
+		
+		===================================================================== 
+		</xsd:documentation>
+	  </xsd:annotation>
+
+	  <xsd:attributeGroup name="type">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Attlist</type>
+            <name>type</name>
+            <comment>
+The type attribute is used in various element to identify a type without restrictions as to its values.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:attribute name="type" type="xsd:string"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="eventType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>eventType</name>
+            <comment>
+This is the list of allowed values for the type attribute of the event and action elements</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="generation"/>
+			      <xsd:enumeration value="amendment"/>
+			      <xsd:enumeration value="repeal"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="eventType">
+		
+
+		    <xsd:attribute name="type" type="eventType"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="opinionType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>opinionType</name>
+            <comment>
+This is the list of allowed values for the type attribute of the opinion element</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="dissenting"/>
+			      <xsd:enumeration value="agreeing"/>
+			      <xsd:enumeration value="null"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="opinionType">
+		
+
+		    <xsd:attribute name="type" type="opinionType"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="resultType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>resultType</name>
+            <comment>
+This is the list of allowed values for the type attribute of the result element</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="deny"/>
+			      <xsd:enumeration value="dismiss"/>
+			      <xsd:enumeration value="uphold"/>
+			      <xsd:enumeration value="revert"/>
+			      <xsd:enumeration value="replaceOrder"/>
+			      <xsd:enumeration value="remit"/>
+			      <xsd:enumeration value="decide"/>
+			      <xsd:enumeration value="approve"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="resultType">
+		
+
+		    <xsd:attribute name="type" type="resultType" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="restrictionType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>restrictionType</name>
+            <comment>
+This is the list of allowed values for the restriction type attribute</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="jurisdiction"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="restrictionType">
+		
+
+		    <xsd:attribute name="type" type="restrictionType" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="remarkType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>remarkType</name>
+            <comment>
+This is the list of allowed values for the type attribute of the remark element for the specification of editorial remarks (e.g., applauses, laughters, etc.) especially within debate records</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="sceneDescription"/>
+			      <xsd:enumeration value="phenomenon"/>
+			      <xsd:enumeration value="caption"/>
+			      <xsd:enumeration value="translation"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="remarkType">
+		
+
+		    <xsd:attribute name="type" type="remarkType"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="timeType">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>timeType</name>
+            <comment>
+This is the list of allowed values for the type attribute of the recordedTime element for the specification of an explicit mention of a time (e.g., in a debate)</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="startEvent"/>
+			      <xsd:enumeration value="endEvent"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="recordedTimeType">
+		
+
+		    <xsd:attribute name="type" type="timeType"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="TextualMods">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>TextualMods</name>
+            <comment>
+The simple type TextualMods lists all the types of textual modifications as values for the type attribute of the textualMod element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="repeal"/>
+			      <xsd:enumeration value="substitution"/>
+			      <xsd:enumeration value="insertion"/>
+			      <xsd:enumeration value="replacement"/>
+			      <xsd:enumeration value="renumbering"/>
+			      <xsd:enumeration value="split"/>
+			      <xsd:enumeration value="join"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="textualModType">
+		
+
+		    <xsd:attribute name="type" type="TextualMods" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="MeaningMods">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>MeaningMods</name>
+            <comment>
+The simple type MeaningMods lists all the types of modifications in meaning as values for the type attribute of the meaningMod element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="variation"/>
+			      <xsd:enumeration value="termModification"/>
+			      <xsd:enumeration value="authenticInterpretation"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="meaningModType">
+		
+
+		    <xsd:attribute name="type" type="MeaningMods" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="ScopeMods">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>ScopeMods</name>
+            <comment>
+The simple type ScopeMods lists all the types of modifications in scope as values for the type attribute of the scopeMod element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="exceptionOfScope"/>
+			      <xsd:enumeration value="extensionOfScope"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="scopeModType">
+		
+
+		    <xsd:attribute name="type" type="ScopeMods" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="ForceMods">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>ForceMods</name>
+            <comment>
+The simple type ForceMods lists all the types of modifications in force as values for the type attribute of the forceMod element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="entryIntoForce"/>
+			      <xsd:enumeration value="endOfEnactment"/>
+			      <xsd:enumeration value="postponementOfEntryIntoForce"/>
+			      <xsd:enumeration value="prorogationOfForce"/>
+			      <xsd:enumeration value="reEnactment"/>
+			      <xsd:enumeration value="uncostitutionality"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="forceModType">
+		
+
+		    <xsd:attribute name="type" type="ForceMods" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="EfficacyMods">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>EfficacyMods</name>
+            <comment>
+The simple type EfficacyMods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="entryIntoEfficacy"/>
+			      <xsd:enumeration value="endOfEfficacy"/>
+			      <xsd:enumeration value="inapplication"/>
+			      <xsd:enumeration value="retroactivity"/>
+			      <xsd:enumeration value="extraefficacy"/>
+			      <xsd:enumeration value="postponementOfEfficacy"/>
+			      <xsd:enumeration value="prorogationOfEfficacy"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="efficacyModType">
+		
+
+		    <xsd:attribute name="type" type="EfficacyMods" use="required"/>
+	  </xsd:attributeGroup>
+
+	  <xsd:simpleType name="LegalSystemMods">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>LegalSystemMods</name>
+            <comment>
+The simple type LegalSystemMods lists all the types of modifications in the legal system as values for the type attribute of the LegalSystemMod element.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="staticReference"/>
+			      <xsd:enumeration value="implementation"/>
+			      <xsd:enumeration value="ratification"/>
+			      <xsd:enumeration value="application"/>
+			      <xsd:enumeration value="legislativeDelegation"/>
+			      <xsd:enumeration value="deregulation"/>
+			      <xsd:enumeration value="conversion"/>
+			      <xsd:enumeration value="expiration"/>
+			      <xsd:enumeration value="reiteration"/>
+			      <xsd:enumeration value="remaking"/>
+			      <xsd:enumeration value="republication"/>
+			      <xsd:enumeration value="coordination"/>
+		    </xsd:restriction>
+	  </xsd:simpleType>
+
+	  <xsd:attributeGroup name="legalSystemModType">
+		
+
+		    <xsd:attribute name="type" type="LegalSystemMods" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="show">
@@ -836,11 +1506,11 @@ These attributes are used in metadata to propose visible representations of the 
 			         <type>Attlist</type>
             <name>src</name>
             <comment>
-These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level IRI of the resource, whule the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason.</comment>
+These attributes are used in manifestation-level references to specify external manifestation-level resources to be loaded in place. The src attribute holds the manifestation-level IRI of the resource, while the alt attribute holds the text to be displayed in case the loading of the external resource is not possible for any reason.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="src" type="xsd:anyURI" use="required"/>
+		    <xsd:attribute name="src" type="manifestationURI" use="required"/>
 		    <xsd:attribute name="alt" type="xsd:string"/>
 	  </xsd:attributeGroup>
 
@@ -854,7 +1524,7 @@ The period attribute is used in versioned content and metadata elements to indic
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="period" type="xsd:anyURI"/>
+		    <xsd:attribute name="period" type="temporalGroupRef"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="enactment">
@@ -877,13 +1547,13 @@ These attributes are those already defined in attribute list "period", plus the 
 			         <type>Attlist</type>
             <name>notes</name>
             <comment>
-These attributes are used by notes, both authorial and editorial</comment>
+These attributes are used by notes, both authorial and editorial. The marker is the string to be used as a marker of the note, the placement is the position where the note should be placed, and placementBase is the eId of the element respect to which the note should be placed near.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:attribute name="marker" type="xsd:string"/>
 		    <xsd:attribute name="placement" type="placementType"/>
-		    <xsd:attribute name="placementBase" type="xsd:anyURI"/>
+		    <xsd:attribute name="placementBase" type="eIdRef"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="modifiers">
@@ -910,33 +1580,20 @@ The attribute role is used to identify the role of an individual mentioned in th
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="as" type="xsd:anyURI"/>
+		    <xsd:attribute name="as" type="roleRef"/>
 	  </xsd:attributeGroup>
 
-	  <xsd:attributeGroup name="actor">
+	  <xsd:attributeGroup name="agent">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Attlist</type>
-            <name>actor</name>
+            <name>agent</name>
             <comment>
-The attribute actor is used to identify the actor of a step of a workflow of the document. It is a reference to a TLCPerson or TLCOrganization element in the references section</comment>
+The attribute by is used to identify the agent of an action. It is a reference to a TLCPerson or TLCOrganization element in the references section</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:attribute name="actor" type="xsd:anyURI"/>
-	  </xsd:attributeGroup>
-
-	  <xsd:attributeGroup name="outcome">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Attlist</type>
-            <name>outcome</name>
-            <comment>
-The attribute outcome is used to identify the outcome of a step in a workflow. It is a reference to a TLCConcept element in the references section</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:attribute name="outcome" type="xsd:anyURI"/>
+		    <xsd:attribute name="by" type="agentRef" use="required"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="quote">
@@ -1039,7 +1696,7 @@ This attribute creates a connection between the element and an element of the Ak
 			      <xsd:simpleType>
 				        <xsd:list>
 					          <xsd:simpleType>
-						            <xsd:restriction base="xsd:anyURI"/>
+						            <xsd:restriction base="referenceRef"/>
 					          </xsd:simpleType>
 				        </xsd:list>
 			      </xsd:simpleType>
@@ -1060,7 +1717,7 @@ This attribute creates a connection between the element and an element of the Ak
 			      <xsd:simpleType>
 				        <xsd:list>
 					          <xsd:simpleType>
-						            <xsd:restriction base="xsd:anyURI"/>
+						            <xsd:restriction base="referenceRef"/>
 					          </xsd:simpleType>
 				        </xsd:list>
 			      </xsd:simpleType>
@@ -1154,7 +1811,7 @@ This is the list of the core attributes that all elements in the content part of
 			         <type>Simple</type>
             <name>noWhiteSpace</name>
             <comment>
-This attribute the values of ids such as eId, wId and GUID as a collection of any printable character except whitespaces.</comment>
+These values are those of ids such as eId, wId and GUID as a collection of any printable character except whitespaces.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1163,13 +1820,143 @@ This attribute the values of ids such as eId, wId and GUID as a collection of an
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
+	  <xsd:simpleType name="eIdRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>eIdRef</name>
+            <comment>
+These values are references to existing eIds only, i.e., given an existing eId of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="wIdRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>wIdRef</name>
+            <comment>
+These values are references to existing wIds only, i.e., given an existing wId of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="roleRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>roleRef</name>
+            <comment>
+These values are references to existing roles (i.e., TLCRole) only, i.e., given an existing eId of a role of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="agentRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>agentRef</name>
+            <comment>
+These values are references to existing agents (i.e., TLCPerson or TLCOrganization) only, i.e., given an existing eId of an agent of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="conceptRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>conceptRef</name>
+            <comment>
+These values are references to existing concepts (i.e., TLCConcept) only, i.e., given an existing eId of a concept of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="referenceRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>referenceRef</name>
+            <comment>
+These values are references to existing References elements only, i.e., given an existing eId of an element of the References section of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="voteRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>voteRef</name>
+            <comment>
+These values are references to existing votes (i.e., quorum or count) only, i.e., given an existing eId of a vote element of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="eventRefRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>eventRefRef</name>
+            <comment>
+These values are references to existing event references (i.e., eventRef) only, i.e., given an existing eId of an eventRef of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="temporalGroupRef">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>temporalGroupRef</name>
+            <comment>
+These values are references to existing temporal groups only, i.e., given an existing eId of a temporal group of the form XYZ, the value is necessarily #XYZ</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
+	  <xsd:simpleType name="manifestationURI">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Simple</type>
+            <name>manifestationURI</name>
+            <comment>
+These values are references of a manifestation-Level document only</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+
+		    <xsd:restriction base="xsd:anyURI"/>
+	  </xsd:simpleType>
+
 	  <xsd:simpleType name="language">
 		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Simple</type>
             <name>language</name>
             <comment>
-This attribute specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.</comment>
+This type specifies the human language in which the document the element refers to is expressed. Values are taken from the RFC 4646.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1212,23 +1999,6 @@ This is the list of allowed values for the placement attribute of notes</comment
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
-	  <xsd:simpleType name="eventType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>eventType</name>
-            <comment>
-This is the list of allowed values for the type attribute of the event and action elements</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="generation"/>
-			      <xsd:enumeration value="amendment"/>
-			      <xsd:enumeration value="repeal"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
 	  <xsd:simpleType name="statusType">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -1263,79 +2033,6 @@ This is the list of allowed values for the status attribute. This is the list of
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
-	  <xsd:simpleType name="remarkType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>remarkType</name>
-            <comment>
-This is the list of allowed values for the type attribute of the remark element</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="sceneDescription"/>
-			      <xsd:enumeration value="phenomenon"/>
-			      <xsd:enumeration value="caption"/>
-			      <xsd:enumeration value="translation"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="timeType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>timeType</name>
-            <comment>
-This is the list of allowed values for the type attribute of the recordedTime element</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="startEvent"/>
-			      <xsd:enumeration value="endEvent"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="opinionType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>opinionType</name>
-            <comment>
-This is the list of allowed values for the type attribute of the opinion element</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="dissenting"/>
-			      <xsd:enumeration value="agreeing"/>
-			      <xsd:enumeration value="null"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="resultType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>resultType</name>
-            <comment>
-This is the list of allowed values for the type attribute of the result element</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="deny"/>
-			      <xsd:enumeration value="dismiss"/>
-			      <xsd:enumeration value="uphold"/>
-			      <xsd:enumeration value="revert"/>
-			      <xsd:enumeration value="replaceOrder"/>
-			      <xsd:enumeration value="remit"/>
-			      <xsd:enumeration value="decide"/>
-			      <xsd:enumeration value="approve"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
 	  <xsd:simpleType name="posType">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -1353,21 +2050,6 @@ This is the list of possible positions of the text being analyzed by the element
 			      <xsd:enumeration value="after"/>
 			      <xsd:enumeration value="end"/>
 			      <xsd:enumeration value="unspecified"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="restrictionType">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>restrictionType</name>
-            <comment>
-This is the list of allowed values for the restriction type attribute</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="jurisdiction"/>
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
@@ -1841,7 +2523,7 @@ the type openStructure specifies the overall content model of all the document t
 			      <xsd:element ref="components" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 		    <xsd:attributeGroup ref="name"/>
-		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+		    <xsd:attributeGroup ref="contains"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="doc" type="openStructure">
@@ -1938,7 +2620,7 @@ the type collectionStructure specifies the overall content model of the document
 			      <xsd:element ref="components" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 		    <xsd:attributeGroup ref="name"/>
-		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+		    <xsd:attributeGroup ref="contains"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="amendmentList" type="collectionStructure">
@@ -2040,7 +2722,7 @@ the type portionStructure specifies the overall content model of the document ty
 			      <xsd:element ref="meta"/>
 			      <xsd:element ref="portionBody"/>
 		    </xsd:sequence>
-		    <xsd:attribute name="includedIn" type="xsd:anyURI" use="required"/>
+		    <xsd:attributeGroup ref="portionAtt"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="portion" type="portionStructure">
@@ -2116,7 +2798,7 @@ the type hierarchicalStructure specifies the overall content model of the docume
 			      <xsd:element ref="components" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 		    <xsd:attributeGroup ref="name"/>
-		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+		    <xsd:attributeGroup ref="contains"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="act" type="hierarchicalStructure">
@@ -2207,7 +2889,7 @@ the type debateStructure specifies the overall content model of the document typ
 			      <xsd:element ref="components" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 		    <xsd:attributeGroup ref="name"/>
-		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+		    <xsd:attributeGroup ref="contains"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="debateReport" type="openStructure">
@@ -2297,7 +2979,7 @@ the type judgmentStructure specifies the overall content model of the document t
 			      <xsd:element ref="components" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 		    <xsd:attributeGroup ref="name"/>
-		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+		    <xsd:attributeGroup ref="contains"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="judgment" type="judgmentStructure">
@@ -2368,7 +3050,7 @@ the type amendmentStructure specifies the overall content model of the document 
 			      <xsd:element ref="components" minOccurs="0" maxOccurs="1"/>
 		    </xsd:sequence>
 		    <xsd:attributeGroup ref="name"/>
-		    <xsd:attribute name="contains" type="versionType" default="originalVersion"/>
+		    <xsd:attributeGroup ref="contains"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="amendment" type="amendmentStructure">
@@ -3879,7 +4561,7 @@ the element tocItem is a component of the table of content and contains header i
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
 					          <xsd:attributeGroup ref="link"/>
-					          <xsd:attribute name="level" type="xsd:integer" use="required"/>
+					          <xsd:attributeGroup ref="level"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -3939,7 +4621,7 @@ the element docProponent is an inline element within preface to identify the str
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
-					          <xsd:attribute name="as" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="role"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4202,9 +4884,7 @@ the element lawyer is an inline element within judgments to identify where the d
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inlinereqreq">
-					          <xsd:attributeGroup ref="role"/>
-					          <xsd:attribute name="for" type="xsd:anyURI"/>
-					          <xsd:attribute name="empoweredBy" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="lawyerAtts"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4223,7 +4903,7 @@ the element opinion is an inline element within judgments to identify where the 
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
-					          <xsd:attribute name="type" type="opinionType"/>
+					          <xsd:attributeGroup ref="opinionType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4325,7 +5005,7 @@ the element person is an inline element to identify a text fragment introducing 
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inlinereqreq">
-					          <xsd:attribute name="as" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="role"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4448,7 +5128,7 @@ The element quantity is an inline element to identify a text fragment introducin
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inlinereqreq">
-					          <xsd:attribute name="normalized" type="xsd:string"/>
+					          <xsd:attributeGroup ref="normalizedAtt"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4512,8 +5192,7 @@ the element rref is an inline element containing a range of references between t
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inlinereq">
-					          <xsd:attribute name="from" type="xsd:anyURI" use="required"/>
-					          <xsd:attribute name="upTo" type="xsd:anyURI" use="required"/>
+					          <xsd:attributeGroup ref="range"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4535,7 +5214,7 @@ the complex type modType specifies the content that is allowed within mod, mmod 
 			      <xsd:element ref="quotedStructure"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="corereq"/>
-		    <xsd:attribute name="for" type="xsd:anyURI"/>
+		    <xsd:attributeGroup ref="for"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="mod" type="modType">
@@ -4577,8 +5256,7 @@ the element rmod is an inline element containing the specification of a range of
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="modType">
-					          <xsd:attribute name="from" type="xsd:anyURI" use="required"/>
-					          <xsd:attribute name="upTo" type="xsd:anyURI" use="required"/>
+					          <xsd:attributeGroup ref="range"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4598,7 +5276,7 @@ the element quotedText is an inline element containing a small string that is us
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
 					          <xsd:attributeGroup ref="quote"/>
-					          <xsd:attribute name="for" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="for"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4617,7 +5295,7 @@ the element remark is an inline element for the specification of editorial remar
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
-					          <xsd:attribute name="type" type="remarkType"/>
+					          <xsd:attributeGroup ref="remarkType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4636,7 +5314,7 @@ the element recordedTime is an inline element for the specification of an explic
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
-					          <xsd:attribute name="type" type="timeType"/>
+					          <xsd:attributeGroup ref="recordedTimeType"/>
 					          <xsd:attributeGroup ref="time"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
@@ -4695,7 +5373,7 @@ the element placeholder is an inline element containing the text of a computable
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
-					          <xsd:attribute name="originalText" type="xsd:string"/>
+					          <xsd:attributeGroup ref="originalText"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4714,7 +5392,7 @@ the element fillIn is an inline element shown as a dotted line or any other typo
 		    <xsd:complexType mixed="true">
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
-					          <xsd:attribute name="width" type="xsd:string"/>
+					          <xsd:attributeGroup ref="fillInWidth"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4779,7 +5457,7 @@ the complex type eolType is shared by eol and eop elements as being able to spec
 		    <xsd:complexContent>
 			      <xsd:extension base="markeropt">
 				        <xsd:attribute name="breakat" type="xsd:integer"/>
-				        <xsd:attribute name="number" type="xsd:string"/>
+				        <xsd:attributeGroup ref="number"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
 	  </xsd:complexType>
@@ -4876,7 +5554,7 @@ the element quotedStructure is a subFlow element containing a full structure pro
 			      <xsd:complexContent>
 				        <xsd:extension base="subFlowStructure">
 					          <xsd:attributeGroup ref="quote"/>
-					          <xsd:attribute name="for" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="for"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -4941,9 +5619,24 @@ the element authorialNote is a subFlow element containing an authorial (non-edit
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="subFlow" type="subFlowStructure"/>
-		
+	  <xsd:element name="subFlow">
+		    <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>subFlow</name>
+            <comment>
+the element subFlow is a generic element for a subFlow.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
 
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="subFlowStructure">
+					          <xsd:attributeGroup ref="name"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="foreign" type="anyOtherType">
       <xsd:annotation>
@@ -5236,7 +5929,7 @@ The element a is an HTML element and is used in Akoma Ntoso as in HTML, for the 
 			      <xsd:complexContent>
 				        <xsd:extension base="inline">
 					          <xsd:attributeGroup ref="link"/>
-					          <xsd:attribute name="target" type="xsd:string"/>
+					          <xsd:attributeGroup ref="target"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -5256,8 +5949,7 @@ The element img is an HTML element and is used in Akoma Ntoso as in HTML, for in
 			      <xsd:complexContent>
 				        <xsd:extension base="markeropt">
 					          <xsd:attributeGroup ref="src"/>
-					          <xsd:attribute name="width" type="xsd:integer"/>
-					          <xsd:attribute name="height" type="xsd:integer"/>
+					          <xsd:attributeGroup ref="imgAtts"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -5338,10 +6030,7 @@ The element li is an HTML element and is used in Akoma Ntoso as in HTML, for the
 				        <xsd:element ref="tr" minOccurs="1" maxOccurs="unbounded"/>
 			      </xsd:sequence>
 				     <xsd:attributeGroup ref="corereq"/>
-				     <xsd:attribute name="width" type="xsd:integer"/>
-				     <xsd:attribute name="border" type="xsd:integer"/>
-				     <xsd:attribute name="cellspacing" type="xsd:integer"/>
-				     <xsd:attribute name="cellpadding" type="xsd:integer"/>
+				     <xsd:attributeGroup ref="tableAtts"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -5705,7 +6394,7 @@ The element FRBRauthor is the metadata property containing a relevant author of 
 			      <xsd:complexContent>
 				        <xsd:extension base="metaopt">
 					          <xsd:attributeGroup ref="link"/>
-					          <xsd:attribute name="as" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="role"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -5724,7 +6413,7 @@ The element FRBRlanguage is the metadata property containing a RFC4646 (three-le
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="metaopt">
-					          <xsd:attribute name="language" type="language" use="required"/>
+					          <xsd:attributeGroup ref="language"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -5744,10 +6433,10 @@ The element FRBRtranslation is the metadata property specifying the source of wh
 			      <xsd:complexContent>
 				        <xsd:extension base="metaopt">
 					          <xsd:attributeGroup ref="link"/>
-					          <xsd:attribute name="fromLanguage" type="language" use="required"/>
-					          <xsd:attribute name="authoritative" type="xsd:boolean"/>
-					          <xsd:attribute name="pivot" type="language"/>
-					          <xsd:attribute name="by" type="xsd:anyURI" use="required"/>
+					          <xsd:attributeGroup ref="fromLanguage"/>
+					          <xsd:attributeGroup ref="authoritative"/>
+					          <xsd:attributeGroup ref="pivot"/>
+					          <xsd:attributeGroup ref="agent"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -5811,8 +6500,7 @@ The element FRBRname is the metadata property containing a string for the title 
 			         <type>Element</type>
             <name>FRBRportion</name>
             <comment>
-The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains
-an interval of elements, the upTo attribute specifies the last one.</comment>
+The element FRBRportion is the metadata property containing the eId of the portion contained in a manifestation-level portion. If the portion contains an interval of elements, the range attributes specifies the first and last one.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5821,8 +6509,7 @@ an interval of elements, the upTo attribute specifies the last one.</comment>
 				        <xsd:extension base="metaopt">
 					          <xsd:attributeGroup ref="refers"/>
 					          <xsd:attributeGroup ref="showopt"/>
-					          <xsd:attribute name="from" type="xsd:anyURI" use="required"/>
-					          <xsd:attribute name="upTo" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="rangeOpt"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -5975,7 +6662,7 @@ The element keyword is a metadata element specifying a keyword  associated to th
 					          <xsd:attributeGroup ref="linkopt"/>
 					          <xsd:attributeGroup ref="value"/>
 					          <xsd:attributeGroup ref="show"/>
-					          <xsd:attribute name="dictionary" type="xsd:anyURI" use="required"/>
+					          <xsd:attributeGroup ref="dictionary"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6006,8 +6693,8 @@ The element eventInfo is a metadata element specifying facts about an event that
 					          <xsd:attributeGroup ref="date"/>
 					          <xsd:attributeGroup ref="source"/>
 					          <xsd:attributeGroup ref="refers"/>
-					          <xsd:attribute name="type" type="eventType"/>
-					          <xsd:attribute name="originatingExpression" type="xsd:boolean"/>
+					          <xsd:attributeGroup ref="eventType"/>
+					          <xsd:attributeGroup ref="originating"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6028,7 +6715,7 @@ The element eventInfo is a metadata element specifying facts about an event that
 			         <type>Element</type>
             <name>step</name>
             <comment>
-The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an actor (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified.</comment>
+The element step is a metadata element specifying facts about a workflow step occurred to the document. For each event, a date, a type, an agent (and the corresponding role) that generated the action must be referenced. The outcome, too, can be specified.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -6036,7 +6723,7 @@ The element step is a metadata element specifying facts about a workflow step oc
 			      <xsd:complexContent>
 				        <xsd:extension base="anyOtherType">
 					          <xsd:attributeGroup ref="date"/>
-					          <xsd:attributeGroup ref="actor"/>
+					          <xsd:attributeGroup ref="agent"/>
 					          <xsd:attributeGroup ref="role"/>
 					          <xsd:attributeGroup ref="refers"/>
 					          <xsd:attributeGroup ref="outcome"/>
@@ -6106,127 +6793,6 @@ The complex type modificationType lists all the properties associated to modific
 		    <xsd:attributeGroup ref="refers"/>
 	  </xsd:complexType>
 
-	  <xsd:simpleType name="TextualMods">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>TextualMods</name>
-            <comment>
-The simple type TextualMods lists all the types of textual modifications as values for the type attribute of the textualMod element.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="repeal"/>
-			      <xsd:enumeration value="substitution"/>
-			      <xsd:enumeration value="insertion"/>
-			      <xsd:enumeration value="replacement"/>
-			      <xsd:enumeration value="renumbering"/>
-			      <xsd:enumeration value="split"/>
-			      <xsd:enumeration value="join"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="MeaningMods">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>MeaningMods</name>
-            <comment>
-The simple type MeaningMods lists all the types of modifications in meaning as values for the type attribute of the meaningMod element.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="variation"/>
-			      <xsd:enumeration value="termModification"/>
-			      <xsd:enumeration value="authenticInterpretation"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="ScopeMods">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>ScopeMods</name>
-            <comment>
-The simple type ScopeMods lists all the types of modifications in scope as values for the type attribute of the scopeMod element.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="exceptionOfScope"/>
-			      <xsd:enumeration value="extensionOfScope"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="ForceMods">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>ForceMods</name>
-            <comment>
-The simple type ForceMods lists all the types of modifications in force as values for the type attribute of the forceMod element.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="entryIntoForce"/>
-			      <xsd:enumeration value="endOfEnactment"/>
-			      <xsd:enumeration value="postponementOfEntryIntoForce"/>
-			      <xsd:enumeration value="prorogationOfForce"/>
-			      <xsd:enumeration value="reEnactment"/>
-			      <xsd:enumeration value="uncostitutionality"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="EfficacyMods">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>EfficacyMods</name>
-            <comment>
-The simple type EfficacyMods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="entryIntoEfficacy"/>
-			      <xsd:enumeration value="endOfEfficacy"/>
-			      <xsd:enumeration value="inapplication"/>
-			      <xsd:enumeration value="retroactivity"/>
-			      <xsd:enumeration value="extraefficacy"/>
-			      <xsd:enumeration value="postponementOfEfficacy"/>
-			      <xsd:enumeration value="prorogationOfEfficacy"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
-	  <xsd:simpleType name="LegalSystemMods">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Simple</type>
-            <name>LegalSystemMods</name>
-            <comment>
-The simple type LegalSystemMods lists all the types of modifications in the legal system as values for the type attribute of the LegalSystemMod element.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="staticReference"/>
-			      <xsd:enumeration value="implementation"/>
-			      <xsd:enumeration value="ratification"/>
-			      <xsd:enumeration value="application"/>
-			      <xsd:enumeration value="legislativeDelegation"/>
-			      <xsd:enumeration value="deregulation"/>
-			      <xsd:enumeration value="conversion"/>
-			      <xsd:enumeration value="expiration"/>
-			      <xsd:enumeration value="reiteration"/>
-			      <xsd:enumeration value="remaking"/>
-			      <xsd:enumeration value="republication"/>
-			      <xsd:enumeration value="coordination"/>
-		    </xsd:restriction>
-	  </xsd:simpleType>
-
 	  <xsd:element name="activeModifications" type="Amendments">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -6271,7 +6837,7 @@ The element textualMod is a metadata element specifying an (active or passive) t
 						            <xsd:element ref="old" minOccurs="0" maxOccurs="unbounded"/>
 						            <xsd:element ref="new" minOccurs="0" maxOccurs="unbounded"/>
 					          </xsd:sequence>
-					          <xsd:attribute name="type" type="TextualMods" use="required"/>
+					          <xsd:attributeGroup ref="textualModType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6293,7 +6859,7 @@ The element meaningMod is a metadata element specifying an (active or passive) m
 					          <xsd:sequence>
 						            <xsd:element ref="domain" minOccurs="0" maxOccurs="1"/>
 					          </xsd:sequence>
-					          <xsd:attribute name="type" type="MeaningMods" use="required"/>
+					          <xsd:attributeGroup ref="meaningModType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6315,7 +6881,7 @@ The element scopeMod is a metadata element specifying an (active or passive) mod
 					          <xsd:sequence>
 						            <xsd:element ref="domain" minOccurs="0" maxOccurs="1"/>
 					          </xsd:sequence>
-					          <xsd:attribute name="type" type="ScopeMods" use="required"/>
+					          <xsd:attributeGroup ref="scopeModType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6334,7 +6900,7 @@ The element forceMod is a metadata element specifying an (active or passive) mod
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="modificationType">
-					          <xsd:attribute name="type" type="ForceMods" use="required"/>
+					          <xsd:attributeGroup ref="forceModType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6353,7 +6919,7 @@ The element efficacyMod is a metadata element specifying an (active or passive) 
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="modificationType">
-					          <xsd:attribute name="type" type="EfficacyMods" use="required"/>
+					          <xsd:attributeGroup ref="efficacyModType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6372,7 +6938,7 @@ The element legalSystemMod is a metadata element specifying an (active or passiv
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="modificationType">
-					          <xsd:attribute name="type" type="LegalSystemMods" use="required"/>
+					          <xsd:attributeGroup ref="legalSystemModType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6454,7 +7020,7 @@ The element result is a metadata element specifying the overall result of the ju
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="anyOtherType">
-					          <xsd:attribute name="type" type="resultType" use="required"/>
+					          <xsd:attributeGroup ref="resultType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6618,7 +7184,7 @@ The element distinguishes is a metadata element specifying a reference to a sour
 			         <type>Element</type>
             <name>restriction</name>
             <comment>
-The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the</comment>
+The element restriction specifies information about a restriction (such as a jurisdiction specification) by pointing to a specific legislative, geographic or temporal events through the refersTo attribute</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -6626,7 +7192,7 @@ The element restriction specifies information about a restriction (such as a jur
 			      <xsd:complexContent>
 				        <xsd:extension base="anyOtherType">
 					          <xsd:attributeGroup ref="refers"/>
-					          <xsd:attribute name="type" type="restrictionType" use="required"/>
+					          <xsd:attributeGroup ref="restrictionType"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6790,10 +7356,7 @@ The element count is a metadata container containing the value of a count in a v
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="metareq">
-					          <xsd:attribute name="original" type="xsd:anyURI"/>
-					          <xsd:attribute name="current" type="xsd:anyURI"/>
-					          <xsd:attribute name="start" type="xsd:anyURI"/>
-					          <xsd:attribute name="end" type="xsd:anyURI"/>
+					          <xsd:attributeGroup ref="mappingAtts"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -6818,20 +7381,6 @@ The element otherAnalysis is a metadata container of any additional metadata ana
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:attributeGroup name="pos">
-		    <xsd:annotation>
-			      <xsd:documentation>
-			         <type>Attlist</type>
-            <name>pos</name>
-            <comment>
-The attribute pos is used to identify the specific position of the reference (e.g., in source or destination)
-with respect to the element being identified with the relative eId.</comment>
-				     </xsd:documentation>
-		    </xsd:annotation>
-
-		    <xsd:attribute name="pos" type="posType"/>
-	  </xsd:attributeGroup>
-
 	  <xsd:complexType name="argumentType">
 		    <xsd:annotation>
 			      <xsd:documentation>
@@ -6846,7 +7395,7 @@ the complex type argumentType defines the empty content model and the list of at
 			      <xsd:extension base="anyOtherType">
 				        <xsd:attributeGroup ref="pos"/>
 				        <xsd:attributeGroup ref="modifiers"/>
-				        <xsd:attribute name="upTo" type="xsd:anyURI"/>
+				        <xsd:attributeGroup ref="upToOpt"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
 	  </xsd:complexType>
@@ -6952,14 +7501,14 @@ The element duration is a metadata element specifying the period of the duration
 			         <type>Element</type>
             <name>condition</name>
             <comment>
-The element condition is a metadata element specifying an open set (non managed by Akoma Ntoso) of conditions on the modification</comment>
+The element condition is a metadata element specifying an open set of conditions on the modification (non managed by Akoma Ntoso).</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="anyOtherType">
-					          <xsd:attribute name="frozen" type="xsd:boolean"/>
+					          <xsd:attributeGroup ref="frozen"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -7056,10 +7605,9 @@ The element domain is a metadata element containing (in some non-managed form) t
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="metaopt">
+					          <xsd:attributeGroup ref="interval"/>
+					          <xsd:attributeGroup ref="duration"/>
 					          <xsd:attributeGroup ref="refersreq"/>
-					          <xsd:attribute name="start" type="xsd:anyURI"/>
-					          <xsd:attribute name="end" type="xsd:anyURI"/>
-					          <xsd:attribute name="duration" type="xsd:duration"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -7204,7 +7752,7 @@ The element hasAttachment is a metadata reference to the Akoma Ntoso IRI of an a
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="referenceType">
-					          <xsd:attribute name="type" type="xsd:string"/>
+					          <xsd:attributeGroup ref="type"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>
@@ -7223,7 +7771,7 @@ The element attachmentOf is a metadata reference to the Akoma Ntoso IRI of a doc
 		    <xsd:complexType>
 			      <xsd:complexContent>
 				        <xsd:extension base="referenceType">
-					          <xsd:attribute name="type" type="xsd:string"/>
+					          <xsd:attributeGroup ref="type"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
 		    </xsd:complexType>

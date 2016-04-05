@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 07/01/2015 - Akoma Ntoso 3.0 CSD13
+Release 22/07/2015 - Akoma Ntoso 3.0 WD14
 Complete version.
 
 
@@ -126,13 +126,18 @@ Attribute groups
 =====================================================================  -->
 
 
-<!ENTITY % alt         " alternativeTo %ANYURI; #IMPLIED" >
+<!ENTITY % versionType      "(originalVersion|singleVersion|multipleVersions)" >
+<!ENTITY % EversionType "((originalVersion|singleVersion|multipleVersions))" ><!ENTITY % contains " contains %versionType; 'originalVersion' " >
+
+<!ENTITY % eIdRef           "%ANYURI;" >
+<!ENTITY % EeIdRef "(%EANYURI;)" ><!ENTITY % alt         " alternativeTo %eIdRef; #IMPLIED" >
 
 <!ENTITY % name         " name %STRING; #REQUIRED" >
 
 <!ENTITY % number       " number %STRING; #IMPLIED" >
 
-<!ENTITY % source       " source %ANYURI; #REQUIRED" >
+<!ENTITY % agentRef         "%ANYURI;" >
+<!ENTITY % EagentRef "(%EANYURI;)" ><!ENTITY % source       " source %agentRef; #REQUIRED" >
 
 <!ENTITY % date         " date CDATA #REQUIRED" >
 
@@ -149,33 +154,201 @@ Attribute groups
 <!ENTITY % booleanvalue     " value %BOOLEAN; #REQUIRED" >
 
 
-<!ENTITY % speechAtts " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED startTime %DATETIME; #IMPLIED endTime %DATETIME; #IMPLIED to %ANYURI; #IMPLIED" >
 
-<!ENTITY % voteAtts   " by %ANYURI; #REQUIRED as %ANYURI; #IMPLIED choice %ANYURI; #IMPLIED" >
+<!ENTITY % eventRefRef      "%ANYURI;" >
+<!ENTITY % EeventRefRef "(%EANYURI;)" ><!ENTITY % interval     " start %eventRefRef; #IMPLIED end %eventRefRef; #IMPLIED" >
+
+<!ENTITY % duration     " duration %DURATION; #IMPLIED" >
 
 
-<!ENTITY % show         " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
-<!ENTITY % showopt    " showAs %STRING; #IMPLIED shortForm %STRING; #IMPLIED" >
 
-<!ENTITY % src         " src %ANYURI; #REQUIRED alt %STRING; #IMPLIED" >
+<!ENTITY % role " as %roleRef; #IMPLIED" ><!ENTITY % agent " by %agentRef; #REQUIRED" ><!ENTITY % speechAtts " %agent;  %role;  startTime %DATETIME; #IMPLIED endTime %DATETIME; #IMPLIED to %agentRef; #IMPLIED" >
 
-<!ENTITY % period " period %ANYURI; #IMPLIED"
->
+<!ENTITY % voteRef          "%ANYURI;" >
+<!ENTITY % EvoteRef "(%EANYURI;)" ><!ENTITY % voteAtts   " %agent;  %role;  choice %voteRef; #IMPLIED" >
+
+<!ENTITY % frozen     " frozen %BOOLEAN; #IMPLIED" >
+
+
+
+
+<!ENTITY % lawyerAtts   " %role;  for %agentRef; #IMPLIED empoweredBy %agentRef; #IMPLIED" >
+
+
+
+<!ENTITY % normalizedAtt   " normalized %STRING; #IMPLIED" >
+
+
+
+<!ENTITY % for " for %eIdRef; #IMPLIED" >
+
+
+
+<!--  The mappingAtts attributes represent the reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup (attribute start) and a final temporalGroup (attribute end).  -->
+<!ENTITY % wIdRef           "%ANYURI;" >
+<!ENTITY % EwIdRef "(%EANYURI;)" ><!ENTITY % mappingAtts " original %wIdRef; #IMPLIED current %eIdRef; #IMPLIED start %eventRefRef; #IMPLIED end %eventRefRef; #IMPLIED" >
+
+<!ENTITY % originating " originatingExpression %BOOLEAN; #IMPLIED" >
+
+
+<!ENTITY % conceptRef       "%ANYURI;" >
+<!ENTITY % EconceptRef "(%EANYURI;)" ><!ENTITY % outcome " outcome %conceptRef; #IMPLIED" >
+
+
+
+
+<!ENTITY % referenceRef     "%ANYURI;" >
+<!ENTITY % EreferenceRef "(%EANYURI;)" ><!ENTITY % portionAtt   " includedIn %referenceRef; #REQUIRED" >
+
+
+
+<!ENTITY % level " level %INTEGER; #REQUIRED" >
+
+
+
+<!ENTITY % target   " target %STRING; #IMPLIED" >
+
+
+<!ENTITY % imgAtts    " width %INTEGER; #IMPLIED height %INTEGER; #IMPLIED" >
+
+
+
+<!ENTITY % tableAtts    " width %INTEGER; #IMPLIED border %INTEGER; #IMPLIED cellspacing %INTEGER; #IMPLIED cellpadding %INTEGER; #IMPLIED" >
+
+
+
+<!ENTITY % originalText " originalText %STRING; #IMPLIED" >
+
+<!ENTITY % fillInWidth  " width %STRING; #IMPLIED" >
+
+
+
+<!ENTITY % upTo " upTo %eIdRef; #REQUIRED" >
+<!ENTITY % upToOpt " upTo %eIdRef; #IMPLIED" >
+
+<!ENTITY % range " from %eIdRef; #REQUIRED %upTo; " >
+<!ENTITY % rangeOpt " from %eIdRef; #REQUIRED %upToOpt; " >
+
+
+<!ENTITY % posType  "(start|before|inside|after|end|unspecified)" >
+<!ENTITY % EposType "((start|before|inside|after|end|unspecified))" ><!ENTITY % pos " pos %posType; #IMPLIED" >
+
+
+<!ENTITY % language         "%STRING;" >
+<!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % language     " language %language; #REQUIRED" >
+
+<!ENTITY % fromLanguage " fromLanguage %language; #REQUIRED" >
+
+<!ENTITY % pivot        " pivot %language; #IMPLIED" >
+
+<!ENTITY % authoritative        " authoritative %BOOLEAN; #IMPLIED" >
+
+
+<!ENTITY % dictionary        " dictionary %referenceRef; #REQUIRED" >
+
+
+<!--  =====================================================================
+
+Attribute groups: attribute "type"
+
+=====================================================================  -->
+
+<!ENTITY % type   " type CDATA #IMPLIED" >
+
+
+
+<!ENTITY %  eventType     "(generation|amendment|repeal)" >
+<!ENTITY % EeventType "((generation|amendment|repeal))" >
+<!ENTITY % eventType     " type %eventType; #IMPLIED" >
+
+
+
+
+<!ENTITY %  opinionType   "(dissenting|agreeing|null)" >
+<!ENTITY % EopinionType "((dissenting|agreeing|null))" >
+<!ENTITY % opinionType   " type %opinionType; #IMPLIED" >
+
+
+<!ENTITY %  resultType  "(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)" >
+<!ENTITY % EresultType "((deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve))" >
+<!ENTITY % resultType    " type %resultType; #REQUIRED" >
+
+
+
+
+<!ENTITY %  restrictionType    "(jurisdiction)" >
+<!ENTITY % ErestrictionType "((jurisdiction))" >
+<!ENTITY % restrictionType    " type %restrictionType; #REQUIRED" >
+
+
+
+
+<!ENTITY % remarkType     "(sceneDescription|phenomenon|caption|translation)" >
+<!ENTITY % EremarkType "((sceneDescription|phenomenon|caption|translation))" >
+<!ENTITY % remarkType   " type %remarkType; #IMPLIED" >
+
+
+<!ENTITY % timeType       "(startEvent|endEvent)" >
+<!ENTITY % EtimeType "((startEvent|endEvent))" >
+<!ENTITY % recordedTimeType   " type %timeType; #IMPLIED" >
+
+
+
+
+<!ENTITY % TextualMods         "(repeal|substitution|insertion|replacement|renumbering|split|join)" >
+<!ENTITY % ETextualMods "((repeal|substitution|insertion|replacement|renumbering|split|join))" >
+<!ENTITY % textualModType            " type %TextualMods; #REQUIRED" >
+
+
+<!ENTITY % MeaningMods         "(variation|termModification|authenticInterpretation)" >
+<!ENTITY % EMeaningMods "((variation|termModification|authenticInterpretation))" >
+<!ENTITY % meaningModType            " type %MeaningMods; #REQUIRED" >
+
+
+<!ENTITY % ScopeMods           "(exceptionOfScope|extensionOfScope)" >
+<!ENTITY % EScopeMods "((exceptionOfScope|extensionOfScope))" >
+<!ENTITY % scopeModType              " type %ScopeMods; #REQUIRED" >
+
+
+<!ENTITY % ForceMods           "(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|uncostitutionality)" >
+<!ENTITY % EForceMods "((entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|uncostitutionality))" >
+<!ENTITY % forceModType              " type %ForceMods; #REQUIRED" >
+
+
+<!ENTITY % EfficacyMods        "(entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy|postponementOfEfficacy|prorogationOfEfficacy)" >
+<!ENTITY % EEfficacyMods "((entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy|postponementOfEfficacy|prorogationOfEfficacy))" >
+<!ENTITY % efficacyModType           " type %EfficacyMods; #REQUIRED" >
+
+
+<!ENTITY % LegalSystemMods     "(staticReference|implementation|ratification|application|legislativeDelegation|deregulation|conversion|expiration|reiteration|remaking|republication|coordination)" >
+<!ENTITY % ELegalSystemMods "((staticReference|implementation|ratification|application|legislativeDelegation|deregulation|conversion|expiration|reiteration|remaking|republication|coordination))" >
+<!ENTITY % legalSystemModType        " type %LegalSystemMods; #REQUIRED" >
+
+
+
+<!ENTITY % show      " showAs %STRING; #REQUIRED shortForm %STRING; #IMPLIED" >
+<!ENTITY % showopt   " showAs %STRING; #IMPLIED shortForm %STRING; #IMPLIED" >
+
+<!ENTITY % manifestationURI "%ANYURI;" >
+<!ENTITY % EmanifestationURI "(%EANYURI;)" ><!ENTITY % src         " src %manifestationURI; #REQUIRED alt %STRING; #IMPLIED" >
+
+<!ENTITY % temporalGroupRef        "%ANYURI;" >
+<!ENTITY % EtemporalGroupRef "(%EANYURI;)" ><!ENTITY % period " period %temporalGroupRef; #IMPLIED" >
+
 
 <!ENTITY % statusType     "(removed|temporarilyRemoved|translated|editorial|edited|verbatim|incomplete|unknown|undefined|ignored)" >
 <!ENTITY % EstatusType "((removed|temporarilyRemoved|translated|editorial|edited|verbatim|incomplete|unknown|undefined|ignored))" ><!ENTITY % enactment " %period;  status %statusType; #IMPLIED" >
 
 <!ENTITY % placementType    "(side|left|right|bottom|inline)" >
-<!ENTITY % EplacementType "((side|left|right|bottom|inline))" ><!ENTITY % notes " marker %STRING; #IMPLIED placement %placementType; #IMPLIED placementBase %ANYURI; #IMPLIED" >
+<!ENTITY % EplacementType "((side|left|right|bottom|inline))" ><!ENTITY % notes " marker %STRING; #IMPLIED placement %placementType; #IMPLIED placementBase %eIdRef; #IMPLIED" >
 
 
 <!ENTITY % modifiers " exclusion %BOOLEAN; #IMPLIED incomplete %BOOLEAN; #IMPLIED" >
 
-<!ENTITY % role " as %ANYURI; #IMPLIED" >
+<!ENTITY % roleRef          "%ANYURI;" >
+<!ENTITY % EroleRef "(%EANYURI;)" >
 
-<!ENTITY % actor " actor %ANYURI; #IMPLIED" >
 
-<!ENTITY % outcome " outcome %ANYURI; #IMPLIED" >
 
 
 <!ENTITY % quote " startQuote %STRING; #IMPLIED endQuote %STRING; #IMPLIED" >
@@ -190,7 +363,7 @@ Attribute groups
 
 <!ENTITY % core    " xxxdirtyTrick %STRING; #IMPLIED" >
 
-<!ENTITY % noWhiteSpace "%STRING;" >
+<!ENTITY % noWhiteSpace     "%STRING;" >
 <!ENTITY % EnoWhiteSpace "(%ESTRING;)" ><!ENTITY % idreq        " eId %noWhiteSpace; #IMPLIED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
 
 <!ENTITY % idopt        " eId %noWhiteSpace; #IMPLIED wId %noWhiteSpace; #IMPLIED GUID %noWhiteSpace; #IMPLIED" >
@@ -200,8 +373,7 @@ Attribute groups
 
 <!ENTITY % refers       " refersTo CDATA #IMPLIED" >
 
-<!ENTITY % language           "%STRING;" >
-<!ENTITY % Elanguage "(%ESTRING;)" ><!ENTITY % xmllang       " xml:lang %language; #IMPLIED xml:space (default|preserve) #IMPLIED" >
+<!ENTITY % xmllang   " xml:lang %language; #IMPLIED xml:space (default|preserve) #IMPLIED" >
 
 
 <!ENTITY % corereq      " %core;  %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang;  %alt; " >
@@ -220,44 +392,36 @@ Simple types (data values)
 
 
 
-<!ENTITY % versionType    "(originalVersion|singleVersion|multipleVersions)" >
-<!ENTITY % EversionType "((originalVersion|singleVersion|multipleVersions))" >
-
-
-
-
-
-<!ENTITY % eventType      "(generation|amendment|repeal)" >
-<!ENTITY % EeventType "((generation|amendment|repeal))" >
 
 
 
 
 
 
-<!ENTITY % remarkType     "(sceneDescription|phenomenon|caption|translation)" >
-<!ENTITY % EremarkType "((sceneDescription|phenomenon|caption|translation))" >
-
-<!ENTITY % timeType       "(startEvent|endEvent)" >
-<!ENTITY % EtimeType "((startEvent|endEvent))" >
 
 
 
 
-<!ENTITY % opinionType  "(dissenting|agreeing|null)" >
-<!ENTITY % EopinionType "((dissenting|agreeing|null))" >
-
-<!ENTITY % resultType  "(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)" >
-<!ENTITY % EresultType "((deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve))" >
 
 
 
-<!ENTITY % posType  "(start|before|inside|after|end|unspecified)" >
-<!ENTITY % EposType "((start|before|inside|after|end|unspecified))" >
 
 
-<!ENTITY % restrictionType    "(jurisdiction)" >
-<!ENTITY % ErestrictionType "((jurisdiction))" >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -347,7 +511,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD13"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -356,7 +520,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT doc           %openStructure; >
-<!ATTLIST doc %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST doc %name;  %contains;  >
 
 <!ATTLIST doc xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -366,7 +530,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT statement  %openStructure; >
-<!ATTLIST statement %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST statement %name;  %contains;  >
 
 <!ATTLIST statement xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -389,7 +553,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT amendmentList           %collectionStructure; >
-<!ATTLIST amendmentList %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST amendmentList %name;  %contains;  >
 
 <!ATTLIST amendmentList xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -397,14 +561,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT officialGazette           %collectionStructure; >
-<!ATTLIST officialGazette %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST officialGazette %name;  %contains;  >
 
 <!ATTLIST officialGazette xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 
 <!ELEMENT documentCollection           %collectionStructure; >
-<!ATTLIST documentCollection %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST documentCollection %name;  %contains;  >
 
 <!ATTLIST documentCollection xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -423,7 +587,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT portion           %portionStructure; >
-<!ATTLIST portion includedIn %ANYURI; #REQUIRED >
+<!ATTLIST portion %portionAtt;  >
 
 <!ATTLIST portion xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -440,14 +604,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT act           %hierarchicalStructure; >
-<!ATTLIST act %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST act %name;  %contains;  >
 
 <!ATTLIST act xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 
 <!ELEMENT bill          %hierarchicalStructure; >
-<!ATTLIST bill %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST bill %name;  %contains;  >
 
 <!ATTLIST bill xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -466,14 +630,14 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT debateReport        %openStructure; >
-<!ATTLIST debateReport %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST debateReport %name;  %contains;  >
 
 <!ATTLIST debateReport xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
 
 <!ELEMENT debate  %debateStructure; >
-<!ATTLIST debate %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST debate %name;  %contains;  >
 
 <!ATTLIST debate xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -491,7 +655,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT judgment     %judgmentStructure; >
-<!ATTLIST judgment %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST judgment %name;  %contains;  >
 
 <!ATTLIST judgment xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -508,7 +672,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 
 <!ELEMENT amendment     %amendmentStructure; >
-<!ATTLIST amendment %name;  contains %versionType; 'originalVersion'  >
+<!ATTLIST amendment %name;  %contains;  >
 
 <!ATTLIST amendment xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
@@ -920,7 +1084,7 @@ main document, the list item and the titled block
 <!ELEMENT tocItem   %inline; >
 <!ATTLIST tocItem %coreopt;  >
 
-<!ATTLIST tocItem %link;  level %INTEGER; #REQUIRED >
+<!ATTLIST tocItem %link;  %level;  >
 
 
 
@@ -947,7 +1111,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT docProponent %inline; >
 <!ATTLIST docProponent %coreopt;  >
 
-<!ATTLIST docProponent as %ANYURI; #IMPLIED >
+<!ATTLIST docProponent %role;  >
 
 
 <!ELEMENT docDate      %inline; >
@@ -1020,12 +1184,12 @@ legal structure, regardless of their position in the document.
 <!ELEMENT lawyer             %inlinereqreq; >
 <!ATTLIST lawyer %corereqreq;  >
 
-<!ATTLIST lawyer %role;  for %ANYURI; #IMPLIED empoweredBy %ANYURI; #IMPLIED >
+<!ATTLIST lawyer %lawyerAtts;  >
 
 <!ELEMENT opinion            %inline; >
 <!ATTLIST opinion %coreopt;  >
 
-<!ATTLIST opinion type %opinionType; #IMPLIED >
+<!ATTLIST opinion %opinionType;  >
 
 
 <!ELEMENT argument            %inline; >
@@ -1058,7 +1222,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT person             %inlinereqreq; >
 <!ATTLIST person %corereqreq;  >
 
-<!ATTLIST person as %ANYURI; #IMPLIED >
+<!ATTLIST person %role;  >
 
 <!ELEMENT organization  %inlinereqreq; >
 <!ATTLIST organization %corereqreq;  >
@@ -1087,7 +1251,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT quantity          %inlinereqreq; >
 <!ATTLIST quantity %corereqreq;  >
 
-<!ATTLIST quantity normalized %STRING; #IMPLIED >
+<!ATTLIST quantity %normalizedAtt;  >
 
 
 <!ELEMENT def          %inline; >
@@ -1109,7 +1273,7 @@ legal structure, regardless of their position in the document.
 <!ELEMENT rref         %inlinereq; >
 <!ATTLIST rref %corereq;  >
 
-<!ATTLIST rref from %ANYURI; #REQUIRED upTo %ANYURI; #REQUIRED >
+<!ATTLIST rref %range;  >
 
 
 
@@ -1118,21 +1282,21 @@ legal structure, regardless of their position in the document.
 <!ENTITY % modType "(#PCDATA | %modType_mixed;)*" >
 
 <!ELEMENT mod   %modType; >
-<!ATTLIST mod %corereq;  for %ANYURI; #IMPLIED >
+<!ATTLIST mod %corereq;  %for;  >
 
 <!ELEMENT mmod  %modType; >
-<!ATTLIST mmod %corereq;  for %ANYURI; #IMPLIED >
+<!ATTLIST mmod %corereq;  %for;  >
 
 <!ELEMENT rmod  %modType; >
-<!ATTLIST rmod %corereq;  for %ANYURI; #IMPLIED >
+<!ATTLIST rmod %corereq;  %for;  >
 
-<!ATTLIST rmod from %ANYURI; #REQUIRED upTo %ANYURI; #REQUIRED >
+<!ATTLIST rmod %range;  >
 
 
 <!ELEMENT quotedText       %inline; >
 <!ATTLIST quotedText %coreopt;  >
 
-<!ATTLIST quotedText %quote;  for %ANYURI; #IMPLIED >
+<!ATTLIST quotedText %quote;  %for;  >
 
 
 
@@ -1140,12 +1304,12 @@ legal structure, regardless of their position in the document.
 <!ELEMENT remark       %inline; >
 <!ATTLIST remark %coreopt;  >
 
-<!ATTLIST remark type %remarkType; #IMPLIED >
+<!ATTLIST remark %remarkType;  >
 
 <!ELEMENT recordedTime   %inline; >
 <!ATTLIST recordedTime %coreopt;  >
 
-<!ATTLIST recordedTime type %timeType; #IMPLIED %time;  >
+<!ATTLIST recordedTime %recordedTimeType;  %time;  >
 
 
 
@@ -1164,12 +1328,12 @@ legal structure, regardless of their position in the document.
 <!ELEMENT placeholder  %inline; >
 <!ATTLIST placeholder %coreopt;  >
 
-<!ATTLIST placeholder originalText %STRING; #IMPLIED >
+<!ATTLIST placeholder %originalText;  >
 
 <!ELEMENT fillIn  %inline; >
 <!ATTLIST fillIn %coreopt;  >
 
-<!ATTLIST fillIn width %STRING; #IMPLIED >
+<!ATTLIST fillIn %fillInWidth;  >
 
 <!ELEMENT decoration  %inline; >
 <!ATTLIST decoration %coreopt;  >
@@ -1196,10 +1360,10 @@ there is text.
 <!ENTITY % eolType  "%markeropt;" >
 
 <!ELEMENT eol   %eolType; >
-<!ATTLIST eol breakat %INTEGER; #IMPLIED number %STRING; #IMPLIED %coreopt;  >
+<!ATTLIST eol breakat %INTEGER; #IMPLIED %number;  %coreopt;  >
 
 <!ELEMENT eop   %eolType; >
-<!ATTLIST eop breakat %INTEGER; #IMPLIED number %STRING; #IMPLIED %coreopt;  >
+<!ATTLIST eop breakat %INTEGER; #IMPLIED %number;  %coreopt;  >
 
 
 <!--  =====================================================================
@@ -1219,7 +1383,7 @@ within a text content, but are not of textual nature.
 <!ELEMENT quotedStructure   %subFlowStructure; >
 <!ATTLIST quotedStructure %corereq;  >
 
-<!ATTLIST quotedStructure %quote;  for %ANYURI; #IMPLIED >
+<!ATTLIST quotedStructure %quote;  %for;  >
 
 
 
@@ -1244,8 +1408,11 @@ within a text content, but are not of textual nature.
 
 <!ATTLIST authorialNote %notes;  >
 
+
 <!ELEMENT subFlow    %subFlowStructure; >
 <!ATTLIST subFlow %corereq;  >
+
+<!ATTLIST subFlow %name;  >
 
 
 
@@ -1355,13 +1522,13 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 <!ELEMENT a    %inline; >
 <!ATTLIST a %coreopt;  >
 
-<!ATTLIST a %link;  target %STRING; #IMPLIED >
+<!ATTLIST a %link;  %target;  >
 
 
 <!ELEMENT img %markeropt; >
 <!ATTLIST img %coreopt;  >
 
-<!ATTLIST img %src;  width %INTEGER; #IMPLIED height %INTEGER; #IMPLIED >
+<!ATTLIST img %src;  %imgAtts;  >
 
 
 <!ENTITY % listItems "(li+)" >
@@ -1381,7 +1548,7 @@ Reference: http://www.xmlpatterns.com/ReuseDocumentTypesMain.shtml
 
 <!ELEMENT table (caption?,tr+)>
 
-<!ATTLIST table %corereq;  width %INTEGER; #IMPLIED border %INTEGER; #IMPLIED cellspacing %INTEGER; #IMPLIED cellpadding %INTEGER; #IMPLIED >
+<!ATTLIST table %corereq;  %tableAtts;  >
 
 
 <!ELEMENT caption    %inline; >
@@ -1461,18 +1628,18 @@ Metadata elements for all documents
 <!ELEMENT FRBRauthor           %metaopt; >
 <!ATTLIST FRBRauthor %core;  %idopt;  >
 
-<!ATTLIST FRBRauthor %link;  as %ANYURI; #IMPLIED >
+<!ATTLIST FRBRauthor %link;  %role;  >
 
 <!ELEMENT FRBRlanguage            %metaopt; >
 <!ATTLIST FRBRlanguage %core;  %idopt;  >
 
-<!ATTLIST FRBRlanguage language %language; #REQUIRED >
+<!ATTLIST FRBRlanguage %language;  >
 
 
 <!ELEMENT FRBRtranslation      %metaopt; >
 <!ATTLIST FRBRtranslation %core;  %idopt;  >
 
-<!ATTLIST FRBRtranslation %link;  fromLanguage %language; #REQUIRED authoritative %BOOLEAN; #IMPLIED pivot %language; #IMPLIED by %ANYURI; #REQUIRED >
+<!ATTLIST FRBRtranslation %link;  %fromLanguage;  %authoritative;  %pivot;  %agent;  >
 
 
 <!ELEMENT FRBRsubtype            %valueType; >
@@ -1490,7 +1657,7 @@ Metadata elements for all documents
 <!ELEMENT FRBRportion             %metaopt; >
 <!ATTLIST FRBRportion %core;  %idopt;  >
 
-<!ATTLIST FRBRportion %refers;  %showopt;  from %ANYURI; #REQUIRED upTo %ANYURI; #IMPLIED >
+<!ATTLIST FRBRportion %refers;  %showopt;  %rangeOpt;  >
 
 
 <!ELEMENT FRBRformat             %valueType; >
@@ -1538,7 +1705,7 @@ Metadata elements for all documents
 <!ELEMENT keyword %metaopt; >
 <!ATTLIST keyword %core;  %idopt;  >
 
-<!ATTLIST keyword %linkopt;  %value;  %show;  dictionary %ANYURI; #REQUIRED >
+<!ATTLIST keyword %linkopt;  %value;  %show;  %dictionary;  >
 
 
 
@@ -1549,7 +1716,7 @@ Metadata elements for all documents
 <!ELEMENT eventRef %anyOtherType; >
 <!ATTLIST eventRef %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST eventRef %date;  %source;  %refers;  type %eventType; #IMPLIED originatingExpression %BOOLEAN; #IMPLIED >
+<!ATTLIST eventRef %date;  %source;  %refers;  %eventType;  %originating;  >
 
 
 <!ELEMENT workflow   (step+)>
@@ -1559,7 +1726,7 @@ Metadata elements for all documents
 <!ELEMENT step     %anyOtherType; >
 <!ATTLIST step %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST step %date;  %actor;  %role;  %refers;  %outcome;  >
+<!ATTLIST step %date;  %agent;  %role;  %refers;  %outcome;  >
 
 
 
@@ -1575,25 +1742,6 @@ Metadata elements for all documents
 <!ENTITY % modificationType    "(source+,destination+,force?,efficacy?,application?,duration?,condition?)" >
 
 
-<!ENTITY % TextualMods         "(repeal|substitution|insertion|replacement|renumbering|split|join)" >
-<!ENTITY % ETextualMods "((repeal|substitution|insertion|replacement|renumbering|split|join))" >
-
-<!ENTITY % MeaningMods         "(variation|termModification|authenticInterpretation)" >
-<!ENTITY % EMeaningMods "((variation|termModification|authenticInterpretation))" >
-
-<!ENTITY % ScopeMods           "(exceptionOfScope|extensionOfScope)" >
-<!ENTITY % EScopeMods "((exceptionOfScope|extensionOfScope))" >
-
-<!ENTITY % ForceMods           "(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|uncostitutionality)" >
-<!ENTITY % EForceMods "((entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|uncostitutionality))" >
-
-<!ENTITY % EfficacyMods        "(entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy|postponementOfEfficacy|prorogationOfEfficacy)" >
-<!ENTITY % EEfficacyMods "((entryIntoEfficacy|endOfEfficacy|inapplication|retroactivity|extraefficacy|postponementOfEfficacy|prorogationOfEfficacy))" >
-
-<!ENTITY % LegalSystemMods     "(staticReference|implementation|ratification|application|legislativeDelegation|deregulation|conversion|expiration|reiteration|remaking|republication|coordination)" >
-<!ENTITY % ELegalSystemMods "((staticReference|implementation|ratification|application|legislativeDelegation|deregulation|conversion|expiration|reiteration|remaking|republication|coordination))" >
-
-
 <!ELEMENT activeModifications   %Amendments; >
 
 <!ELEMENT passiveModifications  %Amendments; >
@@ -1601,32 +1749,32 @@ Metadata elements for all documents
  <!ENTITY            % textualMod_entity "(%modificationType;,(previous?,old*,new*))" ><!ELEMENT textualMod %textualMod_entity;>
 <!ATTLIST textualMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
-<!ATTLIST textualMod type %TextualMods; #REQUIRED >
+<!ATTLIST textualMod %textualModType;  >
 
  <!ENTITY            % meaningMod_entity "(%modificationType;,(domain?))" ><!ELEMENT meaningMod %meaningMod_entity;>
 <!ATTLIST meaningMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
-<!ATTLIST meaningMod type %MeaningMods; #REQUIRED >
+<!ATTLIST meaningMod %meaningModType;  >
 
  <!ENTITY              % scopeMod_entity "(%modificationType;,(domain?))" ><!ELEMENT scopeMod %scopeMod_entity;>
 <!ATTLIST scopeMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
-<!ATTLIST scopeMod type %ScopeMods; #REQUIRED >
+<!ATTLIST scopeMod %scopeModType;  >
 
 <!ELEMENT forceMod              %modificationType; >
 <!ATTLIST forceMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
-<!ATTLIST forceMod type %ForceMods; #REQUIRED >
+<!ATTLIST forceMod %forceModType;  >
 
 <!ELEMENT efficacyMod           %modificationType; >
 <!ATTLIST efficacyMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
-<!ATTLIST efficacyMod type %EfficacyMods; #REQUIRED >
+<!ATTLIST efficacyMod %efficacyModType;  >
 
 <!ELEMENT legalSystemMod        %modificationType; >
 <!ATTLIST legalSystemMod %core;  %idreq;  %enactment;  %modifiers;  %refers;  >
 
-<!ATTLIST legalSystemMod type %LegalSystemMods; #REQUIRED >
+<!ATTLIST legalSystemMod %legalSystemModType;  >
 
 
 
@@ -1641,7 +1789,7 @@ Metadata elements for all documents
 <!ELEMENT result   %anyOtherType; >
 <!ATTLIST result %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST result type %resultType; #REQUIRED >
+<!ATTLIST result %resultType;  >
 
 
 <!ELEMENT supports  %judicialArgumentType; >
@@ -1688,7 +1836,7 @@ Metadata elements for all documents
 <!ELEMENT restriction   %anyOtherType; >
 <!ATTLIST restriction %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST restriction %refers;  type %restrictionType; #REQUIRED >
+<!ATTLIST restriction %refers;  %restrictionType;  >
 
 
 
@@ -1729,7 +1877,8 @@ Metadata elements for all documents
 <!ELEMENT mapping  %metareq; >
 <!ATTLIST mapping %core;  %idreq;  >
 
-<!ATTLIST mapping original %ANYURI; #IMPLIED current %ANYURI; #IMPLIED start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED >
+<!ATTLIST mapping %mappingAtts;  >
+
 
 
 
@@ -1739,19 +1888,16 @@ Metadata elements for all documents
 <!ATTLIST otherAnalysis %source;  >
 
 
-
-<!ENTITY % pos " pos %posType; #IMPLIED" >
-
 <!ENTITY % argumentType      "%anyOtherType;" >
 
 <!ENTITY % periodType        "%anyOtherType;" >
 
 
 <!ELEMENT source           %argumentType; >
-<!ATTLIST source %pos;  %modifiers;  upTo %ANYURI; #IMPLIED %core;  %idopt;  %linkopt;  >
+<!ATTLIST source %pos;  %modifiers;  %upToOpt;  %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT destination      %argumentType; >
-<!ATTLIST destination %pos;  %modifiers;  upTo %ANYURI; #IMPLIED %core;  %idopt;  %linkopt;  >
+<!ATTLIST destination %pos;  %modifiers;  %upToOpt;  %core;  %idopt;  %linkopt;  >
 
 <!ELEMENT force            %periodType; >
 <!ATTLIST force %period;  %core;  %idopt;  %linkopt;  >
@@ -1768,7 +1914,7 @@ Metadata elements for all documents
 <!ELEMENT condition        %anyOtherType; >
 <!ATTLIST condition %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST condition frozen %BOOLEAN; #IMPLIED >
+<!ATTLIST condition %frozen;  >
 
 <!ELEMENT previous         %anyOtherType; >
 <!ATTLIST previous %core;  %idopt;  %linkopt;  >
@@ -1800,7 +1946,7 @@ Metadata elements for all documents
 <!ELEMENT timeInterval  %metaopt; >
 <!ATTLIST timeInterval %core;  %idopt;  >
 
-<!ATTLIST timeInterval %refersreq;  start %ANYURI; #IMPLIED end %ANYURI; #IMPLIED duration %DURATION; #IMPLIED >
+<!ATTLIST timeInterval %interval;  %duration;  %refersreq;  >
 
 
 <!ENTITY % docRefs        "original | passiveRef | activeRef | jurisprudence | hasAttachment | attachmentOf" >
@@ -1829,12 +1975,12 @@ Metadata elements for all documents
 <!ELEMENT hasAttachment    %referenceType; >
 <!ATTLIST hasAttachment %core;  %idreq;  %link;  %show;  >
 
-<!ATTLIST hasAttachment type CDATA #IMPLIED >
+<!ATTLIST hasAttachment %type;  >
 
 <!ELEMENT attachmentOf     %referenceType; >
 <!ATTLIST attachmentOf %core;  %idreq;  %link;  %show;  >
 
-<!ATTLIST attachmentOf type CDATA #IMPLIED >
+<!ATTLIST attachmentOf %type;  >
 
 
 <!ELEMENT TLCPerson        %referenceType; >
@@ -1888,11 +2034,6 @@ Metadata elements for all documents
 <!ATTLIST presentation %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST presentation %source;  >
-
-
-
-
-
 
 <!--  =====================================================================
 
