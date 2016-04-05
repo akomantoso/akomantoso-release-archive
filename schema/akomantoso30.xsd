@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15"
             elementFormDefault="qualified">
 
 
@@ -12,7 +12,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 22/07/2015 - Akoma Ntoso 3.0 WD14
+		Release 10/09/2015 - Akoma Ntoso 3.0 WD15
 		Complete version.
 		
 		
@@ -80,6 +80,7 @@ The group ANhier lists the elements that belong to the Akoma Ntoso legislative h
 			      <xsd:element ref="subdivision"/>
 			      <xsd:element ref="subclause"/>
 			      <xsd:element ref="sublist"/>
+			      <xsd:element ref="level"/>
 			      <xsd:element ref="transitional"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -1410,7 +1411,7 @@ The simple type ForceMods lists all the types of modifications in force as value
 			      <xsd:enumeration value="postponementOfEntryIntoForce"/>
 			      <xsd:enumeration value="prorogationOfForce"/>
 			      <xsd:enumeration value="reEnactment"/>
-			      <xsd:enumeration value="uncostitutionality"/>
+			      <xsd:enumeration value="unconstitutionality"/>
 		    </xsd:restriction>
 	  </xsd:simpleType>
 
@@ -2098,6 +2099,7 @@ The complex type hierarchy is used by most or all the hierarchical elements of a
 						            <xsd:choice minOccurs="0" maxOccurs="unbounded">
 							              <xsd:element ref="componentRef"/>
 							              <xsd:group ref="hierElements"/>
+							              <xsd:element ref="crossHeading"/>
 						            </xsd:choice>
 						            <xsd:element ref="wrapUp" minOccurs="0" maxOccurs="1"/>
 					          </xsd:sequence>
@@ -2758,8 +2760,15 @@ the type portionBodyType specifies a content model of a container of a portion o
 			      <xsd:group ref="containerElements"/>
 			      <xsd:group ref="hierElements"/>
 			      <xsd:group ref="ANcontainers"/>
+			      <xsd:element ref="recitals"/>
 			      <xsd:element ref="recital"/>
+			      <xsd:element ref="citations"/>
 			      <xsd:element ref="citation"/>
+			      <xsd:element ref="longTitle"/>
+			      <xsd:element ref="formula"/>
+			      <xsd:element ref="coverPage"/>
+			      <xsd:element ref="preface"/>
+			      <xsd:element ref="preamble"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="coreopt"/>
 	  </xsd:complexType>
@@ -3125,7 +3134,7 @@ the element amendmentBody is the container of the main hierarchy of a amendment 
 			         <type>Element</type>
             <name>recitals</name>
             <comment>
-the element recitals is the section of the preface that contains recitals</comment>
+the element recitals is the section of the preamble that contains recitals</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3169,7 +3178,7 @@ the element recital is the individual element of the preface that is called reci
 			         <type>Element</type>
             <name>citations</name>
             <comment>
-the element citations is the section of the preface that contains citations</comment>
+the element citations is the section of the preamble that contains citations</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -3732,6 +3741,19 @@ this element is a hierarchical container called "sublist" either explicitly or d
 		
 
 
+	  <xsd:element name="level" type="hierarchy">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>level</name>
+            <comment>
+this element is a hierarchical container called "level" either explicitly or due to the local tradition</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
 	  <xsd:element name="transitional" type="hierarchy">
       <xsd:annotation>
 			      <xsd:documentation>
@@ -3791,6 +3813,19 @@ the element heading is a heading element in a hierarchy that contains a title or
             <name>subheading</name>
             <comment>
 the element subheading is a heading element in a hierarchy that contains a subtitle or any other textual content to further describe the structure.</comment>
+				     </xsd:documentation>
+		    </xsd:annotation>
+   </xsd:element>
+		
+
+
+	  <xsd:element name="crossHeading" type="inlinereq">
+      <xsd:annotation>
+			      <xsd:documentation>
+			         <type>Element</type>
+            <name>crossHeading</name>
+            <comment>
+the element crossHeading is a heading element that is placed side by side with hierarchical containers .</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5450,14 +5485,15 @@ the element noteRef is a reference to a editorial note placed in the notes metad
 			         <type>Complex</type>
             <name>eolType</name>
             <comment>
-the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue</comment>
+the complex type eolType is shared by eol and eop elements as being able to specify a hyphen character and a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
 		    <xsd:complexContent>
 			      <xsd:extension base="markeropt">
-				        <xsd:attribute name="breakat" type="xsd:integer"/>
 				        <xsd:attributeGroup ref="number"/>
+				        <xsd:attribute name="breakAt" type="xsd:integer"/>
+				        <xsd:attribute name="breakWith" type="xsd:string"/>
 			      </xsd:extension>
 		    </xsd:complexContent>
 	  </xsd:complexType>
@@ -5468,7 +5504,8 @@ the complex type eolType is shared by eol and eop elements as being able to spec
 			         <type>Element</type>
             <name>eol</name>
             <comment>
-the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat</comment>
+the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakAt. One can also specify, if relevant, the hyphen or other character used to signal
+the break of a word at the end of the line with the attribute breakWith.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -5481,7 +5518,7 @@ the element eol (end of line) is a marker for where in the original text the lin
 			         <type>Element</type>
             <name>eop</name>
             <comment>
-the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat</comment>
+the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakAt. One can also specify, if relevant, the hyphen or other character used to signal the break of a word at the end of the page with the attribute breakWith.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6741,6 +6778,7 @@ The element step is a metadata element specifying facts about a workflow step oc
 				        <xsd:element ref="judicial" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="parliamentary" minOccurs="0" maxOccurs="1"/>
 				        <xsd:element ref="mappings" minOccurs="0" maxOccurs="1"/>
+				        <xsd:element ref="otherReferences" minOccurs="0" maxOccurs="unbounded"/>
 				        <xsd:element ref="otherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 			      </xsd:sequence>
 				     <xsd:attributeGroup ref="source"/>
@@ -7359,6 +7397,35 @@ The element count is a metadata container containing the value of a count in a v
 					          <xsd:attributeGroup ref="mappingAtts"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	  <xsd:element name="otherReferences">
+      <xsd:annotation>
+		       <xsd:documentation>
+		 The element otherRef contains a legal reference to a document that is not explicitly mentioned in the content of the document. 
+		</xsd:documentation>
+	     </xsd:annotation>
+		    <xsd:complexType>
+			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="otherRef"/>
+			      </xsd:sequence>
+				     <xsd:attributeGroup ref="source"/>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	
+
+	  <xsd:element name="otherRef">
+		    <xsd:complexType>
+			      <xsd:sequence>
+				        <xsd:element ref="source" minOccurs="1" maxOccurs="unbounded"/>
+			      </xsd:sequence>
+				     <xsd:attributeGroup ref="core"/>
+				     <xsd:attributeGroup ref="idreq"/>
+				     <xsd:attributeGroup ref="enactment"/>
+				     <xsd:attributeGroup ref="refers"/>
+				     <xsd:attributeGroup ref="link"/>
 		    </xsd:complexType>
 	  </xsd:element>
 

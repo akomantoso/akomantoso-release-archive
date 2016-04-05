@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 22/07/2015 - Akoma Ntoso 3.0 WD14
+Release 10/09/2015 - Akoma Ntoso 3.0 WD15
 Complete version.
 
 
@@ -34,7 +34,7 @@ Main element groups
 =====================================================================  -->
 
 
-<!ENTITY % ANhier          "clause | section | part | paragraph | chapter | title | article | book | tome | division | list | point | indent | alinea | rule | subrule | proviso | subsection | subpart | subparagraph | subchapter | subtitle | subdivision | subclause | sublist | transitional" >
+<!ENTITY % ANhier          "clause | section | part | paragraph | chapter | title | article | book | tome | division | list | point | indent | alinea | rule | subrule | proviso | subsection | subpart | subparagraph | subchapter | subtitle | subdivision | subclause | sublist | level | transitional" >
 
 
 
@@ -310,8 +310,8 @@ Attribute groups: attribute "type"
 <!ENTITY % scopeModType              " type %ScopeMods; #REQUIRED" >
 
 
-<!ENTITY % ForceMods           "(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|uncostitutionality)" >
-<!ENTITY % EForceMods "((entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|uncostitutionality))" >
+<!ENTITY % ForceMods           "(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|unconstitutionality)" >
+<!ENTITY % EForceMods "((entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|prorogationOfForce|reEnactment|unconstitutionality))" >
 <!ENTITY % forceModType              " type %ForceMods; #REQUIRED" >
 
 
@@ -435,7 +435,7 @@ Complex types (markup structures)
 <!ENTITY % basehierarchy     "(num?,heading?,subheading?)" >
 
 
-<!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(componentRef | %hierElements;)*,wrapUp?) | content))" >
+<!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(componentRef | %hierElements; | crossHeading)*,wrapUp?) | content))" >
 
 
 <!ENTITY % althierarchy      "(%basehierarchy;,(%containerElements; | componentRef | %ANcontainers; | %blockElements;)*)" >
@@ -511,7 +511,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -592,7 +592,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ATTLIST portion xxxUnicityConstraintDirtyTrick %STRING; #IMPLIED >
 
 
-<!ENTITY % portionBodyType  "(%containerElements; | %hierElements; | %ANcontainers; | recital | citation)" >
+<!ENTITY % portionBodyType  "(%containerElements; | %hierElements; | %ANcontainers; | recitals | recital | citations | citation | longTitle | formula | coverPage | preface | preamble)" >
 
 <!ELEMENT portionBody       %portionBodyType; >
 <!ATTLIST portionBody %coreopt;  >
@@ -842,6 +842,9 @@ Elements for hierarchical documents
 <!ELEMENT sublist       %hierarchy; >
 <!ATTLIST sublist %corereq;  >
 
+<!ELEMENT level         %hierarchy; >
+<!ATTLIST level %corereq;  >
+
 
 
 <!ELEMENT transitional    %hierarchy; >
@@ -863,6 +866,9 @@ Elements for hierarchical documents
 
 <!ELEMENT subheading    %inlinereq; >
 <!ATTLIST subheading %corereq;  >
+
+<!ELEMENT crossHeading    %inlinereq; >
+<!ATTLIST crossHeading %corereq;  >
 
 <!ELEMENT intro    %blocksreq; >
 <!ATTLIST intro %corereq;  >
@@ -1360,10 +1366,10 @@ there is text.
 <!ENTITY % eolType  "%markeropt;" >
 
 <!ELEMENT eol   %eolType; >
-<!ATTLIST eol breakat %INTEGER; #IMPLIED %number;  %coreopt;  >
+<!ATTLIST eol %number;  breakAt %INTEGER; #IMPLIED breakWith %STRING; #IMPLIED %coreopt;  >
 
 <!ELEMENT eop   %eolType; >
-<!ATTLIST eop breakat %INTEGER; #IMPLIED %number;  %coreopt;  >
+<!ATTLIST eop %number;  breakAt %INTEGER; #IMPLIED breakWith %STRING; #IMPLIED %coreopt;  >
 
 
 <!--  =====================================================================
@@ -1731,7 +1737,7 @@ Metadata elements for all documents
 
 
 
-<!ELEMENT analysis              (activeModifications?,passiveModifications?,restrictions?,judicial?,parliamentary?,mappings?,otherAnalysis*)>
+<!ELEMENT analysis              (activeModifications?,passiveModifications?,restrictions?,judicial?,parliamentary?,mappings?,otherReferences*,otherAnalysis*)>
 
 <!ATTLIST analysis %source;  >
 
@@ -1879,6 +1885,15 @@ Metadata elements for all documents
 
 <!ATTLIST mapping %mappingAtts;  >
 
+
+<!ELEMENT otherReferences (otherRef)+>
+
+<!ATTLIST otherReferences %source;  >
+
+<!--  The element otherRef contains a legal reference to a document that is not explicitly mentioned in the content of the document.  -->
+<!ELEMENT otherRef   (source+)>
+
+<!ATTLIST otherRef %core;  %idreq;  %enactment;  %refers;  %link;  >
 
 
 

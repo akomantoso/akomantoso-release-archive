@@ -1,7 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     Release 22/07/2015 - Akoma Ntoso 3.0 WD14 
+     Release 10/09/2015 - Akoma Ntoso 3.0 WD15 
 				Complete version. 
 			
 
@@ -21,7 +21,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD14'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -31,7 +31,7 @@
      ===================================================================== -->
 
 <!--- The group ANhier lists the elements that belong to the Akoma Ntoso legislative hierarchy -->
-<!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title|article|book|tome|division|list |point|indent|alinea|rule|subrule|proviso|subsection|subpart|subparagraph|subchapter|subtitle|subdivision|subclause|sublist|transitional)" >
+<!ENTITY @@ ANhier          "(clause|section|part|paragraph|chapter|title|article|book|tome|division|list |point|indent|alinea|rule|subrule|proviso|subsection|subpart|subparagraph|subchapter|subtitle|subdivision|subclause|sublist|level|transitional)" >
 
 	
 <!--- The group ANcontainers lists the elements that are containers and are specific to the Akoma Ntoso debate vocabulary -->
@@ -317,7 +317,7 @@ with respect to the element being identified with the relative eId. -->
 
 <!--- The simple type ForceMods lists all the types of modifications in force as values for the type attribute of the forceMod element. -->
 <!ENTITY # ForceMods           "#STRING(entryIntoForce|endOfEnactment|postponementOfEntryIntoForce|
-prorogationOfForce|reEnactment|uncostitutionality)" >
+prorogationOfForce|reEnactment|unconstitutionality)" >
 <!ENTITY ## forceModType              "type #ForceMods; #REQUIRED" >
 
 <!--- The simple type EfficacyMods lists all the types of modifications in efficacy as values for the type attribute of the efficacyMod element. -->
@@ -470,7 +470,7 @@ reiteration|remaking|republication|coordination)" >
 <!ENTITY @ basehierarchy     "(num?, heading?, subheading?)" >
 
 <!--- The complex type hierarchy is used by most or all the hierarchical elements of act-like documents. -->
-<!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (componentRef |  @@hierElements;)*, wrapUp?) | content)"            "##corereq;">
+<!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (componentRef |  @@hierElements; | crossHeading)*, wrapUp?) | content)"            "##corereq;">
 
 <!--- The complex type althierarchy is used by most or all the hierarchical elements of documents that are not act-like. -->
 <!ENTITY @ althierarchy      "@basehierarchy;, (@@containerElements;  | componentRef |  @@ANcontainers; | @@blockElements;)*" "##corereq;">
@@ -643,7 +643,7 @@ reiteration|remaking|republication|coordination)" >
 <!ATTLIST portion           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 <!--- the type portionBodyType specifies a content model of a container of a portion of another document -->
-<!ENTITY @ portionBodyType  "(@@containerElements; | @@hierElements;  | @@ANcontainers; | recital | citation)" "##coreopt;" >
+<!ENTITY @ portionBodyType  "(@@containerElements; | @@hierElements;  | @@ANcontainers; | recitals | recital | citations | citation | longTitle | formula | coverPage | preface | preamble )" "##coreopt;" >
 <!--- the element portionBody is the container of a portion of another document -->
 <!ELEMENT portionBody       @portionBodyType; >
 
@@ -750,14 +750,14 @@ reiteration|remaking|republication|coordination)" >
 	
 <!ENTITY @ recitalHierarchy         "@basehierarchy;, (intro?, (componentRef |  recital)+, wrapUp?)"            "##corereq;">
 
-<!--- the element recitals is the section of the preface that contains recitals -->
+<!--- the element recitals is the section of the preamble that contains recitals -->
 <!ELEMENT recitals    @recitalHierarchy; >
 <!--- the element recital is the individual element of the preface that is called recital -->
 <!ELEMENT recital    @itemType; >
 
 <!ENTITY @ citationHierarchy         "@basehierarchy;, (intro?, (componentRef |  citation)+, wrapUp?)"            "##corereq;">
 
-<!--- the element citations is the section of the preface that contains citations -->
+<!--- the element citations is the section of the preamble that contains citations -->
 <!ELEMENT citations    @citationHierarchy; >
 
 <!--- the element citation is the individual element of the preface that is called citation -->
@@ -863,6 +863,8 @@ reiteration|remaking|republication|coordination)" >
 <!ELEMENT subclause     @hierarchy; >
 <!--- this element is a hierarchical container called "sublist" either explicitly or due to the local tradition -->
 <!ELEMENT sublist       @hierarchy; >
+<!--- this element is a hierarchical container called "level" either explicitly or due to the local tradition -->
+<!ELEMENT level         @hierarchy; >
 
 
 <!--- this element is a hierarchical container called "transitional" either explicitly or due to the local tradition -->
@@ -880,6 +882,8 @@ reiteration|remaking|republication|coordination)" >
 <!ELEMENT heading       @inlinereq; >
 <!--- the element subheading is a heading element in a hierarchy that contains a subtitle or any other textual content to further describe the structure. -->
 <!ELEMENT subheading    @inlinereq; >
+<!--- the element crossHeading is a heading element that is placed side by side with hierarchical containers . -->
+<!ELEMENT crossHeading    @inlinereq; >
 <!--- the element intro is a heading element in a hierarchy that contains paragraphs introducing one or more lower hierarchical elements. -->
 <!ELEMENT intro    @blocksreq; >
 <!--- the element wrapUp is a concluding element in a hierarchy that contains paragraphs wrapping up the preceding lower hierarchical elements. -->
@@ -1235,11 +1239,12 @@ reiteration|remaking|republication|coordination)" >
 <!ATTLIST noteRef      ##notes; ##link;>
 
 
-<!--- the complex type eolType is shared by eol and eop elements as being able to specify a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue -->
-<!ENTITY @ eolType  "@markeropt;" "breakat  #INTEGER #IMPLIED ##number; ">
-<!--- the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
+<!--- the complex type eolType is shared by eol and eop elements as being able to specify a hyphen character and a position within the next word in which the break can happen, and the number if any, associated to the page or line at issue -->
+<!ENTITY @ eolType  "@markeropt;" "##number; breakAt #INTEGER #IMPLIED breakWith #STRING #IMPLIED">
+<!--- the element eol (end of line) is a marker for where in the original text the line breaks. If the line breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakAt. One can also specify, if relevant, the hyphen or other character used to signal
+the break of a word at the end of the line with the attribute breakWith. -->
 <!ELEMENT eol   @eolType; >
-<!--- the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakat -->
+<!--- the element eop (end of page) is a marker for where in the original text the page breaks. Do NOT use a eol element, too. If the page breaks within a word, place the element BEFORE the word and place the number of characters before the break in the attribute breakAt. One can also specify, if relevant, the hyphen or other character used to signal the break of a word at the end of the page with the attribute breakWith. -->
 <!ELEMENT eop   @eolType; >
 
 	
@@ -1567,7 +1572,8 @@ reiteration|remaking|republication|coordination)" >
 
 <!--- The element analysis is a metadata container of all the analytical considerations on the document. Currently we deal with the analysis of modifcation events, of judgments and of votes in parliamentary documents -->
 <!ELEMENT analysis              (activeModifications?, passiveModifications?, 
-restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
+restrictions?, judicial?,  parliamentary?,  
+	mappings?, otherReferences*, otherAnalysis*) >
 <!ATTLIST analysis              ##source; >
 
 
@@ -1682,6 +1688,13 @@ restrictions?, judicial?,  parliamentary?,  mappings?, otherAnalysis*) >
 <!ELEMENT mapping  @metareq; >
 <!ATTLIST mapping  ##mappingAtts; >
 
+<!--- The element otherReferences is a metadata container of legal references to other documents that do not have a precise position in the document. This in particular is meant for implicit references that are expressed as metadata. -->
+<!ELEMENT otherReferences (otherRef)+ >
+<!ATTLIST otherReferences 	##source; >
+
+<!-- The element otherRef contains a legal reference to a document that is not explicitly mentioned in the content of the document. --> 
+<!ELEMENT otherRef   (source+) >
+<!ATTLIST otherRef 	##core; ##idreq; ##enactment; ##refers; ##link; >
 
 
 <!--- The element otherAnalysis is a metadata container of any additional metadata analysis element that does not belong to the specific categories provided before. Anything can be placed in this element.. -->
