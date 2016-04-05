@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
             elementFormDefault="qualified">
 
 
-	  <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="./xml.xsd"/>
+	  <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
+               schemaLocation="./xml.xsd"/>
 
 	  <xsd:annotation>
 		    <xsd:documentation>
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16
+		Release 01/04/2016 - Akoma Ntoso 3.0 WD17 with errata
 		Complete version.
 		
 		
@@ -1738,6 +1739,7 @@ These attribute specify the human language in which the content of the element i
 
 		    <xsd:attribute ref="xml:lang"/>
 		    <xsd:attribute ref="xml:space"/>
+		    <xsd:attribute ref="xml:id"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="corereq">
@@ -2075,11 +2077,11 @@ The complex type basehierarchy is not used by any element, but is derived by oth
 				     </xsd:documentation>
 		    </xsd:annotation>
 
-		    <xsd:sequence>
+		    <xsd:choice minOccurs="0" maxOccurs="unbounded">
 			      <xsd:element ref="num" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="heading" minOccurs="0" maxOccurs="1"/>
 			      <xsd:element ref="subheading" minOccurs="0" maxOccurs="1"/>
-		    </xsd:sequence>
+		    </xsd:choice>
 	  </xsd:complexType>
 
 	  <xsd:complexType name="hierarchy">
@@ -2342,6 +2344,7 @@ the complex type referenceType defines the empty content model and the list of a
 		    </xsd:annotation>
 
 		    <xsd:attributeGroup ref="core"/>
+		    <xsd:attributeGroup ref="refers"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="link"/>
 		    <xsd:attributeGroup ref="show"/>
@@ -2390,7 +2393,10 @@ the complex type anyOtherType defines an open content model for elements that ma
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+			      <xsd:any namespace="##other"
+                  processContents="lax"
+                  minOccurs="0"
+                  maxOccurs="unbounded"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idopt"/>
@@ -5222,7 +5228,7 @@ the element mref is an inline element containing multiple references (each in tu
 			         <type>Element</type>
             <name>rref</name>
             <comment>
-the element rref is an inline element containing a range of references between the IRI specified in the href attribute and the one specified in the upTo attribute.</comment>
+the element rref is an inline element containing a range of references between the IRI specified in the from attribute and the one specified in the upTo attribute.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -6560,7 +6566,7 @@ The element FRBRportion is the metadata property containing the eId of the porti
 			         <type>Element</type>
             <name>FRBRformat</name>
             <comment>
-The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document</comment>
+The element FRBRformat is the metadata property containing the Internet Media Type specification for the data format to be used in the manifestation-level IRI of this document.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6612,7 +6618,7 @@ The element FRBRauthoritative is the metadata property containing a boolean valu
 			         <type>Element</type>
             <name>FRBRmasterExpression</name>
             <comment>
-The element FRBRmasterExpression is the metadata property identifying the master expression, i.e., the expression whose ids are used as permanent ids in the wId attributes. An expression without the FRBRmasterExpression element is considered a master expression itself, i.e., the first version, or the most important version, of a document expressed in the only language, or in the most important language. Any other situation (subsequent versions, or language variants, or content variants) must have the FRBRmasterExpression element pointing to the URI of the master expression. If the FRBRmasterEpression is specified, but without a href pointing to the masterExpression, it is assumed that NO master expression exist in reality, but an UR-Expression exist, whose ids are used in this expression as wIds. In this case, the refersTo attribute must be used to point to an TLCConcept specifying facts about the UR-Expression.</comment>
+The element FRBRmasterExpression is the metadata property identifying the master expression, i.e., the expression whose ids are used as permanent ids in the wId attributes. An expression without the FRBRmasterExpression element is considered a master expression itself, i.e., the first version, or the most important version, of a document expressed in the only language, or in the most important language. Any other situation (subsequent versions, or language variants, or content variants) must have the FRBRmasterExpression element pointing to the URI of the master expression. If the FRBRmasterEpression is specified, but without a href pointing to the masterExpression, it is assumed that NO master expression exist in reality, but an UR-Expression exist, whose ids are used in this expression as wIds.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -7339,7 +7345,10 @@ The complex type countType lists all the properties associated to elements of pa
 		    </xsd:annotation>
 
 		    <xsd:choice>
-			      <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+			      <xsd:any namespace="##other"
+                  processContents="lax"
+                  minOccurs="0"
+                  maxOccurs="unbounded"/>
 		    </xsd:choice>
 		    <xsd:attributeGroup ref="core"/>
 		    <xsd:attributeGroup ref="idreq"/>
@@ -7544,7 +7553,7 @@ The element efficacy is a metadata element specifying the period of the efficacy
 			         <type>Element</type>
             <name>application</name>
             <comment>
-The element efficacy is a metadata element specifying the period of the efficacy modification.</comment>
+The element application is a metadata element specifying the period of the application modification.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>

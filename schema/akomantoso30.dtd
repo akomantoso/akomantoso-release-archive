@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16
+Release 01/04/2016 - Akoma Ntoso 3.0 WD17 with errata
 Complete version.
 
 
@@ -373,7 +373,7 @@ Attribute groups: attribute "type"
 
 <!ENTITY % refers       " refersTo CDATA #IMPLIED" >
 
-<!ENTITY % xmllang   " xml:lang %language; #IMPLIED xml:space (default|preserve) #IMPLIED" >
+<!ENTITY % xmllang   " xml:lang %language; #IMPLIED xml:space (default|preserve) #IMPLIED xml:id ID #IMPLIED" >
 
 
 <!ENTITY % corereq      " %core;  %HTMLattrs;  %enactment;  %idreq;  %refers;  %xmllang;  %alt; " >
@@ -432,7 +432,7 @@ Complex types (markup structures)
 =====================================================================  -->
 
 
-<!ENTITY % basehierarchy     "(num?,heading?,subheading?)" >
+<!ENTITY % basehierarchy     "(num? | heading? | subheading?)*" >
 
 
 <!ENTITY % hierarchy         "(%basehierarchy;,((intro?,(componentRef | %hierElements; | crossHeading)*,wrapUp?) | content))" >
@@ -511,7 +511,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -1977,57 +1977,57 @@ Metadata elements for all documents
 
 
 <!ELEMENT original         %referenceType; >
-<!ATTLIST original %core;  %idreq;  %link;  %show;  >
+<!ATTLIST original %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT passiveRef       %referenceType; >
-<!ATTLIST passiveRef %core;  %idreq;  %link;  %show;  >
+<!ATTLIST passiveRef %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT activeRef        %referenceType; >
-<!ATTLIST activeRef %core;  %idreq;  %link;  %show;  >
+<!ATTLIST activeRef %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT jurisprudence    %referenceType; >
-<!ATTLIST jurisprudence %core;  %idreq;  %link;  %show;  >
+<!ATTLIST jurisprudence %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT hasAttachment    %referenceType; >
-<!ATTLIST hasAttachment %core;  %idreq;  %link;  %show;  >
+<!ATTLIST hasAttachment %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ATTLIST hasAttachment %type;  >
 
 <!ELEMENT attachmentOf     %referenceType; >
-<!ATTLIST attachmentOf %core;  %idreq;  %link;  %show;  >
+<!ATTLIST attachmentOf %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ATTLIST attachmentOf %type;  >
 
 
 <!ELEMENT TLCPerson        %referenceType; >
-<!ATTLIST TLCPerson %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCPerson %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCOrganization  %referenceType; >
-<!ATTLIST TLCOrganization %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCOrganization %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCConcept       %referenceType; >
-<!ATTLIST TLCConcept %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCConcept %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCObject        %referenceType; >
-<!ATTLIST TLCObject %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCObject %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCEvent         %referenceType; >
-<!ATTLIST TLCEvent %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCEvent %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCLocation         %referenceType; >
-<!ATTLIST TLCLocation %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCLocation %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCProcess       %referenceType; >
-<!ATTLIST TLCProcess %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCProcess %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCRole          %referenceType; >
-<!ATTLIST TLCRole %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCRole %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCTerm          %referenceType; >
-<!ATTLIST TLCTerm %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCTerm %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCReference     %referenceType; >
-<!ATTLIST TLCReference %core;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCReference %core;  %refers;  %idreq;  %link;  %show;  >
 
 <!ATTLIST TLCReference %name;  >
 

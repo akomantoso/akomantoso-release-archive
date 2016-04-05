@@ -14,7 +14,7 @@
 &lt;!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     <report version="Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16"/>
+     <report version="Release 01/04/2016 - Akoma Ntoso 3.0 WD17 with errata"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -32,7 +32,7 @@
 		 
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -410,6 +410,7 @@ reiteration|remaking|republication|coordination)" >
 &lt;!ENTITY ## xmllang   "
                    xml:lang           #language;         #IMPLIED
                    xml:space          (default|preserve) #IMPLIED
+                   xml:id             #ID                #IMPLIED
                    " >
 
 &lt;!--- This is the list of the core attributes that all elements in the content part of the document must have. In elements using this attribute definition the refersTo attribute is optional but the eId attribute is required -->
@@ -479,7 +480,7 @@ reiteration|remaking|republication|coordination)" >
      ===================================================================== -->
 
 &lt;!--- The complex type basehierarchy is not used by any element, but is derived by other types to contain the basic structure of hierarchical elements   -->
-&lt;!ENTITY @ basehierarchy     "(num?, heading?, subheading?)" >
+&lt;!ENTITY @ basehierarchy     "(num? | heading? | subheading?)*" >
 <include if="legislativeDocs">
 &lt;!--- The complex type hierarchy is used by most or all the hierarchical elements of act-like documents. -->
 &lt;!ENTITY @ hierarchy         "@basehierarchy;, ((intro?, (<include if="components" v="componentRef | "/> @@hierElements; | crossHeading)*, wrapUp?) | content)"            "##corereq;">
@@ -517,7 +518,7 @@ reiteration|remaking|republication|coordination)" >
 &lt;!--- The complex type itemType is similar to a hierarchical element, but is isolated and does not belong to a full hierarchy. -->
 &lt;!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 &lt;!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the references section -->
-&lt;!ENTITY @ referenceType     ""                            "##core; ##idreq; ##link; ##show;" >
+&lt;!ENTITY @ referenceType     ""                            "##core; ##refers; ##idreq; ##link; ##show;" >
 &lt;!--- the complex type srcType defines the empty content model and the list of attributes for manifestation-level references to external resources -->
 &lt;!ENTITY @ srcType     ""                            "##core; ##idopt; ##src; ##show;" >
 &lt;!--- the complex type linkType defines the empty content model and the list of attributes for Work- or Expression-level references to external resources -->
@@ -1187,7 +1188,7 @@ reiteration|remaking|republication|coordination)" >
 <include if="advancedRefs" dependsOn="core" label="Advanced references" desc="Elements for sophisticated legal references $mref (multiple references) and $rref (range of references)" >
 &lt;!--- the element mref is an inline element containing multiple references (each in turn represented by a ref element) -->
 &lt;!ELEMENT mref         @inline; >
-&lt;!--- the element rref is an inline element containing a range of references between the IRI specified in the href attribute and the one specified in the upTo attribute. -->
+&lt;!--- the element rref is an inline element containing a range of references between the IRI specified in the from attribute and the one specified in the upTo attribute. -->
 &lt;!ELEMENT rref         @inlinereq; >
 &lt;!ATTLIST rref         ##range; >
 </include>
@@ -1513,7 +1514,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ELEMENT FRBRportion             @metaopt;>
 &lt;!ATTLIST FRBRportion             ##refers; ##showopt; ##rangeOpt; >
 
-&lt;!--- The element FRBRformat is the metadata property containing a string for the data format to be used in the manifestation-level IRI of this document -->
+&lt;!--- The element FRBRformat is the metadata property containing the Internet Media Type specification for the data format to be used in the manifestation-level IRI of this document.  -->
 &lt;!ELEMENT FRBRformat             @valueType;>
 &lt;!--- The element FRBRprescriptive is the metadata property containing a boolean value to determine whether the document contains prescriptive text (i.e., text that is or might become prescriptive, such as an act or a bill) or not (such as, for instance, a non-normative resolution from an assembly. -->
 &lt;!ELEMENT FRBRprescriptive       @booleanValueType;>
@@ -1521,7 +1522,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ELEMENT FRBRversionNumber      @valueType;>
 &lt;!--- The element FRBRauthoritative is the metadata property containing a boolean value to determine whether the document contains authoritative text (i.e., content that is the official, authoritative product of an official workflow from an entity that is entrusted with generating an official, authoriative version of the document. -->
 &lt;!ELEMENT FRBRauthoritative      @booleanValueType;>
-&lt;!--- The element FRBRmasterExpression is the metadata property identifying the master expression, i.e., the expression whose ids are used as permanent ids in the wId attributes. An expression without the FRBRmasterExpression element is considered a master expression itself, i.e., the first version, or the most important version, of a document expressed in the only language, or in the most important language. Any other situation (subsequent versions, or language variants, or content variants) must have the FRBRmasterExpression element pointing to the URI of the master expression. If the FRBRmasterEpression is specified, but without a href pointing to the masterExpression, it is assumed that NO master expression exist in reality, but an UR-Expression exist, whose ids are used in this expression as wIds. In this case, the refersTo attribute must be used to point to an TLCConcept specifying facts about the UR-Expression.  -->
+&lt;!--- The element FRBRmasterExpression is the metadata property identifying the master expression, i.e., the expression whose ids are used as permanent ids in the wId attributes. An expression without the FRBRmasterExpression element is considered a master expression itself, i.e., the first version, or the most important version, of a document expressed in the only language, or in the most important language. Any other situation (subsequent versions, or language variants, or content variants) must have the FRBRmasterExpression element pointing to the URI of the master expression. If the FRBRmasterEpression is specified, but without a href pointing to the masterExpression, it is assumed that NO master expression exist in reality, but an UR-Expression exist, whose ids are used in this expression as wIds.  -->
 &lt;!ELEMENT FRBRmasterExpression  @linkType;>
 
 <include if="advancedMetadata" dependsOn="core" label="Advanced metadata" desc="Advanced metadata specifications for specific needs: $componentInfo and $preservation">
@@ -1726,7 +1727,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ELEMENT force            @periodType; >
 &lt;!--- The element efficacy is a metadata element specifying the period of the efficacy modification. -->
 &lt;!ELEMENT efficacy         @periodType; >
-&lt;!--- The element efficacy is a metadata element specifying the period of the efficacy modification. -->
+&lt;!--- The element application is a metadata element specifying the period of the application modification. -->
 &lt;!ELEMENT application      @periodType; >
 &lt;!--- The element duration is a metadata element specifying the period of the duration modification. -->
 &lt;!ELEMENT duration         @periodType; >
