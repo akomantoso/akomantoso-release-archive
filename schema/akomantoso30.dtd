@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 10/09/2015 - Akoma Ntoso 3.0 WD15
+Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16
 Complete version.
 
 
@@ -351,7 +351,7 @@ Attribute groups: attribute "type"
 
 
 
-<!ENTITY % quote " startQuote %STRING; #IMPLIED endQuote %STRING; #IMPLIED" >
+<!ENTITY % quote " startQuote %STRING; #IMPLIED endQuote %STRING; #IMPLIED inlineQuote %STRING; #IMPLIED" >
 
 
 
@@ -511,7 +511,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -576,6 +576,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 <!ENTITY % collectionBodyType  "(component+)" >
 
 <!ELEMENT collectionBody       %collectionBodyType; >
+<!ATTLIST collectionBody %coreopt;  >
 
 
 
@@ -2033,7 +2034,7 @@ Metadata elements for all documents
 
 <!ELEMENT notes        (note)+>
 
-<!ATTLIST notes %source;  >
+<!ATTLIST notes %source;  %xmllang;  >
 
 <!ELEMENT note         %subFlowStructure; >
 <!ATTLIST note %corereq;  >

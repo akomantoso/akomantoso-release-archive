@@ -1,7 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     Release 10/09/2015 - Akoma Ntoso 3.0 WD15 
+     Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16 
 				Complete version. 
 			
 
@@ -21,7 +21,7 @@
 		 
      ===================================================================== -->
 
-<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15'>
+<!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16'>
 <!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 <!-- =====================================================================
@@ -367,6 +367,7 @@ reiteration|remaking|republication|coordination)" >
 <!ENTITY ## quote "
 	startQuote #STRING #IMPLIED 
 	endQuote #STRING #IMPLIED
+	inlineQuote #STRING #IMPLIED
 ">
 	
 
@@ -626,7 +627,7 @@ reiteration|remaking|republication|coordination)" >
 <!ATTLIST documentCollection           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 <!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
-<!ENTITY @ collectionBodyType  (component+)>
+<!ENTITY @ collectionBodyType  "(component+)" "##coreopt;">
 <!--- the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 <!ELEMENT collectionBody       @collectionBodyType; >
 
@@ -1525,7 +1526,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 
 
 
-<!--- The element publication is the metadata container specifying a publication event for the FRBR expression of the document. -->
+<!--- The element publication is the metadata container specifying an official publication event for the FRBR expression of the document. -->
 <!ELEMENT publication      @metaopt; >
 <!ATTLIST publication      ##date; ##show; ##name; ##number; ##refers; >
 
@@ -1799,7 +1800,7 @@ restrictions?, judicial?,  parliamentary?,
 
 <!--- The element notes is a metadata container of all the note elements used as footnotes and endnotes in the document. -->
 <!ELEMENT notes        (note)+>
-<!ATTLIST notes        ##source; >
+<!ATTLIST notes        ##source; ##xmllang; >
 <!--- The element note is a metadata element containing the text of the footnote and endnote specified. -->
 <!ELEMENT note         @subFlowStructure;>
 

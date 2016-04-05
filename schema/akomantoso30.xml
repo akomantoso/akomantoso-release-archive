@@ -14,7 +14,7 @@
 &lt;!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     <report version="Release 10/09/2015 - Akoma Ntoso 3.0 WD15"/>
+     <report version="Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16"/>
 
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
@@ -32,7 +32,7 @@
 		 
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -378,6 +378,7 @@ reiteration|remaking|republication|coordination)" >
 &lt;!ENTITY ## quote "
 	startQuote #STRING #IMPLIED 
 	endQuote #STRING #IMPLIED
+	inlineQuote #STRING #IMPLIED
 ">
 	
 <include if="table">
@@ -637,7 +638,7 @@ reiteration|remaking|republication|coordination)" >
 &lt;!ATTLIST documentCollection           xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 
 &lt;!--- the type collectionBodyType specifies a content model of a container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
-&lt;!ENTITY @ collectionBodyType  (component+)>
+&lt;!ENTITY @ collectionBodyType  "(component+)" "##coreopt;">
 &lt;!--- the element collectionBody is the container of a list of other documents (e.g, acts, bills, amendments, etc.) possibly  interspersed with interstitial elements with content that does not form an individual document -->
 &lt;!ELEMENT collectionBody       @collectionBodyType; >
 </include>
@@ -1536,7 +1537,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 
 <include desc="Basic metadata elements for libraries: $publication and $classification"/>
 
-&lt;!--- The element publication is the metadata container specifying a publication event for the FRBR expression of the document. -->
+&lt;!--- The element publication is the metadata container specifying an official publication event for the FRBR expression of the document. -->
 &lt;!ELEMENT publication      @metaopt; >
 &lt;!ATTLIST publication      ##date; ##show; ##name; ##number; ##refers; >
 
@@ -1810,7 +1811,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 
 &lt;!--- The element notes is a metadata container of all the note elements used as footnotes and endnotes in the document. -->
 &lt;!ELEMENT notes        (note)+>
-&lt;!ATTLIST notes        ##source; >
+&lt;!ATTLIST notes        ##source; ##xmllang; >
 &lt;!--- The element note is a metadata element containing the text of the footnote and endnote specified. -->
 &lt;!ELEMENT note         @subFlowStructure;>
 

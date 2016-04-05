@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15"
+<xsd:schema xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD15"
+            targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD16"
             elementFormDefault="qualified">
 
 
@@ -12,7 +12,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 10/09/2015 - Akoma Ntoso 3.0 WD15
+		Release 17/09/2015 with errata - Akoma Ntoso 3.0 WD16
 		Complete version.
 		
 		
@@ -1609,6 +1609,7 @@ The attributes startQuote and endQuote are used in quotedText, quotedStructure, 
 
 		    <xsd:attribute name="startQuote" type="xsd:string"/>
 		    <xsd:attribute name="endQuote" type="xsd:string"/>
+		    <xsd:attribute name="inlineQuote" type="xsd:string"/>
 	  </xsd:attributeGroup>
 
 	  <xsd:attributeGroup name="cellattrs">
@@ -2695,6 +2696,7 @@ the type collectionBodyType specifies a content model of a container of a list o
 		    <xsd:sequence>
 			      <xsd:element ref="component" minOccurs="1" maxOccurs="unbounded"/>
 		    </xsd:sequence>
+		    <xsd:attributeGroup ref="coreopt"/>
 	  </xsd:complexType>
 
 	  <xsd:element name="collectionBody" type="collectionBodyType">
@@ -6657,7 +6659,7 @@ The element preservation is the metadata property containing an arbitrary list o
 			         <type>Element</type>
             <name>publication</name>
             <comment>
-The element publication is the metadata container specifying a publication event for the FRBR expression of the document.</comment>
+The element publication is the metadata container specifying an official publication event for the FRBR expression of the document.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -7986,6 +7988,7 @@ The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI 
 				        <xsd:element ref="note"/>
 			      </xsd:sequence>
 				     <xsd:attributeGroup ref="source"/>
+				     <xsd:attributeGroup ref="xmllang"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
