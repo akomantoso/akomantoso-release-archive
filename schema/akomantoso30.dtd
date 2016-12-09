@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 01/04/2016 - Akoma Ntoso 3.0 WD17 with errata
+Release 09/11/2016 - Akoma Ntoso 3.0 WD17 with errata (3rd output)
 Complete version.
 
 
@@ -51,13 +51,13 @@ Main element groups
 
 <!ENTITY % ANblock         "blockList | blockContainer | tblock | toc" >
 
-<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | embeddedText | embeddedStructure | placeholder | fillIn | decoration" >
+<!ENTITY % ANinline        "ref | mref | rref | mod | mmod | rmod | remark | recordedTime | vote | outcome | ins | del | omissis | embeddedText | embeddedStructure | opinion | placeholder | fillIn | decoration" >
 
 <!ENTITY % ANtitleInline   "docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle | docAuthority | docPurpose | docCommittee | docIntroducer | docStage | docStatus | docJurisdiction | docketNumber" >
 
 
 
-<!ENTITY % ANheaderInline  "courtType | neutralCitation | party | judge | lawyer | signature | opinion | argument" >
+<!ENTITY % ANheaderInline  "courtType | neutralCitation | party | judge | lawyer | signature | argument" >
 
 
 
@@ -266,7 +266,7 @@ Attribute groups: attribute "type"
 
 <!ENTITY %  opinionType   "(dissenting|agreeing|null)" >
 <!ENTITY % EopinionType "((dissenting|agreeing|null))" >
-<!ENTITY % opinionType   " type %opinionType; #IMPLIED" >
+<!ENTITY % opinionType   " %agent;  type %opinionType; #IMPLIED" >
 
 
 <!ENTITY %  resultType  "(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)" >
@@ -1712,7 +1712,7 @@ Metadata elements for all documents
 <!ELEMENT keyword %metaopt; >
 <!ATTLIST keyword %core;  %idopt;  >
 
-<!ATTLIST keyword %linkopt;  %value;  %show;  %dictionary;  >
+<!ATTLIST keyword %linkopt;  %value;  %show;  %refers;  %dictionary;  >
 
 
 
@@ -1887,14 +1887,21 @@ Metadata elements for all documents
 <!ATTLIST mapping %mappingAtts;  >
 
 
-<!ELEMENT otherReferences (otherRef)+>
+<!ELEMENT otherReferences (implicitReference | alternativeReference)+>
 
 <!ATTLIST otherReferences %source;  >
 
-<!--  The element otherRef contains a legal reference to a document that is not explicitly mentioned in the content of the document.  -->
-<!ELEMENT otherRef   (source+)>
+<!--  The element implicitReference contains a legal reference to a document that is not explicitly mentioned in the content of the document.  -->
+<!ELEMENT implicitReference  %anyOtherType; >
+<!ATTLIST implicitReference %core;  %idopt;  %linkopt;  >
 
-<!ATTLIST otherRef %core;  %idreq;  %enactment;  %refers;  %link;  >
+<!ATTLIST implicitReference for %eIdRef; #IMPLIED %refers;  %showopt;  >
+
+<!--  The element alternativeReference contains an alternative reference (e.g., using a different namespace) for a legal reference.  -->
+<!ELEMENT alternativeReference   %anyOtherType; >
+<!ATTLIST alternativeReference %core;  %idopt;  %linkopt;  >
+
+<!ATTLIST alternativeReference for %eIdRef; #IMPLIED %refers;  %showopt;  >
 
 
 
@@ -1977,57 +1984,57 @@ Metadata elements for all documents
 
 
 <!ELEMENT original         %referenceType; >
-<!ATTLIST original %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST original %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT passiveRef       %referenceType; >
-<!ATTLIST passiveRef %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST passiveRef %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT activeRef        %referenceType; >
-<!ATTLIST activeRef %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST activeRef %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT jurisprudence    %referenceType; >
-<!ATTLIST jurisprudence %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST jurisprudence %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT hasAttachment    %referenceType; >
-<!ATTLIST hasAttachment %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST hasAttachment %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST hasAttachment %type;  >
 
 <!ELEMENT attachmentOf     %referenceType; >
-<!ATTLIST attachmentOf %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST attachmentOf %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST attachmentOf %type;  >
 
 
 <!ELEMENT TLCPerson        %referenceType; >
-<!ATTLIST TLCPerson %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCPerson %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCOrganization  %referenceType; >
-<!ATTLIST TLCOrganization %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCOrganization %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCConcept       %referenceType; >
-<!ATTLIST TLCConcept %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCConcept %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCObject        %referenceType; >
-<!ATTLIST TLCObject %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCObject %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCEvent         %referenceType; >
-<!ATTLIST TLCEvent %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCEvent %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCLocation         %referenceType; >
-<!ATTLIST TLCLocation %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCLocation %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCProcess       %referenceType; >
-<!ATTLIST TLCProcess %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCProcess %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCRole          %referenceType; >
-<!ATTLIST TLCRole %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCRole %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCTerm          %referenceType; >
-<!ATTLIST TLCTerm %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCTerm %core;  %idreq;  %link;  %show;  >
 
 <!ELEMENT TLCReference     %referenceType; >
-<!ATTLIST TLCReference %core;  %refers;  %idreq;  %link;  %show;  >
+<!ATTLIST TLCReference %core;  %idreq;  %link;  %show;  >
 
 <!ATTLIST TLCReference %name;  >
 
@@ -2038,6 +2045,9 @@ Metadata elements for all documents
 
 <!ELEMENT note         %subFlowStructure; >
 <!ATTLIST note %corereq;  >
+
+<!ATTLIST note %notes;  >
+
 
 
 

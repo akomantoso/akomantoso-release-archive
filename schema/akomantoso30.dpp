@@ -1,7 +1,7 @@
 <!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     Release 01/04/2016 - Akoma Ntoso 3.0 WD17 with errata 
+     Release 09/11/2016 - Akoma Ntoso 3.0 WD17 with errata (3rd output) 
 				Complete version. 
 			
 
@@ -48,13 +48,13 @@
 <!--- The group ANblock lists the elements that are blocks and are specific to the Akoma Ntoso vocabulary -->
 <!ENTITY @@ ANblock         "(blockList | blockContainer | tblock| toc)" >
 <!--- The group ANinline lists the elements that are inline and are specific to the Akoma Ntoso vocabulary -->
-<!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | embeddedText | embeddedStructure | placeholder | fillIn | decoration)" >
-<!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element -->
+<!ENTITY @@ ANinline        "(ref | mref | rref | mod | mmod | rmod| remark | recordedTime | vote | outcome  | ins | del | omissis | embeddedText | embeddedStructure | opinion | placeholder | fillIn | decoration)" >
+<!--- The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the initial elements (preface, preamble and coverpage) -->
 <!ENTITY @@ ANtitleInline   "(docType | docTitle | docNumber | docProponent | docDate | legislature | session | shortTitle|docAuthority|docPurpose|docCommittee|docIntroducer|docStage|docStatus|docJurisdiction|docketNumber)" >
 
 
 <!--- The group ANheaderInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the header element -->
-<!ENTITY @@ ANheaderInline  "(courtType | neutralCitation | party | judge | lawyer | signature | opinion | argument)" >
+<!ENTITY @@ ANheaderInline  "(courtType | neutralCitation | party | judge | lawyer | signature | argument)" >
 
 
 
@@ -271,7 +271,7 @@ with respect to the element being identified with the relative eId. -->
 <!ENTITY ## type   "type  CDATA #IMPLIED">
 
 
-<!--- This is the list of allowed values for the type attribute of the event and action elements  -->
+<!---  This is the list of allowed values for the type attribute of the eventRef element -->
 <!ENTITY #  eventType     "#STRING(generation|amendment|repeal)" >
 <!ENTITY ## eventType     "type   #eventType; #IMPLIED">
 
@@ -279,7 +279,7 @@ with respect to the element being identified with the relative eId. -->
 
 <!--- This is the list of allowed values for the type attribute of the opinion element  -->
 <!ENTITY #  opinionType   "#STRING(dissenting|agreeing|null)">
-<!ENTITY ## opinionType   "type  #opinionType; #IMPLIED">
+<!ENTITY ## opinionType   "##agent; type  #opinionType; #IMPLIED">
 
 <!--- This is the list of allowed values for the type attribute of the result element  -->
 <!ENTITY #  resultType  "#STRING(deny|dismiss|uphold|revert|replaceOrder|remit|decide|approve)">
@@ -363,7 +363,7 @@ reiteration|remaking|republication|coordination)" >
 <!--- The attribute by is used to identify the agent of an action. It is a reference to a TLCPerson or TLCOrganization element in the references section -->
 <!ENTITY ## agent "by #agentRef; #REQUIRED ">
 
-<!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote. -->
+<!--- The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote. Attribute inlineQuote is used for marking the character showing continuation of a quote e.g. at the beginning of each page or at the beginning of each line of the quote -->
 <!ENTITY ## quote "
 	startQuote #STRING #IMPLIED 
 	endQuote #STRING #IMPLIED
@@ -507,7 +507,7 @@ reiteration|remaking|republication|coordination)" >
 <!--- The complex type itemType is similar to a hierarchical element, but is isolated and does not belong to a full hierarchy. -->
 <!ENTITY @ itemType          "@basehierarchy;, (@@blockElements;)+"             "##corereq;">
 <!--- the complex type referenceType defines the empty content model and the list of attributes for metadata elements in the references section -->
-<!ENTITY @ referenceType     ""                            "##core; ##refers; ##idreq; ##link; ##show;" >
+<!ENTITY @ referenceType     ""                            "##core; ##idreq; ##link; ##show;" >
 <!--- the complex type srcType defines the empty content model and the list of attributes for manifestation-level references to external resources -->
 <!ENTITY @ srcType     ""                            "##core; ##idopt; ##src; ##show;" >
 <!--- the complex type linkType defines the empty content model and the list of attributes for Work- or Expression-level references to external resources -->
@@ -1119,7 +1119,7 @@ reiteration|remaking|republication|coordination)" >
 <!--- the element lawyer is an inline element within judgments to identify where the document defines one of the lawyers, his/her role, which party it represents, and the other lawyer, if any, this lawyer received the power delegation of power in some role -->
 <!ELEMENT lawyer             @inlinereqreq; >
 <!ATTLIST lawyer             ##lawyerAtts; >
-<!--- the element opinion is an inline element within judgments to identify where the document defines the opinion of one of the judges -->
+<!--- the element opinion is an inline element to identify where the document defines the opinion of an actor  -->
 <!ELEMENT opinion            @inline; >
 <!ATTLIST opinion            ##opinionType; >
 
@@ -1170,7 +1170,7 @@ reiteration|remaking|republication|coordination)" >
 
 
 
-<!--- the element ref is an inline element containing a legal references (i.e. a reference to a document with legal status and for which an Akoma Ntoso IRI exists)  -->
+<!--- the element ref is an inline element containing a legal reference  -->
 <!ELEMENT ref          @inlinereq; >
 <!ATTLIST ref          ##link; >
 
@@ -1337,7 +1337,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 <!--- the element container is a generic element for a container.  -->
 <!ELEMENT container  @containerType; >
 
-<!--- the element block is a generic element for a container. It can be placed in a container instead of any of the other blocks. The attribute name is required and gives a name to the element. -->
+<!--- the element block is a generic element for a block. It can be placed in a container instead of any of the other blocks. The attribute name is required and gives a name to the element. -->
 <!ELEMENT block      @inline; >
 <!ATTLIST block      ##name; >
 <!--- the element inline is a generic element for an inline. It can be placed inside a block instead of any of the other inlines. The attribute name is required and gives a name to the element. -->
@@ -1448,7 +1448,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 <!ENTITY @@ workProperties   "(FRBRcountry, FRBRsubtype?, FRBRnumber*, FRBRname*, FRBRprescriptive?, FRBRauthoritative?)" >
 <!--- The group exprProperties lists the properties that are characteristics of the FRBR Expression level. -->
 <!ENTITY @@ exprProperties   "(FRBRversionNumber?, FRBRauthoritative?, FRBRmasterExpression?, FRBRlanguage+, FRBRtranslation*)" >
-<!--- The group manifProperties lists the properties that are characteristics of the FRBR Expression level. -->
+<!--- The group manifProperties lists the properties that are characteristics of the FRBR Manifestation level. -->
 <!ENTITY @@ manifProperties   "(FRBRportion?, FRBRformat?)" >
 
 <!--- The element FRBRWork is the metadata container of identifying properties related to the Work level according to the FRBR hierarchy -->
@@ -1464,7 +1464,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 <!ENTITY @ valueType   "@metaopt;" "##value; ##refers; ##showopt;" >
 <!--- The type booleanValueType specifies a boolean value attribute to FRBR elements. -->
 <!ENTITY @ booleanValueType   "@metaopt;" "##booleanvalue;" >
-<!--- The element FRBRthis is the metadata property containing the IRI of the specific component of the document in the respective level of the FRBR hierarchy -->
+<!--- The element FRBRthis is the metadata property containing the IRI of the specific component of the document -->
 <!ELEMENT FRBRthis             @valueType;>
 <!--- The element FRBRuri is the metadata property containing the IRI of the whole document in the respective level of the FRBR hierarchy -->
 <!ELEMENT FRBRuri              @valueType;>
@@ -1541,13 +1541,14 @@ the break of a word at the end of the line with the attribute breakWith. -->
 						##linkopt; 
             ##value;
             ##show;
+            ##refers; 
             ##dictionary; >
 
 
 <!--- The element lifecycle is a metadata container of the events associated to the FRBR expression of the document. -->
 <!ELEMENT lifecycle (eventRef+)>
 <!ATTLIST lifecycle ##source; >
-<!--- The element eventInfo is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.  -->
+<!--- The element eventRef is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.  -->
 <!ELEMENT eventRef @anyOtherType;>
 <!ATTLIST eventRef 
     ##date;
@@ -1690,13 +1691,25 @@ restrictions?, judicial?,  parliamentary?,
 <!ELEMENT mapping  @metareq; >
 <!ATTLIST mapping  ##mappingAtts; >
 
-<!--- The element otherReferences is a metadata container of legal references to other documents that do not have a precise position in the document. This in particular is meant for implicit references that are expressed as metadata. -->
-<!ELEMENT otherReferences (otherRef)+ >
+<!--- The element otherReferences is a metadata container of legal references to other documents that for any reason cannot be placed in the body of the document. This is mainly meant for implicit references that are expressed as metadata or for alternative uris of normal references. -->
+<!ELEMENT otherReferences (implicitReference | alternativeReference)+ >
 <!ATTLIST otherReferences 	##source; >
 
-<!-- The element otherRef contains a legal reference to a document that is not explicitly mentioned in the content of the document. --> 
-<!ELEMENT otherRef   (source+) >
-<!ATTLIST otherRef 	##core; ##idreq; ##enactment; ##refers; ##link; >
+<!-- The element implicitReference contains a legal reference to a document that is not explicitly mentioned in the content of the document. --> 
+<!ELEMENT implicitReference  @anyOtherType; >
+<!ATTLIST implicitReference 	
+                           for         #eIdRef;        #IMPLIED
+                           ##refers; 
+                           ##showopt;
+>
+
+<!-- The element alternativeReference contains an alternative reference (e.g., using a different namespace) for a legal reference. --> 
+<!ELEMENT alternativeReference   @anyOtherType; >
+<!ATTLIST alternativeReference 
+                           for         #eIdRef;        #IMPLIED
+                           ##refers; 
+                           ##showopt;
+>
 
 
 <!--- The element otherAnalysis is a metadata container of any additional metadata analysis element that does not belong to the specific categories provided before. Anything can be placed in this element.. -->
@@ -1804,6 +1817,8 @@ restrictions?, judicial?,  parliamentary?,
 <!ATTLIST notes        ##source; ##xmllang; >
 <!--- The element note is a metadata element containing the text of the footnote and endnote specified. -->
 <!ELEMENT note         @subFlowStructure;>
+<!ATTLIST note         ##notes;>
+
 
 
 <!--- The element proprietary is a metadata container of any additional metadata property that does not belong to the Akoma Ntoso properties. Anything can be placed in this element. -->

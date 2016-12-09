@@ -13,7 +13,7 @@
 		 =====================================================================
 		Akoma Ntoso main schema
 		
-		Release 01/04/2016 - Akoma Ntoso 3.0 WD17 with errata
+		Release 09/11/2016 - Akoma Ntoso 3.0 WD17 with errata (3rd output)
 		Complete version.
 		
 		
@@ -204,6 +204,7 @@ The group ANinline lists the elements that are inline and are specific to the Ak
 			      <xsd:element ref="omissis"/>
 			      <xsd:element ref="embeddedText"/>
 			      <xsd:element ref="embeddedStructure"/>
+			      <xsd:element ref="opinion"/>
 			      <xsd:element ref="placeholder"/>
 			      <xsd:element ref="fillIn"/>
 			      <xsd:element ref="decoration"/>
@@ -216,7 +217,7 @@ The group ANinline lists the elements that are inline and are specific to the Ak
 			         <type>Group</type>
             <name>ANtitleInline</name>
             <comment>
-The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the title element</comment>
+The group ANtitleInline lists the elements that are inline, are specific to the Akoma Ntoso vocabulary, and should only be used within the initial elements (preface, preamble and coverpage)</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -257,7 +258,6 @@ The group ANheaderInline lists the elements that are inline, are specific to the
 			      <xsd:element ref="judge"/>
 			      <xsd:element ref="lawyer"/>
 			      <xsd:element ref="signature"/>
-			      <xsd:element ref="opinion"/>
 			      <xsd:element ref="argument"/>
 		    </xsd:choice>
 	  </xsd:group>
@@ -1189,7 +1189,7 @@ The type attribute is used in various element to identify a type without restric
 			         <type>Simple</type>
             <name>eventType</name>
             <comment>
-This is the list of allowed values for the type attribute of the event and action elements</comment>
+This is the list of allowed values for the type attribute of the eventRef element</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -1226,6 +1226,7 @@ This is the list of allowed values for the type attribute of the opinion element
 	  <xsd:attributeGroup name="opinionType">
 		
 
+		    <xsd:attributeGroup ref="agent"/>
 		    <xsd:attribute name="type" type="opinionType"/>
 	  </xsd:attributeGroup>
 
@@ -1604,7 +1605,7 @@ The attribute by is used to identify the agent of an action. It is a reference t
 			         <type>Attlist</type>
             <name>quote</name>
             <comment>
-The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote.</comment>
+The attributes startQuote and endQuote are used in quotedText, quotedStructure, embeddedText and embeddedStructure to specify the start and quote character delimiting the quoted or embedded part. If the characters are the same, one can use only startQuote. Attribute inlineQuote is used for marking the character showing continuation of a quote e.g. at the beginning of each page or at the beginning of each line of the quote</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -2344,7 +2345,6 @@ the complex type referenceType defines the empty content model and the list of a
 		    </xsd:annotation>
 
 		    <xsd:attributeGroup ref="core"/>
-		    <xsd:attributeGroup ref="refers"/>
 		    <xsd:attributeGroup ref="idreq"/>
 		    <xsd:attributeGroup ref="link"/>
 		    <xsd:attributeGroup ref="show"/>
@@ -4939,7 +4939,7 @@ the element lawyer is an inline element within judgments to identify where the d
 			         <type>Element</type>
             <name>opinion</name>
             <comment>
-the element opinion is an inline element within judgments to identify where the document defines the opinion of one of the judges</comment>
+the element opinion is an inline element to identify where the document defines the opinion of an actor</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5196,7 +5196,7 @@ the element def is an inline element used for the definition of a term used in t
 			         <type>Element</type>
             <name>ref</name>
             <comment>
-the element ref is an inline element containing a legal references (i.e. a reference to a document with legal status and for which an Akoma Ntoso IRI exists)</comment>
+the element ref is an inline element containing a legal reference</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -5777,7 +5777,7 @@ the element container is a generic element for a container.</comment>
 			         <type>Element</type>
             <name>block</name>
             <comment>
-the element block is a generic element for a container. It can be placed in a container instead of any of the other blocks. The attribute name is required and gives a name to the element.</comment>
+the element block is a generic element for a block. It can be placed in a container instead of any of the other blocks. The attribute name is required and gives a name to the element.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -6238,7 +6238,7 @@ The group exprProperties lists the properties that are characteristics of the FR
 			         <type>Group</type>
             <name>manifProperties</name>
             <comment>
-The group manifProperties lists the properties that are characteristics of the FRBR Expression level.</comment>
+The group manifProperties lists the properties that are characteristics of the FRBR Manifestation level.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -6366,7 +6366,7 @@ The type booleanValueType specifies a boolean value attribute to FRBR elements.<
 			         <type>Element</type>
             <name>FRBRthis</name>
             <comment>
-The element FRBRthis is the metadata property containing the IRI of the specific component of the document in the respective level of the FRBR hierarchy</comment>
+The element FRBRthis is the metadata property containing the IRI of the specific component of the document</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
    </xsd:element>
@@ -6707,6 +6707,7 @@ The element keyword is a metadata element specifying a keyword  associated to th
 					          <xsd:attributeGroup ref="linkopt"/>
 					          <xsd:attributeGroup ref="value"/>
 					          <xsd:attributeGroup ref="show"/>
+					          <xsd:attributeGroup ref="refers"/>
 					          <xsd:attributeGroup ref="dictionary"/>
 				        </xsd:extension>
 			      </xsd:complexContent>
@@ -6728,7 +6729,7 @@ The element keyword is a metadata element specifying a keyword  associated to th
 			         <type>Element</type>
             <name>eventRef</name>
             <comment>
-The element eventInfo is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.</comment>
+The element eventRef is a metadata element specifying facts about an event that had an effect on the document. For each event, a date, a type and a document that generated the event must be referenced.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
 
@@ -7414,29 +7415,47 @@ The element count is a metadata container containing the value of a count in a v
 	  <xsd:element name="otherReferences">
       <xsd:annotation>
 		       <xsd:documentation>
-		 The element otherRef contains a legal reference to a document that is not explicitly mentioned in the content of the document. 
+		 The element implicitReference contains a legal reference to a document that is not explicitly mentioned in the content of the document. 
 		</xsd:documentation>
 	     </xsd:annotation>
 		    <xsd:complexType>
-			      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-				        <xsd:element ref="otherRef"/>
-			      </xsd:sequence>
+			      <xsd:choice minOccurs="1" maxOccurs="unbounded">
+				        <xsd:element ref="implicitReference"/>
+				        <xsd:element ref="alternativeReference"/>
+			      </xsd:choice>
 				     <xsd:attributeGroup ref="source"/>
 		    </xsd:complexType>
 	  </xsd:element>
 
 	
 
-	  <xsd:element name="otherRef">
+	  <xsd:element name="implicitReference">
+		
+
 		    <xsd:complexType>
-			      <xsd:sequence>
-				        <xsd:element ref="source" minOccurs="1" maxOccurs="unbounded"/>
-			      </xsd:sequence>
-				     <xsd:attributeGroup ref="core"/>
-				     <xsd:attributeGroup ref="idreq"/>
-				     <xsd:attributeGroup ref="enactment"/>
-				     <xsd:attributeGroup ref="refers"/>
-				     <xsd:attributeGroup ref="link"/>
+			      <xsd:complexContent>
+				        <xsd:extension base="anyOtherType">
+					          <xsd:attribute name="for" type="eIdRef"/>
+					          <xsd:attributeGroup ref="refers"/>
+					          <xsd:attributeGroup ref="showopt"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
+
+	
+
+	  <xsd:element name="alternativeReference">
+		
+
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="anyOtherType">
+					          <xsd:attribute name="for" type="eIdRef"/>
+					          <xsd:attributeGroup ref="refers"/>
+					          <xsd:attributeGroup ref="showopt"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
 		    </xsd:complexType>
 	  </xsd:element>
 
@@ -8001,8 +8020,8 @@ The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI 
 		    </xsd:complexType>
 	  </xsd:element>
 
-	  <xsd:element name="note" type="subFlowStructure">
-      <xsd:annotation>
+	  <xsd:element name="note">
+		    <xsd:annotation>
 			      <xsd:documentation>
 			         <type>Element</type>
             <name>note</name>
@@ -8010,9 +8029,15 @@ The element TLCreference is a generic metadata reference to the Akoma Ntoso IRI 
 The element note is a metadata element containing the text of the footnote and endnote specified.</comment>
 				     </xsd:documentation>
 		    </xsd:annotation>
-   </xsd:element>
-		
 
+		    <xsd:complexType>
+			      <xsd:complexContent>
+				        <xsd:extension base="subFlowStructure">
+					          <xsd:attributeGroup ref="notes"/>
+				        </xsd:extension>
+			      </xsd:complexContent>
+		    </xsd:complexType>
+	  </xsd:element>
 
 	  <xsd:element name="proprietary">
 		    <xsd:annotation>
