@@ -4,7 +4,7 @@
 <!--  =====================================================================
 Akoma Ntoso main schema
 
-Release 09/11/2016 - Akoma Ntoso 3.0 WD17 with errata (3rd output)
+Release 30/03/2017 - Akoma Ntoso 3.0
 Complete version.
 
 
@@ -19,8 +19,9 @@ mentions.
 
 TERMS AND CONDITIONS
 
-This schema is provided by OASIS, the Copyright Holder, under the licence
-specified in the file licence.txt that can also be found at the URL xxxx
+This schema is provided by OASIS, the Copyright Holder, under licence
+cc-by 4.0, that can also be found at the URL
+https://creativecommons.org/licenses/by/4.0/legalcode
 
 =====================================================================  -->
 
@@ -184,7 +185,7 @@ Attribute groups
 
 
 
-<!--  The mappingAtts attributes represent the reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup (attribute start) and a final temporalGroup (attribute end).  -->
+
 <!ENTITY % wIdRef           "%ANYURI;" >
 <!ENTITY % EwIdRef "(%EANYURI;)" ><!ENTITY % mappingAtts " original %wIdRef; #IMPLIED current %eIdRef; #IMPLIED start %eventRefRef; #IMPLIED end %eventRefRef; #IMPLIED" >
 
@@ -511,7 +512,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ENTITY % akomaNtosoType    "((%documentType;),components?)" >
 
-<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<!ELEMENT     akomaNtoso        %akomaNtosoType; ><!ATTLIST akomaNtoso xmlns CDATA #FIXED "http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
  xmlns:xml CDATA #FIXED "http://www.w3.org/XML/1998/namespace" >
 
 
@@ -527,6 +528,7 @@ Reference: http://www.xmlpatterns.com/ConsistentElementSetMain.shtml
 
 <!ELEMENT mainBody     %maincontent; >
 <!ATTLIST mainBody %coreopt;  >
+
 
 
 <!ELEMENT statement  %openStructure; >
@@ -1057,15 +1059,18 @@ main document, the list item and the titled block
 =====================================================================  -->
 
 
-<!ENTITY % blockContainerType      "(%basehierarchy;,(intro?,(componentRef | %blockElements;)+,wrapUp?))" >
+<!ENTITY % blockContainerType      "(%basehierarchy;,(intro?,(componentRef | %blockElements; | crossHeading)+,wrapUp?))" >
+
 <!ELEMENT blockContainer           %blockContainerType; >
 <!ATTLIST blockContainer %corereq;  >
 
 
-<!ELEMENT blockList                (listIntroduction?,item+,listWrapUp?)>
 
+<!ENTITY  % blockListType          "(listIntroduction?,item+,listWrapUp?)" >
+
+<!ELEMENT blockList                %blockListType; >
 <!ATTLIST blockList %corereq;  >
-<!--  The element item is a container belonging to a list  -->
+
 <!ELEMENT item                %itemType; >
 <!ATTLIST item %corereq;  >
 
@@ -1880,7 +1885,7 @@ Metadata elements for all documents
 
 <!ATTLIST mappings %source;  >
 
-<!--  The element mapping contains a reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup and a final temporalGroup. This is useful for tracking the evolving ids of documents frequently renumbered (e,g., bills). Every single element whose wId does not match its eId needs to be represented here.  -->
+
 <!ELEMENT mapping  %metareq; >
 <!ATTLIST mapping %core;  %idreq;  >
 
@@ -1891,13 +1896,13 @@ Metadata elements for all documents
 
 <!ATTLIST otherReferences %source;  >
 
-<!--  The element implicitReference contains a legal reference to a document that is not explicitly mentioned in the content of the document.  -->
+
 <!ELEMENT implicitReference  %anyOtherType; >
 <!ATTLIST implicitReference %core;  %idopt;  %linkopt;  >
 
 <!ATTLIST implicitReference for %eIdRef; #IMPLIED %refers;  %showopt;  >
 
-<!--  The element alternativeReference contains an alternative reference (e.g., using a different namespace) for a legal reference.  -->
+
 <!ELEMENT alternativeReference   %anyOtherType; >
 <!ATTLIST alternativeReference %core;  %idopt;  %linkopt;  >
 
@@ -1960,12 +1965,12 @@ Metadata elements for all documents
 
 <!ATTLIST temporalData %source;  >
 
-<!--  The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept.  -->
+
 <!ELEMENT temporalGroup  (timeInterval+)>
 
 <!ATTLIST temporalGroup %core;  %idreq;  >
 
-<!--  The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section  -->
+
 <!ELEMENT timeInterval  %metaopt; >
 <!ATTLIST timeInterval %core;  %idopt;  >
 

@@ -14,8 +14,8 @@
 &lt;!-- =====================================================================
      Akoma Ntoso main schema                                              
 
-     <report version="Release 09/11/2016 - Akoma Ntoso 3.0 WD17 with errata (3rd output)"/>
-
+     <report version="Release 30/03/2017 - Akoma Ntoso 3.0"/>
+     
      technical supervision Fabio Vitali - University of Bologna
      legal domain supervision Monica Palmirani - University of Bologna
         
@@ -27,12 +27,13 @@
 
      TERMS AND CONDITIONS
 		 
-		 This schema is provided by OASIS, the Copyright Holder, under the licence 
-		 specified in the file licence.txt that can also be found at the URL xxxx
-		 
+		 This schema is provided by OASIS, the Copyright Holder, under licence
+     cc-by 4.0, that can also be found at the URL 
+     https://creativecommons.org/licenses/by/4.0/legalcode
+
      ===================================================================== -->
 
-&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17'>
+&lt;!TARGETNS       'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'>
 &lt;!TARGETNS  xml  'http://www.w3.org/XML/1998/namespace'>
 
 &lt;!-- =====================================================================
@@ -201,7 +202,7 @@
 </include>
 <include if="advancedMetadata" dependsOn="core">
 
-&lt;!-- The mappingAtts attributes represent the reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup (attribute start) and a final temporalGroup (attribute end). --> 
+&lt;!--- The mappingAtts attributes represent the reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup (attribute start) and a final temporalGroup (attribute end). --> 
 &lt;!ENTITY ## mappingAtts " 
     original        #wIdRef;        #IMPLIED
     current         #eIdRef;        #IMPLIED
@@ -596,7 +597,8 @@ reiteration|remaking|republication|coordination)" >
 &lt;!--- the element mainBody is the container of the main part of all other document types -->
 &lt;!ELEMENT mainBody     @maincontent; >
 <include if="statementDocs" label="Statement" desc="Document type $statement">
-&lt;!--- Element statement is used for describing the structure and content of a official documents of a legislative assembly that are not normative in structure (e.g., statements, non-normative resolutions, etc.). -->
+
+&lt;!--- Element statement is used for describing the structure and content of an official document of a body that may or may not be normative in structure (e.g., statements, resolutions, etc.). -->
 &lt;!ELEMENT statement  @openStructure; >
 &lt;!ATTLIST statement  xxxUnicityConstraintDirtyTrick        #STRING      #IMPLIED>
 </include>
@@ -775,7 +777,7 @@ reiteration|remaking|republication|coordination)" >
 
 &lt;!--- the element citation is the individual element of the preface that is called citation -->
 &lt;!ELEMENT citation    @itemType; >
-&lt;!--- the element longTitle is the section of the preface or preamble that is called long title -->
+&lt;!--- the element longTitle is the section of the preface or coverPage that is called long title -->
 &lt;!ELEMENT longTitle    @blocksreq; >
 &lt;!--- the element formula is a section of the preface or preamble that contains a formulaic expression that is systematically or frequently present in a preface or a preamble and has e precise legal meaning (e.g. an enacting formula). Use the refersTo attribute for the specification of the actual type of formula. -->
 &lt;!ELEMENT formula    @blocksreq; >
@@ -1032,18 +1034,21 @@ reiteration|remaking|republication|coordination)" >
     
     ===================================================================== -->
 <include desc="Block-context peculiar elements: $blockContainer, $blockList, $listIntroduction, $item, and $listWrapUp"/>
+&lt;!--- the blockContainerType is the type of element blockContainer -->
+&lt;!ENTITY @ blockContainerType      "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> @@blockElements; | crossHeading)+, wrapUp?)"            "##corereq;" >
 &lt;!--- the element blockContainer is used as a container of many individual block elements in a block context -->
-&lt;!ENTITY @ blockContainerType      "@basehierarchy;, (intro?, (<include if="components" v="componentRef | "/> @@blockElements;)+, wrapUp?)"            "##corereq;" >
 &lt;!ELEMENT blockContainer           @blockContainerType; >
 
-&lt;!--- the element blocklist is used as a container of many individual item elements put in a list -->
-&lt;!ELEMENT blockList                (listIntroduction?, item+, listWrapUp?) >
-&lt;!ATTLIST blockList                ##corereq; >
-&lt;!-- The element item is a container belonging to a list -->
+
+&lt;!--- the blockListType is the type of element blockList -->
+&lt;!ENTITY  @ blockListType          "(listIntroduction?, item+, listWrapUp?)" "##corereq;" >
+&lt;!--- the element blockList is used as in a block context as a container of many individual item elements to be treated as in a list -->
+&lt;!ELEMENT blockList                @blockListType; >
+&lt;!--- The element item is a container belonging to a blockList -->
 &lt;!ELEMENT item                @itemType; >
-&lt;!--- the element listIntroduction is an optional element of list before any item of the list itself.  -->
+&lt;!--- the element listIntroduction is an optional element of blockList before any item of the list itself.  -->
 &lt;!ELEMENT listIntroduction   @inline; >
-&lt;!--- the element listWrapUp is an optional element of list after all items of the list itself.  -->
+&lt;!--- the element listWrapUp is an optional element of blockList after all items of the list itself.  -->
 &lt;!ELEMENT listWrapUp @inline; >
 
 <include if="tblock" dependsOn="core" label="Titled block" desc="The element tblock (titled block) is used to specify a container for blocks introduced by heading elements, similarly to a hierarchical structure.">
@@ -1293,7 +1298,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!--- the element embeddedText is an inline element containing a string used as an extract from another document. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character.  -->
 &lt;!ELEMENT embeddedText        @inline; >
 &lt;!ATTLIST embeddedText        ##quote; ##linkopt; >
-&lt;!--- the element embeddedStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. Attribute for is used in a mmod or rmod to point to the eId of the corresponding ref element. -->
+&lt;!--- the element embeddedStructure is a subFlow element containing a full structure used as an extract from another document or position. Attribute quote is used to specify the quote character used in the original; no quote attribute implies that the quote is left in the text; quote="" implies that there is no quote character. -->
 &lt;!ELEMENT embeddedStructure   @subFlowStructure;>
 &lt;!ATTLIST embeddedStructure   ##quote; ##linkopt; >
 
@@ -1477,7 +1482,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ENTITY @ booleanValueType   "@metaopt;" "##booleanvalue;" >
 &lt;!--- The element FRBRthis is the metadata property containing the IRI of the specific component of the document -->
 &lt;!ELEMENT FRBRthis             @valueType;>
-&lt;!--- The element FRBRuri is the metadata property containing the IRI of the whole document in the respective level of the FRBR hierarchy -->
+&lt;!--- The element FRBRuri is the metadata property containing the IRI of the whole document. -->
 &lt;!ELEMENT FRBRuri              @valueType;>
 &lt;!--- The element FRBRalias is the metadata property containing additional well-known names of the document in the respective level of the FRBR hierarchy -->
 &lt;!ELEMENT FRBRalias            @valueType; >
@@ -1698,7 +1703,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ELEMENT mappings   (mapping)+ >
 &lt;!ATTLIST mappings 	##source; >
 
-&lt;!-- The element mapping contains a reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup and a final temporalGroup. This is useful for tracking the evolving ids of documents frequently renumbered (e,g., bills). Every single element whose wId does not match its eId needs to be represented here. --> 
+&lt;!--- The element mapping contains a reference to the permanent wId (attribute original) of a structure, and to the eId (attribute current) such structure had during the time interval included between an initial temporalGroup and a final temporalGroup. This is useful for tracking the evolving ids of documents frequently renumbered (e,g., bills). Every single element whose wId does not match its eId needs to be represented here. --> 
 &lt;!ELEMENT mapping  @metareq; >
 &lt;!ATTLIST mapping  ##mappingAtts; >
 
@@ -1706,7 +1711,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ELEMENT otherReferences (implicitReference | alternativeReference)+ >
 &lt;!ATTLIST otherReferences 	##source; >
 
-&lt;!-- The element implicitReference contains a legal reference to a document that is not explicitly mentioned in the content of the document. --> 
+&lt;!--- The element implicitReference contains a legal reference to a document that is not explicitly mentioned in the content of the document. --> 
 &lt;!ELEMENT implicitReference  @anyOtherType; >
 &lt;!ATTLIST implicitReference 	
                            for         #eIdRef;        #IMPLIED
@@ -1714,7 +1719,7 @@ the break of a word at the end of the line with the attribute breakWith. -->
                            ##showopt;
 >
 
-&lt;!-- The element alternativeReference contains an alternative reference (e.g., using a different namespace) for a legal reference. --> 
+&lt;!--- The element alternativeReference contains an alternative reference (e.g., using a different namespace) for a legal reference. --> 
 &lt;!ELEMENT alternativeReference   @anyOtherType; >
 &lt;!ATTLIST alternativeReference 
                            for         #eIdRef;        #IMPLIED
@@ -1764,11 +1769,11 @@ the break of a word at the end of the line with the attribute breakWith. -->
 &lt;!ELEMENT temporalData  (temporalGroup+) >
 &lt;!ATTLIST temporalData     ##source; >
 
-&lt;!-- The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept. --> 
+&lt;!--- The element temporalGroup contains a list of time Intervals that need to be applied together to an element of the document that is associated to time information. Each temporal group can contain any number of time interval associated via the refersTo to a different time-specific concept. --> 
 &lt;!ELEMENT temporalGroup  (timeInterval+) >
 &lt;!ATTLIST temporalGroup  ##core; ##idreq; >
 
-&lt;!-- The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section -->
+&lt;!--- The element timeInterval contains all the data needed to identify a specific time interval. It is built either with two dates or with a date and a duration (exactly two of the 'start', 'end' and 'duration' attributes can be specified). Values of the 'start' and 'end' attributes are NOT dates, but references to event elements in the corresponding metadata section. The refers attribute is a reference to a temporal concept belonging to the Akoma Ntoso ontology and specified in the references section -->
 &lt;!ELEMENT timeInterval  @metaopt; >
 &lt;!ATTLIST   timeInterval     
 		##interval; 
